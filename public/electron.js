@@ -13,8 +13,26 @@ function createWindow() {
         webPreferences: {
             title: "Desktop",
             preload: path.join(__dirname, "preload.js"),
+            webSecurity: false,
         },
     });
+
+    const ses = mainWindow.webContents.session;
+
+    ses.webRequest.onHeadersReceived(
+        { urls: ['https://haddef-sigwen.arvo.network/*/*'] },
+        (details, callback) => {
+            if (
+                details.responseHeaders &&
+                details.responseHeaders['set-cookie'] &&
+                details.responseHeaders['set-cookie'].length &&
+                !details.responseHeaders['set-cookie'][0].includes('SameSite=none')
+            ) {
+                details.responseHeaders['set-cookie'][0] = details.responseHeaders['set-cookie'][0] + '; SameSite=none; Secure';
+            }
+            callback({ cancel: false, responseHeaders: details.responseHeaders });
+        },
+    );
 
     // In production, set the initial browser path to the local bundle generated
     // by the Create React App build process.

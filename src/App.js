@@ -1,21 +1,26 @@
+import { useState, useEffect } from 'react';
+import { scryCharges } from '@urbit/api';
+import { api } from './state/api';
 
 function App() {
-  console.log(process.env)
+  const [apps, setApps] = useState([]);
+  const [windows, setWindows] = useState([]);
+  const [selectedWindow, setSelectedWindow] = useState({});
+
+  useEffect(() => {
+    async function init() {
+      const charges = (await api.scry(scryCharges)).initial;
+      setApps(charges);
+    }
+
+    init();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="bg-blue-400">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="bg-gray-300 h-screen w-screen flex flex-col p-2">
+      <div className="w-full h-8 bg-black opacity-90 rounded-lg">
+        <a href="https://urbit.org" target="_blank">link</a>
+      </div>
     </div>
   );
 }

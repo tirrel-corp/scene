@@ -1,5 +1,5 @@
 {
-  "name": "@tirrel-corp/desktop",
+  "name": "Desktop",
   "version": "0.0.1",
   "author": "Tirrel Corporation",
   "description": "Your reliable, pliable, desirable Urbit desktop",
@@ -27,7 +27,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "electron:start": "concurrently -k \"cross-env BROWSER=none npm run start start\" \"wait-on http://localhost:3000 && electronmon .\"",
+    "electron:start": "concurrently -k \"cross-env BROWSER=none npm run start start\" \"wait-on http://localhost:3000 && electronmon . \"",
     "electron:package:mac": "cross-env NODE_ENV=production npm run build && electron-builder -m -c.extraMetadata.main=build/electron.js",
     "electron:package:win": "cross-env NODE_ENV=production npm run build && electron-builder -w -c.extraMetadata.main=build/electron.js",
     "electron:package:linux": "cross-env NODE_ENV=production npm run build && electron-builder -l -c.extraMetadata.main=build/electron.js"
