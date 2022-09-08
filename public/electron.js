@@ -1,5 +1,5 @@
 // Module to control the application lifecycle and the native browser window.
-const { app, BrowserWindow, protocol } = require("electron");
+const { app, BrowserWindow, protocol, shell } = require("electron");
 const path = require("path");
 const url = require("url");
 require("dotenv").config()
@@ -19,6 +19,9 @@ function createWindow() {
     });
 
     const ses = mainWindow.webContents.session;
+    mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+        return shell.openExternal(url)
+    })
 
     ses.webRequest.onHeadersReceived(
         { urls: [`${process.env.REACT_APP_URL}/*/*`] },
