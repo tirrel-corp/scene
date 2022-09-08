@@ -2,6 +2,7 @@
 const { app, BrowserWindow, protocol } = require("electron");
 const path = require("path");
 const url = require("url");
+require("dotenv").config()
 
 // Create the native browser window.
 function createWindow() {
