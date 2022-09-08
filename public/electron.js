@@ -21,7 +21,7 @@ function createWindow() {
     const ses = mainWindow.webContents.session;
 
     ses.webRequest.onHeadersReceived(
-        { urls: ['https://haddef-sigwen.arvo.network/*/*'] },
+        { urls: [`${process.env.REACT_APP_URL}/*/*`] },
         (details, callback) => {
             if (
                 details.responseHeaders &&
@@ -96,13 +96,13 @@ app.on("window-all-closed", function () {
 // If your app has no need to navigate or only needs to navigate to known pages,
 // it is a good idea to limit navigation outright to that known scope,
 // disallowing any other kinds of navigation.
-const allowedNavigationDestinations = "https://my-electron-app.com";
-app.on("web-contents-created", (event, contents) => {
-    contents.on("will-navigate", (event, navigationUrl) => {
-        const parsedUrl = new URL(navigationUrl);
+// const allowedNavigationDestinations = "https://my-electron-app.com";
+// app.on("web-contents-created", (event, contents) => {
+//     contents.on("will-navigate", (event, navigationUrl) => {
+//         const parsedUrl = new URL(navigationUrl);
 
-        if (!allowedNavigationDestinations.includes(parsedUrl.origin)) {
-            event.preventDefault();
-        }
-    });
-});
+//         if (!allowedNavigationDestinations.includes(parsedUrl.origin)) {
+//             event.preventDefault();
+//         }
+//     });
+// });
