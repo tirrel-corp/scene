@@ -102,11 +102,12 @@ export const useHarkStore = createState(
     },
     getMore: async () => {
       const { archive: arch } = get();
-      const idx = decToUd((arch?.peekSmallest()?.[0] || unixToDa(Date.now() * 1000)).toString());
+      const idx = decToUd((arch?.peekSmallest?.()?.[0] || unixToDa(Date.now() * 1000)).toString());
       const update = await api.scry({
         app: 'hark-store',
         path: `/recent/inbox/${idx}/5`
       });
+      console.debug(update);
       reduceHark(update);
     }
   }),

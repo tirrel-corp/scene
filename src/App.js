@@ -14,9 +14,12 @@ function App() {
 
   const [seen, unseen] = useHarkStore(s => [s.seen, s.unseen]);
   useEffect(() => {
+    useHarkStore.getState().initialize(api);
+  }, []);
+  useEffect(() => {
     console.debug('seen', seen);
     console.debug('unseen', unseen);
-  }, []);
+  }, [seen, unseen]);
 
   useEffect(() => {
     async function init() {
