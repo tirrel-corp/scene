@@ -29,8 +29,8 @@ function App() {
   return (
     <div className="bg-gray-300 h-screen w-screen flex flex-col">
       <HeaderBar selectedWindow={selectedWindow} />
-      <Screen setSelectedWindow={setSelectedWindow} windows={windows} />
-      <Dock apps={apps} windows={windows} setWindows={setWindows} />
+      <Screen selectedWindow={selectedWindow} setSelectedWindow={setSelectedWindow} windows={windows} setWindows={setWindows} />
+      <Dock apps={apps} windows={windows} setWindows={setWindows} setSelectedWindow={setSelectedWindow} />
     </div>
   );
 }
