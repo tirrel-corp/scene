@@ -18,8 +18,11 @@ npm run electron:package:linux
 
 ## Roadmap
 
-- [ ] dock
-- [ ] open and drag windows
+- [x] dock
+- [x] open and drag windows
+- [x] closable windows
+- [ ] set selected window on focussing an iframe
+- [ ] display notifications and set selected window based on notification source
 - [ ] construct hosting onboarding flow
 - [ ] store hosting flow url + code on disk
 - [ ] boot to desktop from a hosted account
