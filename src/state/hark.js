@@ -107,7 +107,6 @@ export const useHarkStore = createState(
         app: 'hark-store',
         path: `/recent/inbox/${idx}/5`
       });
-      console.debug(update);
       reduceHark(update);
     }
   }),
@@ -215,7 +214,6 @@ api.subscribe({
   path: '/updates',
   event: (u) => {
     /* eslint-ignore-next-line camelcase */
-    console.debug('hark /updates');
     reduceHark(u);
   }
 });

@@ -12,14 +12,10 @@ function App() {
   const [windows, setWindows] = useState([]);
   const [selectedWindow, setSelectedWindow] = useState({});
 
-  const [seen, unseen] = useHarkStore(s => [s.seen, s.unseen]);
+  const harkStore = useHarkStore();
   useEffect(() => {
-    useHarkStore.getState().initialize(api);
+    harkStore.initialize(api);
   }, []);
-  useEffect(() => {
-    console.debug('seen', seen);
-    console.debug('unseen', unseen);
-  }, [seen, unseen]);
 
   useEffect(() => {
     async function init() {
