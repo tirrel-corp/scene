@@ -25,3 +25,23 @@ button:hover {
 button:active {
   filter: brightness(110%);
 }
+
+#notifications {
+  position: absolute;
+  right: 1rem;
+  top: 3rem;
+  max-height: 80vh;
+  overflow-y: auto;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 0.5rem;
+
+  visibility: hidden;
+  transition: 150ms ease;
+}
+#notifications.shown {
+  visibility: visible;
+}

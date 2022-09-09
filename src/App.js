@@ -36,14 +36,16 @@ function App() {
   }, []);
 
   return (
-    <div className="bg-gray-300 h-screen w-screen flex flex-col">
-      <HeaderBar selectedWindow={selectedWindow} />
+    <div className="bg-gray-300 h-screen w-screen flex flex-col relative">
+      <HeaderBar
+        selectedWindow={selectedWindow}
+        toggleNotifs={() => setShowNotifs(p => !p)}
+      />
       <Screen
         selectedWindow={selectedWindow}
         setSelectedWindow={setSelectedWindow}
         windows={windows}
         setWindows={setWindows}
-        toggleNotifs={() => setShowNotifs(p => !p)}
       />
       <Notifications visible={showNotifs} />
       <Dock apps={apps} windows={windows} setWindows={setWindows} setSelectedWindow={setSelectedWindow} />
