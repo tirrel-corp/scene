@@ -1,3 +1,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+svg:not:has([width]) {
+  width: 1rem;
+}
+svg:not:has([height]) {
+  height: 1rem;
+}
+
+button {
+  border-width: 1px;
+  border-style: solid;
+  border-color: currentColor;
+  border-radius: 0.5rem;
+  padding-inline: 0.25rem;
+  padding-block: 0.25rem;
+  filter: none;
+  transition: 150ms ease;
+}
+button:hover {
+  filter: brightness(80%);
+}
+button:active {
+  filter: brightness(110%);
+}
