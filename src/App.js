@@ -2,7 +2,9 @@ import { useState, useReducer, useEffect } from 'react';
 import { scryCharges } from '@urbit/api';
 import { api } from './state/api';
 import HeaderBar from './components/HeaderBar';
-import { chargeReducer } from './state/charges';
+import Screen from './components/Screen';
+import Dock from './components/Dock';
+import chargeReducer from './state/charges';
 
 function App() {
   const [apps, setApps] = useReducer(chargeReducer, {});
@@ -26,7 +28,9 @@ function App() {
 
   return (
     <div className="bg-gray-300 h-screen w-screen flex flex-col">
-      <HeaderBar />
+      <HeaderBar selectedWindow={selectedWindow} />
+      <Screen setSelectedWindow={setSelectedWindow} windows={windows} />
+      <Dock apps={apps} windows={windows} setWindows={setWindows} />
     </div>
   );
 }
