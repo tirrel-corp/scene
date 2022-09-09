@@ -19,8 +19,8 @@ export default function Screen({ windows, setWindows, selectedWindow, setSelecte
                 onClick={() => setSelectedWindow(win)}
             >
                 <div className="w-full h-full p-2 flex flex-col bg-black cursor-default">
-                    <div onClick={() => console.log('click! div')} className="h-8 bg-black text-white w-full">{win.title}</div>
-                    <iframe onClick={() => console.log('click! iframe')} className="w-full h-full bg-white min-h-0" src={href} title={win.title} />
+                    <div className="h-8 bg-black text-white w-full flex justify-between px-1"><p>{win.title}</p><a className="text-white" onClick={() => setWindows(windows.filter((e) => e !== win))}>x</a></div>
+                    <iframe className="w-full h-full bg-white min-h-0" src={href} title={win.title} />
                 </div>
             </Rnd>
         })}
