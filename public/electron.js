@@ -2,7 +2,9 @@
 const { app, BrowserWindow, protocol, shell } = require("electron");
 const path = require("path");
 const url = require("url");
-require("dotenv").config()
+require("dotenv").config();
+const { default: installExtension, REACT_DEVELOPER_TOOLS } = require('electron-devtools-installer');
+
 
 // Create the native browser window.
 function createWindow() {
@@ -75,6 +77,9 @@ function setupLocalFilesNormalizerProxy() {
 // is ready to create the browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
+    installExtension(REACT_DEVELOPER_TOOLS)
+        .then((name) => console.log(`Added Extension:  ${name}`))
+        .catch((err) => console.log('An error occurred: ', err));
     createWindow();
     setupLocalFilesNormalizerProxy();
 
