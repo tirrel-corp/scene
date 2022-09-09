@@ -21,15 +21,26 @@ npm run electron:package:linux
 - [x] dock
 - [x] open and drag windows
 - [x] closable windows
+- [x] status panel at top
+- [ ] minimizable windows
+- [ ] refreshable window contents
 - [ ] set selected window on focussing an iframe
-- [ ] localstorage recently used apps to sort the dock
-- [ ] "Overview" for more apps, searching for apps/treaties, installing apps, seeing app information, deleting apps
+- [ ] only show open windows in the dock
+- [ ] clicking icon in dock focuses window, doesn't spawn another window
+- [ ] "Overview" for apps, searching for apps/treaties, installing apps, seeing app information, deleting apps
 - [ ] display notifications and set selected window based on notification source
 - [ ] construct hosting onboarding flow
-- [ ] store hosting flow url + code on disk
-- [ ] boot to desktop from a hosted account
+    - [ ] should convey what they are buying
+    - [ ] should allow entering credit card to begin subscription
+    - [ ] should allow for promo codes
+    - [ ] should ask thirdearth api to spawn planet, transfer code to electron and login automatically
+    - [ ] store hosting flow url + code on disk
+    - [ ] boot to desktop from a hosted account
+
 
 Stretch:
 
-- [ ] Customisation (set bg img, colors)
+- [x] Resizable windows
+- [ ] Settings and customisation (set bg img, colors)
+- [ ] See hosting details ("About" menu?)
 - [ ] Dark mode
