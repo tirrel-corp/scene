@@ -38,3 +38,5 @@ const normalizeUrbitColor = (color) => {
     const lengthAdjustedColor = colorString.padEnd(6, colorString.slice(0, -1));
     return `#${lengthAdjustedColor}`
 }
+
+export default chargeReducer;
