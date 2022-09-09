@@ -30,7 +30,7 @@ const normalizeDocket = (docket, desk) => {
     return { ...docket, desk, color: normalizeUrbitColor(docket.color) }
 };
 
-const normalizeUrbitColor = (color) => {
+export const normalizeUrbitColor = (color) => {
     if (color.startsWith('#')) {
         return color
     }
