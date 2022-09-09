@@ -218,7 +218,7 @@ api.subscribe({
   }
 });
 
-function harkContentsToPlainText(contents: HarkContent[]) {
+function harkContentsToPlainText(contents) {
   return contents
     .map((c) => {
       if ('ship' in c) {
