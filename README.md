@@ -19,6 +19,7 @@ npm run electron:package:linux
 ## Roadmap
 
 - [x] dock
+    - [x] tooltips over icons
 - [x] open and drag windows
 - [x] closable windows
 - [x] status panel at top
