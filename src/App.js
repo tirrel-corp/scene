@@ -9,7 +9,7 @@ import chargeReducer from './state/charges';
 function App() {
   const [apps, setApps] = useReducer(chargeReducer, {});
   const [windows, setWindows] = useState([]);
-  const [selectedWindow, setSelectedWindow] = useState({});
+  const [selectedWindow, setSelectedWindow] = useState([]);
 
   useEffect(() => {
     async function init() {
@@ -27,10 +27,10 @@ function App() {
   }, []);
 
   return (
-    <div className="bg-gray-300 h-screen w-screen flex flex-col">
+    <div className="bg-[#e4e4e4] h-screen w-screen flex flex-col">
       <HeaderBar selectedWindow={selectedWindow} />
       <Screen selectedWindow={selectedWindow} setSelectedWindow={setSelectedWindow} windows={windows} setWindows={setWindows} />
-      <Dock apps={apps} windows={windows} setWindows={setWindows} setSelectedWindow={setSelectedWindow} />
+      <Dock apps={apps} windows={windows} setWindows={setWindows} selectedWindow={selectedWindow} setSelectedWindow={setSelectedWindow} />
     </div>
   );
 }

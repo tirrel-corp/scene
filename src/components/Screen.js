@@ -8,7 +8,7 @@ export default function Screen({ windows, setWindows, selectedWindow, setSelecte
                 key={win.title}
                 className="rounded-xl overflow-hidden"
                 style={{
-                    zIndex: win === selectedWindow ? 20 : index + 2
+                    zIndex: ([...selectedWindow].reverse().indexOf(win) + 1) * 10
                 }}
                 default={{
                     x: (index + 1) * 100,
@@ -16,10 +16,18 @@ export default function Screen({ windows, setWindows, selectedWindow, setSelecte
                     width: 640,
                     height: 480,
                 }}
-                onClick={() => setSelectedWindow(win)}
+                onMouseDown={() => setSelectedWindow([win, ...selectedWindow.filter((e) => e !== win)])}
             >
                 <div className="w-full h-full p-2 flex flex-col bg-black cursor-default">
-                    <div className="h-8 bg-black text-white w-full flex justify-between px-1"><p>{win.title}</p><a className="text-white" onClick={() => setWindows(windows.filter((e) => e !== win))}>x</a></div>
+                    <div className="h-8 bg-black text-white w-full flex justify-between px-1">
+                        <p>{win.title}</p>
+                        <a
+                            className="text-white"
+                            onClick={() => setWindows(windows.filter((e) => e !== win))}
+                        >
+                            x
+                        </a>
+                    </div>
                     <iframe className="w-full h-full bg-white min-h-0" src={href} title={win.title} />
                 </div>
             </Rnd>
