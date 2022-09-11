@@ -26,14 +26,20 @@ function App() {
   }, []);
 
   return (
-    <div className="bg-[#e4e4e4] h-screen w-screen flex flex-col">
+    <div className="bg-[#e4e4e4] h-screen w-screen flex flex-col absolute">
       <HeaderBar selectedWindow={selectedWindow} />
       <Screen
         hiddenWindow={{ value: hiddenWindow, set: setHiddenWindow }}
         selectedWindow={{ value: selectedWindow, set: setSelectedWindow }}
         windows={{ value: windows, set: setWindows }}
       >
-        {launchOpen && <Launchpad apps={apps} />}
+        {launchOpen && <Launchpad
+          apps={apps}
+          hiddenWindow={{ value: hiddenWindow, set: setHiddenWindow }}
+          launchOpen={{ value: launchOpen, set: setLaunchOpen }}
+          selectedWindow={{ value: selectedWindow, set: setSelectedWindow }}
+          windows={{ value: windows, set: setWindows }}
+        />}
       </Screen>
       <Dock
         apps={apps}
