@@ -26,7 +26,7 @@ npm run electron:package:linux
 - [x] minimizable windows
 - [x] refreshable window contents
 - [x] set selected window on focussing an iframe
-- [ ] only show open windows in the dock
+- [x] only show open windows in the dock
 - [x] clicking icon in dock focuses window, doesn't spawn another window
 - [ ] "Overview" for apps, searching for apps/treaties, installing apps, seeing app information, deleting apps
 - [ ] display notifications and set selected window based on notification source
