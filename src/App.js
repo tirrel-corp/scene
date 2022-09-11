@@ -1,6 +1,7 @@
 import { useState, useReducer, useEffect } from 'react';
 import { scryCharges } from '@urbit/api';
 import { api } from './state/api';
+import { chargeSubscription } from './state/subscriptions';
 import HeaderBar from './components/HeaderBar';
 import Screen from './components/Screen';
 import Dock from './components/Dock';
@@ -16,12 +17,7 @@ function App() {
     async function init() {
       const charges = (await api.scry(scryCharges));
       setApps(charges);
-
-      api.subscribe({
-        app: 'docket',
-        path: '/charges',
-        event: (data) => setApps(data)
-      });
+      chargeSubscription(setApps);
     }
 
     init();
