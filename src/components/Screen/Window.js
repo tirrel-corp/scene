@@ -37,7 +37,10 @@ export const Window = ({ win, index, windows, selectedWindow, hiddenWindow }) =>
                     </a>
                     <a
                         className="text-black"
-                        onClick={() => windows.set(windows.value.filter((e) => e !== win))}
+                        onClick={() => {
+                            windows.set(windows.value.filter((e) => e !== win));
+                            selectedWindow.set(selectedWindow.value.filter((e) => e !== win))
+                        }}
                     >
                         x
                     </a>
