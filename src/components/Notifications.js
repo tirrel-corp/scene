@@ -9,7 +9,6 @@ const Notifications = props => {
   const { charges, visible } = props;
   const harkStore = useHarkStore();
   const { seen, unseen } = harkStore;
-  console.debug(seen);
 
   return (
     <div
