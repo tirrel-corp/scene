@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { harkBinToId } from '@urbit/api';
 import { useHarkStore } from '../state/hark';
+import { normalizeUrbitColor } from '../state/util';
 
 const MAX_CONTENTS = 3;
 
@@ -8,11 +9,12 @@ const Notifications = props => {
   const { charges, visible } = props;
   const harkStore = useHarkStore();
   const { seen, unseen } = harkStore;
+  console.debug(seen);
 
   return (
     <div
       id="notifications"
-      class={`notifications ${visible ? 'shown' : ''}`}
+      class={`notifications text-zinc-200 ${visible ? 'shown' : ''}`}
     >
       {Object.values(unseen)
         .sort((a, b) => b.time - a.time)
@@ -20,7 +22,7 @@ const Notifications = props => {
         .filter(n => !!charges?.[n.bin.place.desk])
         .map(n => ([n, charges[n.bin.place.desk]]))
         .map(([n, charge], idx) => (
-          <Notification key={idx} {...{notification: n, charge}}>
+          <Notification key={idx} className="unseen" {...{notification: n, charge}}>
             Unseen Notification {idx}
           </Notification>
         ))
@@ -58,19 +60,37 @@ const Notification = props => {
   };
 
   return (
-    <div className={`notification ${className}`}>
+    <div className={`notification bg-neutral-700 text-white ${className}`}>
       <header>
-        <div>{charge?.title || notification.bin.place.desk}</div>
-        <h2>{notification.body[0].title.map(i => i.text).join()}</h2>
+        <DocketImage {...charge} />
+        <h2>{charge?.title || notification.bin.place.desk}</h2>
+        <button className="archive ml-auto">
+          <svg width="9" height="9" className="icon inline">
+            <use href="/icons.svg#cross-circle" />
+          </svg>
+        </button>
       </header>
-      <div>
+      <article>
+        <h2>{notification.body[0].title.map(i => i.text).join()}</h2>
         {_.take(contents, MAX_CONTENTS).map(c => (<p key={c}>{c}</p>))}
         {contents.length > MAX_CONTENTS && (
           <p>...and {contents.length - MAX_CONTENTS} more</p>
         )}
-      </div>
+      </article>
     </div>
   )
 };
+
+const DocketImage = props => {
+  const { className = '', color, image } = props;
+
+  const bgColor = normalizeUrbitColor(color);
+  
+  return (
+    <div className={`docket-image ${className}`} style={{background: bgColor}}>
+      <img src={image} alt="" />
+    </div>
+  )
+}
 
 export default Notifications;
