@@ -12,7 +12,7 @@ function App() {
   const [apps, setApps] = useReducer(chargeReducer, {});
   const [windows, setWindows] = useState([]);
   const [selectedWindow, setSelectedWindow] = useState({});
-  const [showNotifs, setShowNotifs] = useState(false);
+  const [showNotifs, setShowNotifs] = useState(true);
 
   const harkStore = useHarkStore();
   const { seen, unseen } = harkStore;
@@ -47,7 +47,10 @@ function App() {
         windows={windows}
         setWindows={setWindows}
       />
-      <Notifications visible={showNotifs} />
+      <Notifications
+        visible={showNotifs}
+        charges={apps.charges}
+      />
       <Dock apps={apps} windows={windows} setWindows={setWindows} setSelectedWindow={setSelectedWindow} />
     </div>
   );

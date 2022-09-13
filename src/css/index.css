@@ -32,12 +32,14 @@ button:active {
   top: 3rem;
   max-height: 80vh;
   overflow-y: auto;
+  min-width: calc(min(30ch, 100%));
 
   display: flex;
   flex-direction: column;
+  padding: 0.5rem;
   gap: 0.5rem;
   background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 0.5rem;
+  border-radius: 0.2rem;
 
   visibility: hidden;
   transition: 150ms ease;
