@@ -28,15 +28,16 @@ function App() {
     init();
   }, []);
 
-  const harkStore = useHarkStore();
-  const { seen, unseen } = harkStore;
   useEffect(() => {
-    harkStore.initialize(api);
+    useHarkStore.getState().initialize(api);
   }, []);
 
   return (
     <div className="bg-[#e4e4e4] h-screen w-screen flex flex-col absolute">
-      <HeaderBar selectedWindow={selectedWindow} />
+      <HeaderBar
+        selectedWindow={selectedWindow}
+        toggleNotifs={() => setShowNotifs(a => !a)}
+      />
       <Screen
         hiddenWindow={{ value: hiddenWindow, set: setHiddenWindow }}
         selectedWindow={{ value: selectedWindow, set: setSelectedWindow }}
