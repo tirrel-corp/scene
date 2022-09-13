@@ -37,13 +37,11 @@ button:active {
   right: 1rem;
   top: 3rem;
   max-height: 80vh;
+  max-width: 35ch;
   overflow-y: auto;
-  min-width: calc(min(30ch, 100%));
+  min-width: calc(min(35ch, 100%));
 
-  display: flex;
-  flex-direction: column;
   padding: 0.5rem;
-  gap: 0.5rem;
   background-color: rgba(0, 0, 0, 0.2);
   border-radius: 0.75ch;
 
@@ -53,8 +51,14 @@ button:active {
 #notifications.shown {
   visibility: visible;
 }
+#notifications > :only-child {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
 
 .notification {
+  min-height: min-content;
   overflow: hidden;
   border-radius: 0.5ch;
   cursor: pointer;
