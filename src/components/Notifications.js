@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { harkBinToId } from '@urbit/api';
 import { useHarkStore } from '../state/hark';
-import { normalizeUrbitColor } from '../state/util';
+import { normalizeUrbitColor } from '../state/charges';
 
 const MAX_CONTENTS = 3;
 
