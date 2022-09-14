@@ -32,6 +32,15 @@ function App() {
     useHarkStore.getState().initialize(api);
   }, []);
 
+  const focusByCharge = charge => {
+    setWindows(prev => (!prev.includes(charge)
+      ? [...prev, charge]
+      : prev
+    ));
+    setSelectedWindow(prev => ([charge, ...prev.filter(i => i !== charge)]));
+    setHiddenWindow(prev => prev.filter(i => i !== charge));
+  }
+
   return (
     <div className="bg-[#e4e4e4] h-screen w-screen flex flex-col absolute">
       <HeaderBar
@@ -45,22 +54,20 @@ function App() {
       >
         {launchOpen && <Launchpad
           apps={apps}
-          hiddenWindow={{ value: hiddenWindow, set: setHiddenWindow }}
           launchOpen={{ value: launchOpen, set: setLaunchOpen }}
-          selectedWindow={{ value: selectedWindow, set: setSelectedWindow }}
-          windows={{ value: windows, set: setWindows }}
+          focusByCharge={focusByCharge}
         />}
       </Screen>
       <Notifications
         visible={showNotifs}
         charges={apps.charges}
+        focusByCharge={focusByCharge}
       />
       <Dock
         apps={apps}
-        hiddenWindow={{ value: hiddenWindow, set: setHiddenWindow }}
         launchOpen={{ value: launchOpen, set: setLaunchOpen }}
-        selectedWindow={{ value: selectedWindow, set: setSelectedWindow }}
         windows={{ value: windows, set: setWindows }}
+        focusByCharge={focusByCharge}
       />
     </div>
   );

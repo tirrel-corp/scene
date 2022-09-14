@@ -6,7 +6,7 @@ import { normalizeUrbitColor } from '../state/charges';
 const MAX_CONTENTS = 3;
 
 const Notifications = props => {
-  const { charges, visible } = props;
+  const { charges, focusByCharge, visible } = props;
   const harkStore = useHarkStore();
   const { seen, unseen } = harkStore;
 
@@ -22,7 +22,13 @@ const Notifications = props => {
           .filter(n => !!charges?.[n.bin.place.desk])
           .map(n => ([n, charges[n.bin.place.desk]]))
           .map(([n, charge], idx) => (
-            <Notification key={idx} className="unseen" {...{notification: n, charge}}>
+            <Notification {...{
+                key: 'idx',
+                className: 'unseen',
+                notification: n,
+                charge,
+                onClick: () => focusByCharge(charge),
+              }}>
               Unseen Notification {idx}
             </Notification>
           ))
@@ -33,7 +39,12 @@ const Notifications = props => {
           .filter(n => !!charges?.[n.bin.place.desk])
           .map(n => ([n, charges[n.bin.place.desk]]))
           .map(([n, charge], idx) => (
-            <Notification key={idx} {...{notification: n, charge}}>
+            <Notification {...{
+                key: idx,
+                notification: n,
+                charge,
+                onClick: () => focusByCharge(charge),
+              }}>
               Seen Notification {idx}
             </Notification>
           ))
@@ -44,7 +55,7 @@ const Notifications = props => {
 }
 
 const Notification = props => {
-  const { charge, className = '', notification, lid } = props;
+  const { charge, className = '', notification, lid, ...rest } = props;
   const binId = harkBinToId(notification.bin);
   const id = `notif-${notification.time}-${binId}`;
 
@@ -62,8 +73,8 @@ const Notification = props => {
 
   return (
     <div
-      onClick={() => console.debug(notification.body?.[0])}
-      className={`notification bg-neutral-700 text-white ${className}`}>
+      className={`notification bg-neutral-700 text-white ${className}`}
+      {...rest}>
       <header>
         <DocketImage {...charge} />
         <h2>{charge?.title || notification.bin.place.desk}</h2>
