@@ -77,7 +77,15 @@ const Notification = props => {
         <h2>{notification.body[0].title.map(i =>
           i.ship ? (<span className="ship">{i.ship}</span>) : (<span>{i.text}</span>)
         )}</h2>
-        {_.take(contents, MAX_CONTENTS).map((c, idx) => (<p key={idx}>{c.text}</p>))}
+        {_.take(contents, MAX_CONTENTS).map((cs, idx) => (
+          <p key={idx}>
+            {cs.map((c, idx) => (
+              <span className={c?.ship ? 'ship' : ''} key={idx}>
+                {c?.ship || c.text}
+              </span>
+            ))}
+          </p>
+        ))}
         {contents.length > MAX_CONTENTS && (
           <p>...and {contents.length - MAX_CONTENTS} more</p>
         )}
