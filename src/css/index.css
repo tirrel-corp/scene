@@ -46,10 +46,29 @@ button:active {
   border-radius: 0.75ch;
 
   visibility: hidden;
-  transition: 150ms ease;
+  filter: opacity(0%);
+  transition: filter 150ms ease;
+}
+#notifications::-webkit-scrollbar {
+  border-top-right-radius: 0.75ch;
+  border-bottom-right-radius: 0.75ch;
+  overflow: hidden;
+  max-width: 0.75ch;
+  background-color: #555;
+  /* padding: 0.25ch; */
+}
+#notifications::-webkit-scrollbar-thumb {
+  background-color: #eee;
+  border-top-right-radius: 0.75ch;
+  border-bottom-right-radius: 0.75ch;
+  border-width: 1px;
+  border-style: inset;
+  border-color: black;
 }
 #notifications.shown {
   visibility: visible;
+  filter: opacity(100%);
+  transition: filter 150ms ease;
 }
 #notifications > :only-child {
   display: flex;
@@ -87,7 +106,7 @@ button:active {
   border: none;
   padding: 0.25ch;
   transform: none;
-  transition: 150ms ease;
+  transition: transform 150ms ease;
 }
 .notification button.archive:hover {
   transform: scale(1.3);
