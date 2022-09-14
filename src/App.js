@@ -31,6 +31,7 @@ function App() {
       <Screen
         hiddenWindow={{ value: hiddenWindow, set: setHiddenWindow }}
         selectedWindow={{ value: selectedWindow, set: setSelectedWindow }}
+        launchOpen={{ value: launchOpen, set: setLaunchOpen }}
         windows={{ value: windows, set: setWindows }}
       >
         {launchOpen && <Launchpad

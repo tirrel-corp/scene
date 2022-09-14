@@ -2,7 +2,7 @@ import { Rnd } from 'react-rnd';
 import { useState } from 'react';
 import cn from 'classnames';
 
-export const Window = ({ win, index, windows, selectedWindow, hiddenWindow }) => {
+export const Window = ({ win, index, windows, selectedWindow, launchOpen, hiddenWindow }) => {
     const [key, setKey] = useState(0);
     const href = 'glob' in win.chad ? `${process.env.REACT_APP_URL}/apps/${win.href.glob.base}` : `${process.env.REACT_APP_URL}${win.href.site}`;
     return <Rnd
@@ -47,20 +47,30 @@ export const Window = ({ win, index, windows, selectedWindow, hiddenWindow }) =>
                 </div>
             </div>
             <div className="w-full h-full"
-                onClickCapture={() => selectedWindow.set([win, ...selectedWindow.value.filter((e) => e !== win)])}
+                onClickCapture={() => {
+                    selectedWindow.set([win, ...selectedWindow.value.filter((e) => e !== win)]);
+                }}
+                onClick={() => launchOpen.set(false)}
             >
-                <Frame selectedWindow={selectedWindow} win={win} href={href} title={win.title} keyName={key} />
+                <Frame
+                    selectedWindow={selectedWindow}
+                    win={win}
+                    launchOpen={launchOpen}
+                    href={href}
+                    title={win.title}
+                    keyName={key}
+                />
             </div>
         </div>
     </Rnd>
 }
 
-const Frame = ({ selectedWindow, win, href, title, keyName }) => {
+const Frame = ({ selectedWindow, launchOpen, win, href, title, keyName }) => {
     return <iframe
         className={cn(
             "w-full h-full bg-white min-h-0",
             {
-                "pointer-events-none": selectedWindow.value?.[0]?.title !== win.title
+                "pointer-events-none": selectedWindow.value?.[0]?.title !== win.title || launchOpen.value === true
             })}
         src={href}
         title={title}
