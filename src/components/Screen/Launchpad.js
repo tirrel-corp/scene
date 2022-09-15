@@ -17,6 +17,7 @@ export default function Launchpad({ apps, windows, launchOpen, selectedWindow, h
                     .sort((a, b) => a[1].title.toLowerCase().localeCompare(b[1].title.toLowerCase()))
                     .filter((e) => e[0] !== "garden")
                     .map(([desk, charge]) => {
+                        console.log(charge)
                         return <div className="flex flex-col items-center justify-center text-white space-y-4">
                             <div
                                 className="h-[125px] w-[125px] rounded-xl overflow-hidden mx-2 cursor-pointer hover:brightness-110"
