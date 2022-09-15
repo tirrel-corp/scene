@@ -29,7 +29,10 @@ const Notifications = props => {
                 notification: n,
                 charge,
                 lid: { unseen: null },
-                onClick: () => focusByCharge(charge),
+                onClick: () => {
+                  focusByCharge(charge);
+                  visible.set(false);
+                },
               }}>
               Unseen Notification {idx}
             </Notification>
@@ -47,7 +50,10 @@ const Notifications = props => {
                 notification: n,
                 charge,
                 lid: { seen: null },
-                onClick: () => focusByCharge(charge),
+                onClick: () => {
+                  focusByCharge(charge)
+                  visible.set(false);
+                },
               }}>
               Seen Notification {idx}
             </Notification>
