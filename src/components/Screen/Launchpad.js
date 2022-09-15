@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from "react";
 import cn from 'classnames';
 import { normalizeUrbitColor } from '../../state/charges';
 
-export default function Launchpad({ apps, windows, launchOpen, selectedWindow, hiddenWindow }) {
+export default function Launchpad({ apps, windows, launchOpen, selectedWindow, hiddenWindow, children }) {
     const wrapperRef = useRef(null);
     useOutsideAlerter(wrapperRef, () => launchOpen.set(!launchOpen.value));
     return <div className="w-full h-full z-[1000] flex justify-center items-center transition-all">
@@ -11,7 +11,7 @@ export default function Launchpad({ apps, windows, launchOpen, selectedWindow, h
                 { "opacity-0 fade-in": launchOpen.value === true })}
             ref={wrapperRef}
         >
-            <input type="text" placeholder="Search for providers..." className="rounded-xl my-4 p-1" />
+            {children}
             <div className="grow overflow-y-auto grid md:grid-cols-3 xl:grid-cols-4 gap-8">
                 {Object.entries(apps?.charges || {})
                     .sort((a, b) => a[1].title.toLowerCase().localeCompare(b[1].title.toLowerCase()))

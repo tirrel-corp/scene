@@ -1,15 +1,20 @@
 import { useState, useReducer, useEffect } from 'react';
-import { scryCharges } from '@urbit/api';
+import { scryCharges, scryAllies } from '@urbit/api';
 import { api } from './state/api';
-import { chargeSubscription } from './state/subscriptions';
+import { chargeSubscription, allySubscription } from './state/subscriptions';
 import HeaderBar from './components/HeaderBar';
 import Screen from './components/Screen';
 import Dock from './components/Dock';
 import chargeReducer from './state/charges';
+import allyReducer from "./state/allies";
+import { treatyReducer } from './state/treaties';
 import Launchpad from './components/Screen/Launchpad';
+import Search from './components/Screen/Search';
 
 function App() {
   const [apps, setApps] = useReducer(chargeReducer, {});
+  const [allies, setAllies] = useReducer(allyReducer, {});
+  const [treaties, setTreaties] = useReducer(treatyReducer, {});
   const [windows, setWindows] = useState([]);
   const [hiddenWindow, setHiddenWindow] = useState([]);
   const [selectedWindow, setSelectedWindow] = useState([]);
@@ -18,8 +23,11 @@ function App() {
   useEffect(() => {
     async function init() {
       const charges = (await api.scry(scryCharges));
+      const allies = (await api.scry(scryAllies));
       setApps(charges);
+      setAllies(allies);
       chargeSubscription(setApps);
+      allySubscription(setAllies);
     }
 
     init();
@@ -40,7 +48,12 @@ function App() {
           launchOpen={{ value: launchOpen, set: setLaunchOpen }}
           selectedWindow={{ value: selectedWindow, set: setSelectedWindow }}
           windows={{ value: windows, set: setWindows }}
-        />}
+        >
+          <Search
+            allies={{ value: allies, set: setAllies }}
+            treaties={{ value: treaties, set: setTreaties }}
+          />
+        </Launchpad>}
       </Screen>
       <Dock
         apps={apps}
