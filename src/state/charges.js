@@ -1,3 +1,5 @@
+import { normalizeDocket } from "../lib/utils";
+
 export const chargeReducer = (state, action) => {
     switch (Object.keys(action)[0]) {
         case 'initial':
@@ -24,19 +26,6 @@ const omit = (originalObj = {}, keysToOmit) =>
 
 const delCharge = (state, desk) => {
     return { charges: omit(state.charges, desk) }
-}
-
-const normalizeDocket = (docket, desk) => {
-    return { ...docket, desk, color: normalizeUrbitColor(docket.color) }
-};
-
-export const normalizeUrbitColor = (color) => {
-    if (color.startsWith('#')) {
-        return color
-    }
-    const colorString = color.slice(2).replace('.', '').toUpperCase();
-    const lengthAdjustedColor = colorString.padEnd(6, colorString.slice(0, -1));
-    return `#${lengthAdjustedColor}`
 }
 
 export default chargeReducer;

@@ -1,17 +1,22 @@
 import { useState, useReducer, useEffect } from 'react';
-import { scryCharges } from '@urbit/api';
+import { scryCharges, scryAllies } from '@urbit/api';
 import { api } from './state/api';
 import { useHarkStore } from './state/hark';
-import { chargeSubscription } from './state/subscriptions';
+import { chargeSubscription, allySubscription } from './state/subscriptions';
 import HeaderBar from './components/HeaderBar';
 import Screen from './components/Screen';
 import Dock from './components/Dock';
 import Notifications from './components/Notifications';
 import chargeReducer from './state/charges';
+import allyReducer from "./state/allies";
+import { treatyReducer } from './state/treaties';
 import Launchpad from './components/Screen/Launchpad';
+import Search from './components/Screen/Search';
 
 function App() {
   const [apps, setApps] = useReducer(chargeReducer, {});
+  const [allies, setAllies] = useReducer(allyReducer, {});
+  const [treaties, setTreaties] = useReducer(treatyReducer, {});
   const [windows, setWindows] = useState([]);
   const [hiddenWindow, setHiddenWindow] = useState([]);
   const [selectedWindow, setSelectedWindow] = useState([]);
@@ -21,8 +26,11 @@ function App() {
   useEffect(() => {
     async function init() {
       const charges = (await api.scry(scryCharges));
+      const allies = (await api.scry(scryAllies));
       setApps(charges);
+      setAllies(allies);
       chargeSubscription(setApps);
+      allySubscription(setAllies);
     }
 
     init();
@@ -42,7 +50,7 @@ function App() {
   }
 
   return (
-    <div className="bg-[#e4e4e4] h-screen w-screen flex flex-col absolute">
+    <div className="bg-[#e4e4e4] h-screen w-screen flex flex-col absolute" style={{ backgroundImage: "url('https://s3.us-east-1.amazonaws.com/haddefsigwen1/haddef-sigwen/2021.1.22..17.43.27-AA5EB02C-2559-47F1-9869-85867A42336F.jpeg')", backgroundSize: 'cover' }}>
       <HeaderBar
         selectedWindow={selectedWindow}
         toggleNotifs={() => setShowNotifs(a => !a)}
@@ -50,13 +58,18 @@ function App() {
       <Screen
         hiddenWindow={{ value: hiddenWindow, set: setHiddenWindow }}
         selectedWindow={{ value: selectedWindow, set: setSelectedWindow }}
+        launchOpen={{ value: launchOpen, set: setLaunchOpen }}
         windows={{ value: windows, set: setWindows }}
       >
         {launchOpen && <Launchpad
           apps={apps}
           launchOpen={{ value: launchOpen, set: setLaunchOpen }}
-          focusByCharge={focusByCharge}
-        />}
+          focusByCharge={focusByCharge}>
+          <Search
+            allies={{ value: allies, set: setAllies }}
+            treaties={{ value: treaties, set: setTreaties }}
+          />
+        </Launchpad>}
       </Screen>
       <Notifications
         visible={showNotifs}
