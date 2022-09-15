@@ -70,7 +70,7 @@ function App() {
         </Launchpad>}
       </Screen>
       <Notifications
-        visible={showNotifs}
+        visible={{ value: showNotifs, set: setShowNotifs }}
         charges={apps.charges}
         focusByCharge={focusByCharge}
       />

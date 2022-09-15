@@ -13,7 +13,7 @@ const Notifications = props => {
   return (
     <div
       id="notifications"
-      class={`notifications text-zinc-200 ${visible ? 'shown' : ''}`}
+      class={`notifications text-zinc-200 ${visible.value ? 'shown' : ''}`}
     >
       <section>
         {Object.values(unseen)
