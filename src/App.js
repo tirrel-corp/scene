@@ -1,12 +1,10 @@
 import { useState, useReducer, useEffect } from 'react';
 import { scryCharges, scryAllies } from '@urbit/api';
 import { api } from './state/api';
-import { useHarkStore } from './state/hark';
 import { chargeSubscription, allySubscription } from './state/subscriptions';
 import HeaderBar from './components/HeaderBar';
 import Screen from './components/Screen';
 import Dock from './components/Dock';
-import Notifications from './components/Notifications';
 import chargeReducer from './state/charges';
 import allyReducer from "./state/allies";
 import { treatyReducer } from './state/treaties';
@@ -21,7 +19,6 @@ function App() {
   const [hiddenWindow, setHiddenWindow] = useState([]);
   const [selectedWindow, setSelectedWindow] = useState([]);
   const [launchOpen, setLaunchOpen] = useState(false);
-  const [showNotifs, setShowNotifs] = useState(false);
 
   useEffect(() => {
     async function init() {
@@ -36,25 +33,9 @@ function App() {
     init();
   }, []);
 
-  useEffect(() => {
-    useHarkStore.getState().initialize(api);
-  }, []);
-
-  const focusByCharge = charge => {
-    setWindows(prev => (!prev.includes(charge)
-      ? [...prev, charge]
-      : prev
-    ));
-    setSelectedWindow(prev => ([charge, ...prev.filter(i => i !== charge)]));
-    setHiddenWindow(prev => prev.filter(i => i !== charge));
-  }
-
   return (
     <div className="bg-[#e4e4e4] h-screen w-screen flex flex-col absolute" style={{ backgroundImage: "url('https://s3.us-east-1.amazonaws.com/haddefsigwen1/haddef-sigwen/2021.1.22..17.43.27-AA5EB02C-2559-47F1-9869-85867A42336F.jpeg')", backgroundSize: 'cover' }}>
-      <HeaderBar
-        selectedWindow={selectedWindow}
-        toggleNotifs={() => setShowNotifs(a => !a)}
-      />
+      <HeaderBar selectedWindow={selectedWindow} />
       <Screen
         hiddenWindow={{ value: hiddenWindow, set: setHiddenWindow }}
         selectedWindow={{ value: selectedWindow, set: setSelectedWindow }}
@@ -63,24 +44,23 @@ function App() {
       >
         {launchOpen && <Launchpad
           apps={apps}
+          hiddenWindow={{ value: hiddenWindow, set: setHiddenWindow }}
           launchOpen={{ value: launchOpen, set: setLaunchOpen }}
-          focusByCharge={focusByCharge}>
+          selectedWindow={{ value: selectedWindow, set: setSelectedWindow }}
+          windows={{ value: windows, set: setWindows }}
+        >
           <Search
             allies={{ value: allies, set: setAllies }}
             treaties={{ value: treaties, set: setTreaties }}
           />
         </Launchpad>}
       </Screen>
-      <Notifications
-        visible={showNotifs}
-        charges={apps.charges}
-        focusByCharge={focusByCharge}
-      />
       <Dock
         apps={apps}
+        hiddenWindow={{ value: hiddenWindow, set: setHiddenWindow }}
         launchOpen={{ value: launchOpen, set: setLaunchOpen }}
+        selectedWindow={{ value: selectedWindow, set: setSelectedWindow }}
         windows={{ value: windows, set: setWindows }}
-        focusByCharge={focusByCharge}
       />
     </div>
   );
