@@ -1,3 +1,4 @@
+import { allyShip, deSig } from '@urbit/api';
 import { useState } from 'react';
 import ob from 'urbit-ob';
 import { api } from '../../state/api';
@@ -17,7 +18,7 @@ export default function Search({ allies, treaties }) {
             if (e.key === "Enter") {
                 e.preventDefault();
                 if (ob.isValidPatp(query)) {
-
+                    api.poke(allyShip(`~${deSig(query)}`));
                 }
             }
         }}
