@@ -9,6 +9,8 @@ const Notifications = props => {
   const { charges, focusByCharge, visible } = props;
   const harkStore = useHarkStore();
   const { seen, unseen } = harkStore;
+  const empty = Object.values(unseen).length === 0
+    && Object.values(seen).length === 0;
 
   return (
     <div
@@ -16,6 +18,11 @@ const Notifications = props => {
       class={`notifications text-zinc-200 ${visible.value ? 'shown' : ''}`}
     >
       <section>
+        {empty && (
+          <div className="p-3 text-center">
+            <p>No notifications</p>
+          </div>
+        )}
         {Object.values(unseen)
           .sort((a, b) => b.time - a.time)
           .filter(n => !!n?.body?.[0])
