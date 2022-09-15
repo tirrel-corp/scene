@@ -1,5 +1,6 @@
 import { normalizeUrbitColor } from '../state/charges';
 import Tippy from '@tippyjs/react';
+import LaunchpadIcon from "./icons/launchpad"
 
 export default function Dock({ windows, selectedWindow, hiddenWindow, launchOpen }) {
     return <div className="bg-[rgba(0,0,0,0.5)] text-white w-fit self-center p-2 flex rounded-t-md shadow-sm shadow-[rgba(0,0,0,0.15)] border border-[rgba(0,0,0,0.15)]">
@@ -21,6 +22,13 @@ export default function Dock({ windows, selectedWindow, hiddenWindow, launchOpen
                 </div>
             </Tippy>
         })}
-        <a onClick={() => launchOpen.set(!launchOpen.value)}>launch</a>
+        <Tippy key="launch" content="Launchpad">
+            <a
+                className="cursor-pointer hover:brightness-110"
+                onClick={() => launchOpen.set(!launchOpen.value)}
+            >
+                <LaunchpadIcon />
+            </a>
+        </Tippy>
     </div>
 }
