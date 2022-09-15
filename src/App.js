@@ -21,7 +21,7 @@ function App() {
   const [hiddenWindow, setHiddenWindow] = useState([]);
   const [selectedWindow, setSelectedWindow] = useState([]);
   const [launchOpen, setLaunchOpen] = useState(false);
-  const [showNotifs, setShowNotifs] = useState(true);
+  const [showNotifs, setShowNotifs] = useState(false);
 
   useEffect(() => {
     async function init() {
