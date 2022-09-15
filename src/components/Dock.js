@@ -1,4 +1,4 @@
-import { normalizeUrbitColor } from '../state/charges';
+import { normalizeUrbitColor } from '../lib/utils';
 import Tippy from '@tippyjs/react';
 import LaunchpadIcon from "./icons/launchpad"
 

@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import cn from 'classnames';
-import { normalizeUrbitColor } from '../../state/charges';
+import { normalizeUrbitColor } from '../../lib/utils';
 
 export default function Launchpad({ apps, windows, launchOpen, selectedWindow, hiddenWindow, children }) {
     const wrapperRef = useRef(null);

@@ -11,3 +11,9 @@ export const allySubscription = (callback) => api.subscribe({
     path: "/allies",
     event: (data) => callback(data)
 })
+
+export const treatySubscription = (callback) => api.subscribe({
+    app: "treaty",
+    path: "/treaties",
+    event: (data) => callback(data)
+})
