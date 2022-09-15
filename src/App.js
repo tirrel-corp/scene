@@ -12,6 +12,7 @@ import allyReducer from "./state/allies";
 import { treatyReducer } from './state/treaties';
 import Launchpad from './components/Screen/Launchpad';
 import Search from './components/Screen/Search';
+import { isDescendant } from './lib/utils';
 
 function App() {
   const [apps, setApps] = useReducer(chargeReducer, {});
@@ -37,6 +38,22 @@ function App() {
 
     init();
   }, []);
+
+  useEffect(() => {
+    if (!showNotifs) {
+      return;
+    }
+
+    const closeNotifications = ev => {
+      if (!isDescendant(document.getElementById('notifications'), ev.target)
+        && !isDescendant(document.getElementById('notifications-toggle'), ev.target)
+      ) {
+        setShowNotifs(false);
+      }
+    }
+    document.addEventListener('click', closeNotifications);
+    return () => document.removeEventListener('click', closeNotifications);
+  }, [showNotifs, setShowNotifs]); 
 
   const focusByCharge = useCallback(charge => {
     setWindows(prev => (!prev.includes(charge)

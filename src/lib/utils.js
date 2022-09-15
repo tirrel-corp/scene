@@ -18,3 +18,18 @@ export const normalizeUrbitColor = (color) => {
     const lengthAdjustedColor = colorString.padEnd(6, colorString.slice(0, -1));
     return `#${lengthAdjustedColor}`
 }
+
+// takes two elements
+export const isDescendant = (parent, child) => {
+    if (parent === child) {
+        return true;
+    }
+
+    while (child = child.parentNode) {
+        if (parent === child) {
+            return true;
+        }
+    }
+
+    return false;
+}
