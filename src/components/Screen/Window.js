@@ -9,6 +9,7 @@ export const Window = ({ win, index, windows, selectedWindow, launchOpen, hidden
     const [key, setKey] = useState(0);
     const href = 'glob' in win.chad ? `${process.env.REACT_APP_URL}/apps/${win.href.glob.base}` : `${process.env.REACT_APP_URL}${win.href.site}`;
     return <Rnd
+        bounds="window"
         className="rounded-xl overflow-hidden shadow-md shadow-[rgba(0,0,0,0.1]"
         style={{
             zIndex: ([...selectedWindow.value].reverse().indexOf(win) + 1) * 10,
@@ -71,7 +72,7 @@ export const Window = ({ win, index, windows, selectedWindow, launchOpen, hidden
 const Frame = ({ selectedWindow, launchOpen, win, href, title, keyName }) => {
     return <iframe
         className={cn(
-            "w-full h-full bg-white min-h-0",
+            "w-full h-full bg-white min-h-0 select-none",
             {
                 "pointer-events-none": selectedWindow.value?.[0]?.title !== win.title || launchOpen.value === true
             })}
