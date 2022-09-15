@@ -29,7 +29,7 @@ npm run electron:package:linux
 - [x] only show open windows in the dock
 - [x] clicking icon in dock focuses window, doesn't spawn another window
 - [ ] "Overview" for apps, searching for apps/treaties, installing apps, seeing app information, deleting apps
-- [ ] display notifications and set selected window based on notification source
+- [x] display notifications and set selected window based on notification source
 - [ ] construct hosting onboarding flow
     - [ ] should convey what they are buying
     - [ ] should allow entering credit card to begin subscription
