@@ -15,6 +15,7 @@ export default function Launchpad({ apps, windows, launchOpen, selectedWindow, h
             <div className="grow overflow-y-auto grid md:grid-cols-3 xl:grid-cols-4 gap-8">
                 {Object.entries(apps?.charges || {})
                     .sort((a, b) => a[1].title.toLowerCase().localeCompare(b[1].title.toLowerCase()))
+                    .filter((e) => e[0] !== "garden")
                     .map(([desk, charge]) => {
                         return <div className="flex flex-col items-center justify-center text-white space-y-4">
                             <div
