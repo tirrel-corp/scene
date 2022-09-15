@@ -9,6 +9,7 @@ const Notifications = props => {
   const { charges, focusByCharge, visible } = props;
   const harkStore = useHarkStore();
   const { seen, unseen } = harkStore;
+  console.debug(unseen);
 
   return (
     <div
@@ -27,6 +28,7 @@ const Notifications = props => {
                 className: 'unseen',
                 notification: n,
                 charge,
+                lid: { unseen: null },
                 onClick: () => focusByCharge(charge),
               }}>
               Unseen Notification {idx}
@@ -43,6 +45,7 @@ const Notifications = props => {
                 key: idx,
                 notification: n,
                 charge,
+                lid: { seen: null },
                 onClick: () => focusByCharge(charge),
               }}>
               Seen Notification {idx}
