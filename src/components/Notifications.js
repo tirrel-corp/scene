@@ -24,7 +24,7 @@ const Notifications = props => {
           .filter(([n, charge]) => charge?.title !== 'System')
           .map(([n, charge], idx) => (
             <Notification {...{
-                key: 'idx',
+                key: idx,
                 className: 'unseen',
                 notification: n,
                 charge,
