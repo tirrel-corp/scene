@@ -1,4 +1,4 @@
-import { useState, useReducer, useEffect } from 'react';
+import { useCallback, useState, useReducer, useEffect } from 'react';
 import { scryCharges, scryAllies } from '@urbit/api';
 import { api } from './state/api';
 import { useHarkStore } from './state/hark';
@@ -31,23 +31,21 @@ function App() {
       setAllies(allies);
       chargeSubscription(setApps);
       allySubscription(setAllies);
+
+      useHarkStore.getState().initialize(api);
     }
 
     init();
   }, []);
 
-  useEffect(() => {
-    useHarkStore.getState().initialize(api);
-  }, []);
-
-  const focusByCharge = charge => {
+  const focusByCharge = useCallback(charge => {
     setWindows(prev => (!prev.includes(charge)
       ? [...prev, charge]
       : prev
     ));
     setSelectedWindow(prev => ([charge, ...prev.filter(i => i !== charge)]));
     setHiddenWindow(prev => prev.filter(i => i !== charge));
-  }
+  }, [setWindows, setSelectedWindow, setHiddenWindow]);
 
   return (
     <div className="bg-[#e4e4e4] h-screen w-screen flex flex-col absolute" style={{ backgroundImage: "url('https://s3.us-east-1.amazonaws.com/haddefsigwen1/haddef-sigwen/2021.1.22..17.43.27-AA5EB02C-2559-47F1-9869-85867A42336F.jpeg')", backgroundSize: 'cover' }}>
