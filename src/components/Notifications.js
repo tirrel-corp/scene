@@ -21,6 +21,7 @@ const Notifications = props => {
           .filter(n => !!n?.body?.[0])
           .filter(n => !!charges?.[n.bin.place.desk])
           .map(n => ([n, charges[n.bin.place.desk]]))
+          .filter(([n, charge]) => charge?.title !== 'System')
           .map(([n, charge], idx) => (
             <Notification {...{
                 key: 'idx',
@@ -39,6 +40,7 @@ const Notifications = props => {
           .filter(n => !!n?.body?.[0])
           .filter(n => !!charges?.[n.bin.place.desk])
           .map(n => ([n, charges[n.bin.place.desk]]))
+          .filter(([n, charge]) => charge?.title !== 'System')
           .map(([n, charge], idx) => (
             <Notification {...{
                 key: idx,
