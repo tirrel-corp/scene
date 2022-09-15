@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from "react";
 import cn from 'classnames';
 import { normalizeUrbitColor } from '../../lib/utils';
 
-export default function Launchpad({ apps, children, focusByCharge, launchOpen }) {
+export default function Launchpad({ apps, windows, launchOpen, selectedWindow, hiddenWindow, children }) {
     const wrapperRef = useRef(null);
     useOutsideAlerter(wrapperRef, () => launchOpen.set(!launchOpen.value));
     return <div className="w-full h-full z-[1000] flex justify-center items-center transition-all">
@@ -24,8 +24,12 @@ export default function Launchpad({ apps, children, focusByCharge, launchOpen })
                                 style={{ backgroundColor: normalizeUrbitColor(charge.color) }}
                                 key={desk}
                                 onClick={() => {
-                                    focusByCharge(charge);
-                                    launchOpen.set(!launchOpen.value);
+                                    if (!windows.value.includes(charge)) {
+                                        windows.set([...windows.value, charge]);
+                                    }
+                                    selectedWindow.set([charge, ...selectedWindow.value.filter((e) => e !== charge)])
+                                    hiddenWindow.set(hiddenWindow.value.filter((e) => e !== charge))
+                                    launchOpen.set(!launchOpen.value)
                                 }}
                             >
                                 {charge?.image && <img className="h-[125px] w-[125px]" src={charge.image} />}
