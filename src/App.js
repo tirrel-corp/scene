@@ -59,8 +59,15 @@ function App() {
     setHiddenWindow(prev => prev.filter(i => i !== charge));
   }, [setWindows, setSelectedWindow, setHiddenWindow]);
 
+  const bgImage = window.localStorage.getItem('tirrel-desktop-background');
+
   return (
-    <div className="bg-[#e4e4e4] h-screen w-screen flex flex-col absolute" style={{ backgroundImage: "url('https://s3.us-east-1.amazonaws.com/haddefsigwen1/haddef-sigwen/2021.1.22..17.43.27-AA5EB02C-2559-47F1-9869-85867A42336F.jpeg')", backgroundSize: 'cover' }}>
+    <div
+      className="bg-[#e4e4e4] h-screen w-screen flex flex-col absolute"
+      style={{
+        backgroundImage: bgImage || undefined,
+        backgroundSize: 'cover',
+      }}>
       <HeaderBar
         selectedWindow={selectedWindow}
         toggleNotifs={() => setShowNotifs(a => !a)}

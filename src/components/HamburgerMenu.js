@@ -8,7 +8,7 @@ const HamburgerMenu = props => {
       id="hamburger"
       className={`${visible.value ? 'shown' : ''}`}>
       <section className="flex flex-col gap-2">
-        <BackgroundInput />
+        <BackgroundInput onSave={() => visible.set(false)} />
       </section>
     </div>
   );
@@ -23,9 +23,20 @@ function isValidUrl(input) {
   return true;
 }
 
+function isImage(input) {
+  return /\.(jpe?g|tiff?|png|webp|bmp)$/i.test(input);
+}
+
 const BackgroundInput = props => {
+  const { onSave } = props;
+
   const [value, setValue] = useState('');
-  const validity = isValidUrl(value);
+  const validity = isValidUrl(value) && isImage(value);
+
+  const handleSave = () => {
+    window.localStorage.setItem('tirrel-desktop-background', `url(${value})`);
+    onSave();
+  };
 
   return (
     <div className="rounded bg-neutral-500 text-white overflow-hidden">
@@ -43,7 +54,7 @@ const BackgroundInput = props => {
             placeholder="https://image.host/image.jpg"
             onChange={ev => setValue(ev.target.value)}
           />
-          <button>
+          <button disabled={!validity} onClick={handleSave}>
             Save
           </button>
         </div>
