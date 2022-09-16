@@ -66,6 +66,7 @@ function App() {
           <Search
             allies={{ value: allies, set: setAllies }}
             treaties={{ value: treaties, set: setTreaties }}
+            apps={apps}
           />
         </Launchpad>}
       </Screen>

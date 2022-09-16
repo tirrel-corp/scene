@@ -1,4 +1,6 @@
 import { normalizeDocket, normalizeDockets } from "../lib/utils";
+import { api } from "./api";
+import { scryAllyTreaties } from "@urbit/api";
 
 export const treatyReducer = (state, action) => {
     switch (Object.keys(action)[0]) {
@@ -10,4 +12,8 @@ export const treatyReducer = (state, action) => {
             const treaty = normalizeDocket(action.add, desk);
             return { ...state, [`${ship}/${desk}`]: treaty }
     }
+}
+export const getTreaties = async (ship) => {
+    const treaties = await api.scry(scryAllyTreaties(ship));
+    return treaties;
 }
