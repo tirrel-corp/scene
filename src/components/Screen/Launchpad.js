@@ -20,15 +20,21 @@ export default function Launchpad({ apps, children, focusByCharge, launchOpen })
                         console.log(charge)
                         return <div className="flex flex-col items-center justify-center text-white space-y-4">
                             <div
-                                className="h-[125px] w-[125px] rounded-xl overflow-hidden mx-2 cursor-pointer hover:brightness-110"
+                                className={cn("h-[125px] w-[125px] rounded-xl overflow-hidden mx-2 cursor-pointer",
+                                    {
+                                        "hover:brightness-110": !('install' in charge?.chad),
+                                        "opacity-75": Boolean('install' in charge?.chad)
+                                    })}
                                 style={{ backgroundColor: normalizeUrbitColor(charge.color) }}
                                 key={desk}
                                 onClick={() => {
-                                    focusByCharge(charge);
-                                    launchOpen.set(!launchOpen.value);
+                                    if (!('install' in charge?.chad)) {
+                                        focusByCharge(charge);
+                                        launchOpen.set(!launchOpen.value);
+                                    }
                                 }}
                             >
-                                {charge?.image && <img className="h-[125px] w-[125px]" src={charge.image} />}
+                                {charge?.image?.startsWith("http") && <img className="h-[125px] w-[125px]" src={charge.image} />}
                             </div>
                             <p>{charge.title}</p>
                         </div>

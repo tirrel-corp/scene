@@ -1,5 +1,5 @@
-import { allyShip, deSig } from '@urbit/api';
-import { useEffect, useState } from 'react';
+import { allyShip, deSig, docketInstall } from '@urbit/api';
+import { useState } from 'react';
 import ob from 'urbit-ob';
 import { api } from '../../state/api';
 import { getTreaties } from "../../state/treaties";
@@ -52,12 +52,13 @@ const Prompt = ({ allies, apps, siggedAlly, treaties, setPromptOpen, currentApp,
         {query === ""
             ? <p className="text-gray-500 text-xs p-4">Please enter a valid <code>@p</code> to search for applications.</p>
             : <div className='flex flex-col space-y-2 w-full min-h-0 h-full self-start'>
-                {currentApp.value?.desk && <AppInfo apps={apps} currentApp={currentApp} />}
+                {currentApp.value?.desk && <AppInfo apps={apps} currentApp={currentApp} setPromptOpen={setPromptOpen} />}
                 {!currentApp.value?.desk && ob.isValidPatp(siggedAlly) && Object.values(allies.value?.[siggedAlly] || {})?.map((charge) => {
                     if (treaties.value?.[charge]) {
                         const app = treaties?.value?.[charge];
                         return <div
                             className="p-2 hover:bg-[rgba(0,0,0,0.1)] rounded-xl flex justify-between w-full items-center cursor-pointer"
+                            key={app.desk}
                             onClick={() => {
                                 setPromptOpen(true);
                                 currentApp.set(app);
@@ -84,10 +85,15 @@ const Prompt = ({ allies, apps, siggedAlly, treaties, setPromptOpen, currentApp,
     </div>
 }
 
-const AppInfo = ({ currentApp, apps }) => {
+const AppInfo = ({ currentApp, apps, setPromptOpen }) => {
     const app = currentApp.value;
     return <div className="min-h-0 min-w-0 w-full h-full flex flex-col space-y-2">
-        <a className="cursor-pointer font-bold" onClick={() => currentApp.set({})}>← Back</a>
+        <a
+            className="cursor-pointer font-bold"
+            onClick={() => currentApp.set({})}
+        >
+            ← Back
+        </a>
         <div className="flex items-center space-x-4 p-2">
             <div
                 className="h-16 w-16 rounded-xl overflow-hidden mx-2"
@@ -103,7 +109,15 @@ const AppInfo = ({ currentApp, apps }) => {
                 {app.info !== '' && <p className="truncate w-full">{app.info}</p>}
             </div>
         </div>
-        {!apps.charges?.[app.desk] && <button className="bg-blue-500 text-white">Install app</button>}
+        {!apps.charges?.[app.desk] && <button
+            className="bg-blue-500 text-white"
+            onClick={() => {
+                api.poke(docketInstall(app.ship, app.desk))
+                setPromptOpen(false)
+            }}
+        >
+            Install app
+        </button>}
         <div className="flex justify-between">
             <p className="font-bold">Version</p>
             <p>{app.version}</p>

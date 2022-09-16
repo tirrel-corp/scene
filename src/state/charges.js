@@ -8,7 +8,7 @@ export const chargeReducer = (state, action) => {
             const { desk, charge } = action['add-charge'];
             return addCharge(state, desk, charge);
         case 'del-charge':
-            return delCharge(state, desk);
+            return delCharge(state, action?.['del-charge']);
         default:
             return state;
     }
