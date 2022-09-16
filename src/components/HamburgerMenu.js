@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const HamburgerMenu = props => {
   const { visible } = props;
@@ -29,12 +29,13 @@ function isImage(input) {
 
 const BackgroundInput = props => {
   const { onSave } = props;
-
-  const [value, setValue] = useState('');
+  const previousBg = window.localStorage.getItem('tirrel-desktop-background') || '';
+  const [value, setValue] = useState(previousBg);
   const validity = isValidUrl(value) && isImage(value);
 
+
   const handleSave = () => {
-    window.localStorage.setItem('tirrel-desktop-background', `url(${value})`);
+    window.localStorage.setItem('tirrel-desktop-background', value);
     onSave();
   };
 
@@ -48,11 +49,11 @@ const BackgroundInput = props => {
           <input
             type="url"
             id="background-input"
-            className={`block grow rounded p-1 text-small text-black border-2 ${
-              !!value && !validity ? 'border-red-400' : 'border-transparent'
-            }`}
+            className={`block grow rounded p-1 text-small text-black border-2 ${!!value && !validity ? 'border-red-400' : 'border-transparent'
+              }`}
             placeholder="https://image.host/image.jpg"
             onChange={ev => setValue(ev.target.value)}
+            value={value}
           />
           <button disabled={!validity} onClick={handleSave}>
             Save
