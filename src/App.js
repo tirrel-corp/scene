@@ -12,6 +12,7 @@ import allyReducer from "./state/allies";
 import { treatyReducer } from './state/treaties';
 import Launchpad from './components/Screen/Launchpad';
 import Search from './components/Screen/Search';
+import HamburgerMenu from './components/HamburgerMenu';
 import { useClickOutside } from './lib/hooks';
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
   const [selectedWindow, setSelectedWindow] = useState([]);
   const [launchOpen, setLaunchOpen] = useState(false);
   const [showNotifs, setShowNotifs] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
 
   useEffect(() => {
     async function init() {
@@ -58,6 +60,7 @@ function App() {
       <HeaderBar
         selectedWindow={selectedWindow}
         toggleNotifs={() => setShowNotifs(a => !a)}
+        toggleMenu={() => setShowMenu(a => !a)}
       />
       <Screen
         hiddenWindow={{ value: hiddenWindow, set: setHiddenWindow }}
@@ -76,6 +79,9 @@ function App() {
           />
         </Launchpad>}
       </Screen>
+      <HamburgerMenu
+        visible={{ value: showMenu, set: setShowMenu }}
+      />
       <Notifications
         visible={{ value: showNotifs, set: setShowNotifs }}
         charges={apps.charges}
