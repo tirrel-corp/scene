@@ -29,7 +29,8 @@ button:active {
   @apply brightness-110;
 }
 
-#notifications {
+#notifications,
+#hamburger {
   @apply z-[100] absolute right-4 top-12 max-h-[80vh] max-w-[35ch] overflow-y-auto p-2 invisible;
   min-width: calc(min(35ch, 100%));
   background-color: rgba(0, 0, 0, 0.2);
@@ -54,7 +55,8 @@ button:active {
   border-style: inset;
 }
 
-#notifications.shown {
+#notifications.shown,
+#hamburger.shown {
   @apply visible;
   filter: opacity(100%);
   transition: filter 150ms ease;
