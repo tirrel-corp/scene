@@ -45,6 +45,10 @@ function App() {
     { current: document.getElementById('notifications') },
     { current: document.getElementById('notifications-toggle') },
   ], () => setShowNotifs(false));
+  useClickOutside([
+    { current: document.getElementById('hamburger') },
+    { current: document.getElementById('hamburger-toggle') },
+  ], () => setShowMenu(false));
 
   const focusByCharge = useCallback(charge => {
     setWindows(prev => (!prev.includes(charge)
