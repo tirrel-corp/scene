@@ -15,7 +15,7 @@ const Notifications = props => {
   return (
     <div
       id="notifications"
-      class={`notifications text-zinc-200 ${visible.value ? 'shown' : ''}`}
+      className={`notifications text-zinc-200 ${visible.value ? 'shown' : ''}`}
     >
       <section>
         {empty && (
