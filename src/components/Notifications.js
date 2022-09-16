@@ -9,13 +9,20 @@ const Notifications = props => {
   const { charges, focusByCharge, visible } = props;
   const harkStore = useHarkStore();
   const { seen, unseen } = harkStore;
+  const empty = Object.values(unseen).length === 0
+    && Object.values(seen).length === 0;
 
   return (
     <div
       id="notifications"
-      class={`notifications text-zinc-200 ${visible ? 'shown' : ''}`}
+      className={`notifications text-zinc-200 ${visible.value ? 'shown' : ''}`}
     >
       <section>
+        {empty && (
+          <div className="p-3 text-center">
+            <p>No notifications</p>
+          </div>
+        )}
         {Object.values(unseen)
           .sort((a, b) => b.time - a.time)
           .filter(n => !!n?.body?.[0])
@@ -24,12 +31,15 @@ const Notifications = props => {
           .filter(([n, charge]) => charge?.title !== 'System')
           .map(([n, charge], idx) => (
             <Notification {...{
-                key: 'idx',
+                key: idx,
                 className: 'unseen',
                 notification: n,
                 charge,
                 lid: { unseen: null },
-                onClick: () => focusByCharge(charge),
+                onClick: () => {
+                  focusByCharge(charge);
+                  visible.set(false);
+                },
               }}>
               Unseen Notification {idx}
             </Notification>
@@ -47,7 +57,10 @@ const Notifications = props => {
                 notification: n,
                 charge,
                 lid: { seen: null },
-                onClick: () => focusByCharge(charge),
+                onClick: () => {
+                  focusByCharge(charge)
+                  visible.set(false);
+                },
               }}>
               Seen Notification {idx}
             </Notification>
