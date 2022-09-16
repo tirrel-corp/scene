@@ -12,6 +12,7 @@ import allyReducer from "./state/allies";
 import { treatyReducer } from './state/treaties';
 import Launchpad from './components/Screen/Launchpad';
 import Search from './components/Screen/Search';
+import { useClickOutside } from './lib/hooks';
 
 function App() {
   const [apps, setApps] = useReducer(chargeReducer, {});
@@ -38,21 +39,10 @@ function App() {
     init();
   }, []);
 
-  useEffect(() => {
-    if (!showNotifs) {
-      return;
-    }
-
-    const closeNotifications = ev => {
-      if (!document.getElementById('notifications').contains(ev.target)
-        && !document.getElementById('notifications-toggle').contains(ev.target)
-      ) {
-        setShowNotifs(false);
-      }
-    }
-    document.addEventListener('click', closeNotifications);
-    return () => document.removeEventListener('click', closeNotifications);
-  }, [showNotifs, setShowNotifs]); 
+  useClickOutside([
+    { current: document.getElementById('notifications') },
+    { current: document.getElementById('notifications-toggle') },
+  ], () => setShowNotifs(false));
 
   const focusByCharge = useCallback(charge => {
     setWindows(prev => (!prev.includes(charge)
