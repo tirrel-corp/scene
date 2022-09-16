@@ -63,7 +63,7 @@ function App() {
 
   return (
     <div
-      className="bg-[#e4e4e4] h-screen w-screen flex flex-col absolute"
+      className="bg-[#e4e4e4] h-screen w-screen flex flex-col absolute overflow-hidden"
       style={{
         backgroundImage: bgImage ? `url(${bgImage})` : undefined,
         backgroundSize: 'cover',
