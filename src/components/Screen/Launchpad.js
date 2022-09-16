@@ -17,13 +17,12 @@ export default function Launchpad({ apps, children, focusByCharge, launchOpen })
                     .sort((a, b) => a[1].title.toLowerCase().localeCompare(b[1].title.toLowerCase()))
                     .filter((e) => e[0] !== "garden")
                     .map(([desk, charge]) => {
-                        console.log(charge)
                         return <div className="flex flex-col items-center justify-center text-white space-y-4">
                             <div
                                 className={cn("h-[125px] w-[125px] rounded-xl overflow-hidden mx-2 cursor-pointer",
                                     {
                                         "hover:brightness-110": !('install' in charge?.chad),
-                                        "opacity-75": Boolean('install' in charge?.chad)
+                                        "opacity-25": Boolean('install' in charge?.chad)
                                     })}
                                 style={{ backgroundColor: normalizeUrbitColor(charge.color) }}
                                 key={desk}

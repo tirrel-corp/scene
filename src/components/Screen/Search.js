@@ -1,5 +1,5 @@
 import { allyShip, deSig, docketInstall } from '@urbit/api';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ob from 'urbit-ob';
 import { api } from '../../state/api';
 import { getTreaties } from "../../state/treaties";
@@ -8,8 +8,14 @@ export default function Search({ allies, treaties, apps }) {
     const [query, setQuery] = useState("");
     const [promptOpen, setPromptOpen] = useState(false);
     const [currentApp, setCurrentApp] = useState({});
-
     const siggedAlly = `~${deSig(query)}`;
+
+    // useEffect(() => {
+    //     if (allies.value?.[siggedAlly]?.length > 0 && !treaties?.[allies.value?.[siggedAlly][0]]) {
+    //         searchFetch(treaties, getTreaties(siggedAlly));
+    //     }
+    // }, [allies, siggedAlly, treaties]);
+
     return <div className="relative w-full max-w-md flex items-center justify-center"><input
         type="text"
         placeholder="Search for providers..."
@@ -28,7 +34,11 @@ export default function Search({ allies, treaties, apps }) {
                     if (allies.value?.[siggedAlly]) {
                         searchFetch(treaties, getTreaties(siggedAlly));
                     } else {
-                        api.poke(allyShip(siggedAlly));
+                        api.poke(allyShip(siggedAlly)).then(() => {
+                            setTimeout(() => {
+                                searchFetch(treaties, getTreaties(siggedAlly));
+                            }, 5000)
+                        });
                     }
                 }
             }
