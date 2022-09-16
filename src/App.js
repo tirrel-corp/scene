@@ -12,7 +12,6 @@ import allyReducer from "./state/allies";
 import { treatyReducer } from './state/treaties';
 import Launchpad from './components/Screen/Launchpad';
 import Search from './components/Screen/Search';
-import { isDescendant } from './lib/utils';
 
 function App() {
   const [apps, setApps] = useReducer(chargeReducer, {});
@@ -45,8 +44,8 @@ function App() {
     }
 
     const closeNotifications = ev => {
-      if (!isDescendant(document.getElementById('notifications'), ev.target)
-        && !isDescendant(document.getElementById('notifications-toggle'), ev.target)
+      if (!document.getElementById('notifications').contains(ev.target)
+        && !document.getElementById('notifications-toggle').contains(ev.target)
       ) {
         setShowNotifs(false);
       }
