@@ -1,9 +1,9 @@
-import { normalizeDocket } from "../lib/utils";
+import { normalizeDocket, normalizeDockets } from "../lib/utils";
 
 export const chargeReducer = (state, action) => {
     switch (Object.keys(action)[0]) {
         case 'initial':
-            return { charges: action.initial };
+            return { charges: normalizeDockets(action.initial) };
         case 'add-charge':
             const { desk, charge } = action['add-charge'];
             return addCharge(state, desk, charge);

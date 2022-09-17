@@ -28,7 +28,7 @@ npm run electron:package:linux
 - [x] set selected window on focussing an iframe
 - [x] only show open windows in the dock
 - [x] clicking icon in dock focuses window, doesn't spawn another window
-- [ ] "Overview" for apps, searching for apps/treaties, installing apps, seeing app information, deleting apps
+- [x] "Overview" for apps, searching for apps/treaties, installing apps, seeing app information, deleting apps
 - [x] display notifications and set selected window based on notification source
 - [ ] construct hosting onboarding flow
     - [ ] should convey what they are buying
@@ -42,6 +42,6 @@ npm run electron:package:linux
 Stretch:
 
 - [x] Resizable windows
-- [ ] Settings and customisation (set bg img, colors)
+- [x] Settings and customisation (set bg img, colors)
 - [ ] See hosting details ("About" menu?)
 - [ ] Dark mode

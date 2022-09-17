@@ -5,7 +5,7 @@ export const normalizeDocket = (docket, desk) => {
 export const normalizeDockets = (dockets) => {
     return Object.entries(dockets).reduce((obj, [key, value]) => {
         const [, desk] = key.split('/');
-        obj[key] = normalizeDocket(value, desk);
+        obj[key] = normalizeDocket(value, desk || key);
         return obj;
     }, {});
 }

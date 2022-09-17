@@ -69,7 +69,8 @@ function App() {
         backgroundSize: 'cover',
       }}>
       <HeaderBar
-        selectedWindow={selectedWindow}
+        selectedWindow={{ value: selectedWindow, set: setSelectedWindow }}
+        windows={{ value: windows, set: setWindows }}
         toggleNotifs={() => setShowNotifs(a => !a)}
         toggleMenu={() => setShowMenu(a => !a)}
       />

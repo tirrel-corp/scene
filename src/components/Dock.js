@@ -1,4 +1,3 @@
-import { normalizeUrbitColor } from '../lib/utils';
 import Tippy from '@tippyjs/react';
 import LaunchpadIcon from "./icons/launchpad"
 
@@ -8,7 +7,7 @@ export default function Dock({ windows, focusByCharge, launchOpen }) {
             return <Tippy key={charge.title} content={charge.title}>
                 <div
                     className="h-14 w-14 rounded-xl overflow-hidden mx-2 cursor-pointer hover:brightness-110"
-                    style={{ backgroundColor: normalizeUrbitColor(charge.color) }}
+                    style={{ backgroundColor: charge.color }}
                     key={charge.title}
                     onClick={() => focusByCharge(charge)}
                 >

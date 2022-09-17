@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import { harkBinToId } from '@urbit/api';
 import { useHarkStore } from '../state/hark';
-import { normalizeUrbitColor } from '../lib/utils';
 
 const MAX_CONTENTS = 3;
 
@@ -31,16 +30,16 @@ const Notifications = props => {
           .filter(([n, charge]) => charge?.title !== 'System')
           .map(([n, charge], idx) => (
             <Notification {...{
-                key: idx,
-                className: 'unseen',
-                notification: n,
-                charge,
-                lid: { unseen: null },
-                onClick: () => {
-                  focusByCharge(charge);
-                  visible.set(false);
-                },
-              }}>
+              key: idx,
+              className: 'unseen',
+              notification: n,
+              charge,
+              lid: { unseen: null },
+              onClick: () => {
+                focusByCharge(charge);
+                visible.set(false);
+              },
+            }}>
               Unseen Notification {idx}
             </Notification>
           ))
@@ -53,15 +52,15 @@ const Notifications = props => {
           .filter(([n, charge]) => charge?.title !== 'System')
           .map(([n, charge], idx) => (
             <Notification {...{
-                key: idx,
-                notification: n,
-                charge,
-                lid: { seen: null },
-                onClick: () => {
-                  focusByCharge(charge)
-                  visible.set(false);
-                },
-              }}>
+              key: idx,
+              notification: n,
+              charge,
+              lid: { seen: null },
+              onClick: () => {
+                focusByCharge(charge)
+                visible.set(false);
+              },
+            }}>
               Seen Notification {idx}
             </Notification>
           ))
@@ -125,10 +124,10 @@ const Notification = props => {
 const DocketImage = props => {
   const { className = '', color, image } = props;
 
-  const bgColor = normalizeUrbitColor(color);
-  
+  const bgColor = color;
+
   return (
-    <div className={`docket-image ${className}`} style={{background: bgColor}}>
+    <div className={`docket-image ${className}`} style={{ background: bgColor }}>
       <img src={image} alt="" />
     </div>
   )
