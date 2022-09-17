@@ -4,10 +4,10 @@ const path = require("path");
 const url = require("url");
 require("dotenv").config();
 const { default: installExtension, REACT_DEVELOPER_TOOLS } = require('electron-devtools-installer');
-
+const { localStorage } = require("electron-browser-storage");
 
 // Create the native browser window.
-function createWindow() {
+function createWindow(authData) {
     const mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
@@ -25,20 +25,23 @@ function createWindow() {
         return shell.openExternal(url)
     })
 
-    ses.webRequest.onHeadersReceived(
-        { urls: [`${process.env.REACT_APP_URL}/*/*`] },
-        (details, callback) => {
-            if (
-                details.responseHeaders &&
-                details.responseHeaders['set-cookie'] &&
-                details.responseHeaders['set-cookie'].length &&
-                !details.responseHeaders['set-cookie'][0].includes('SameSite=none')
-            ) {
-                details.responseHeaders['set-cookie'][0] = details.responseHeaders['set-cookie'][0] + '; SameSite=none; Secure';
-            }
-            callback({ cancel: false, responseHeaders: details.responseHeaders });
-        },
-    );
+
+    if (authData?.url || process.env.REACT_APP_URL) {
+        ses.webRequest.onHeadersReceived(
+            { urls: [`${authData?.url || process.env.REACT_APP_URL}/*/*`] },
+            (details, callback) => {
+                if (
+                    details.responseHeaders &&
+                    details.responseHeaders['set-cookie'] &&
+                    details.responseHeaders['set-cookie'].length &&
+                    !details.responseHeaders['set-cookie'][0].includes('SameSite=none')
+                ) {
+                    details.responseHeaders['set-cookie'][0] = details.responseHeaders['set-cookie'][0] + '; SameSite=none; Secure';
+                }
+                callback({ cancel: false, responseHeaders: details.responseHeaders });
+            },
+        );
+    }
 
     // In production, set the initial browser path to the local bundle generated
     // by the Create React App build process.
@@ -76,18 +79,19 @@ function setupLocalFilesNormalizerProxy() {
 // This method will be called when Electron has finished its initialization and
 // is ready to create the browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
+    const authData = await localStorage.getItem("tirrel-desktop-auth") || "";
     installExtension(REACT_DEVELOPER_TOOLS)
         .then((name) => console.log(`Added Extension:  ${name}`))
         .catch((err) => console.log('An error occurred: ', err));
-    createWindow();
+    createWindow(authData);
     setupLocalFilesNormalizerProxy();
 
-    app.on("activate", function () {
+    app.on("activate", function async() {
         // On macOS it's common to re-create a window in the app when the
         // dock icon is clicked and there are no other windows open.
         if (BrowserWindow.getAllWindows().length === 0) {
-            createWindow();
+            createWindow(authData);
         }
     });
 });

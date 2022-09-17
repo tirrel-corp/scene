@@ -8,6 +8,8 @@ import {
 import './css/index.css';
 import App from './App';
 import Onboarding from "./Onboarding";
+import Login from "./components/Onboarding/login";
+import Welcome from "./components/Onboarding/welcome";
 import 'tippy.js/dist/tippy.css';
 
 const rootLoader = async () => {
@@ -16,6 +18,7 @@ const rootLoader = async () => {
     return redirect("/app");
   }
 }
+
 const authLoader = async () => {
   return window.localStorage.getItem("tirrel-desktop-auth") || {
     ship: process.env.REACT_APP_SHIP,
@@ -28,7 +31,17 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Onboarding />,
-    loader: rootLoader
+    loader: rootLoader,
+    children: [
+      {
+        path: "",
+        element: <Welcome />
+      },
+      {
+        path: "login",
+        element: <Login />
+      }
+    ]
   },
   {
     path: '/app',

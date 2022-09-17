@@ -17,6 +17,7 @@
     "autoprefixer": "^10.4.8",
     "classnames": "^2.3.1",
     "dotenv": "^16.0.2",
+    "electron-browser-storage": "^1.0.7",
     "immer": "^9.0.15",
     "lodash": "^4.17.21",
     "postcss": "^8.4.16",
