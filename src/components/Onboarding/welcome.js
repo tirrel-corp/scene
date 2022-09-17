@@ -7,7 +7,9 @@ export default function Welcome() {
             <Link to="login">
                 <a className="rounded-full bg-[rgba(217,217,217,0.2)] px-4 py-2 text-white hover:brightness-110 cursor-pointer">Log in</a>
             </Link>
-            <a className="rounded-full bg-[rgba(217,217,217,0.2)] px-4 py-2 text-white hover:brightness-110 cursor-pointer">New Account</a>
+            <Link to="new">
+                <a className="rounded-full bg-[rgba(217,217,217,0.2)] px-4 py-2 text-white hover:brightness-110 cursor-pointer">New Account</a>
+            </Link>
         </div>
     </div>
 }

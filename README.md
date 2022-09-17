@@ -4,7 +4,7 @@
 
 ```bash
 cp .env.example .env ## set it to your ship and +code
-npm i
+npm i --force ## so that sigil-js installs
 npm run dev ## spawns react + electron dev servers
 ```
 

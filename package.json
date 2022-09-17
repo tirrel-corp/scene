@@ -12,6 +12,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@tippyjs/react": "^4.2.6",
+    "@tlon/sigil-js": "^1.4.5",
     "@urbit/api": "^2.1.1",
     "@urbit/http-api": "^2.2.0",
     "autoprefixer": "^10.4.8",
