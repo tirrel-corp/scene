@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useOutletContext } from "react-router-dom";
 
 export default function NewAccount() {
     const [planet, setPlanet] = useState("");
@@ -8,8 +8,7 @@ export default function NewAccount() {
     return (
         <>
             <Outlet
-                planet={{ value: planet, set: setPlanet }}
-                credit={{ value: credit, set: setCredit }}
+                context={{ planet, setPlanet, credit, setCredit }}
             />
             <div className="flex justify-between text-white w-full p-12">
                 <div className="flex space-x-4 items-center">
@@ -23,3 +22,6 @@ export default function NewAccount() {
     )
 }
 
+export function useNewAcctContext() {
+    return useOutletContext();
+}

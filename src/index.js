@@ -12,7 +12,9 @@ import Login from "./components/Onboarding/login";
 import Welcome from "./components/Onboarding/welcome";
 import NewAccount from './components/Onboarding/new';
 import PlanetList from "./components/Onboarding/planetList"
-import PayScreen from './components/Onboarding/pay';
+import PayDetailScreen from './components/Onboarding/detail';
+import PayScreen from "./components/Onboarding/pay";
+import ConfirmScreen from "./components/Onboarding/confirm";
 import 'tippy.js/dist/tippy.css';
 
 const rootLoader = async () => {
@@ -53,8 +55,16 @@ const router = createBrowserRouter([
             element: <PlanetList />
           },
           {
+            path: "detail",
+            element: <PayDetailScreen />
+          },
+          {
             path: "pay",
             element: <PayScreen />
+          },
+          {
+            path: "confirm",
+            element: <ConfirmScreen />
           }
         ]
       }
