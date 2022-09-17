@@ -1,5 +1,5 @@
 // Module to control the application lifecycle and the native browser window.
-const { app, BrowserWindow, protocol, shell } = require("electron");
+const { app, BrowserWindow, ipcMain, protocol, shell } = require("electron");
 const path = require("path");
 const url = require("url");
 require("dotenv").config();
@@ -17,6 +17,8 @@ function createWindow(authData) {
             title: "Desktop",
             preload: path.join(__dirname, "preload.js"),
             webSecurity: false,
+            nodeIntegration: true,
+            contextIsolation: false
         },
     });
 
@@ -80,18 +82,18 @@ function setupLocalFilesNormalizerProxy() {
 // is ready to create the browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(async () => {
-    const authData = await localStorage.getItem("tirrel-desktop-auth") || "";
+    const authData = await localStorage.getItem("tirrel-desktop-auth") || "{}";
     installExtension(REACT_DEVELOPER_TOOLS)
         .then((name) => console.log(`Added Extension:  ${name}`))
         .catch((err) => console.log('An error occurred: ', err));
-    createWindow(authData);
+    createWindow(JSON.parse(authData || "{}"));
     setupLocalFilesNormalizerProxy();
 
     app.on("activate", function async() {
         // On macOS it's common to re-create a window in the app when the
         // dock icon is clicked and there are no other windows open.
         if (BrowserWindow.getAllWindows().length === 0) {
-            createWindow(authData);
+            createWindow(JSON.parse(authData || "{}"));
         }
     });
 });
@@ -104,6 +106,11 @@ app.on("window-all-closed", function () {
         app.quit();
     }
 });
+
+ipcMain.on('respawn', () => {
+    app.relaunch();
+    app.quit(0);
+})
 
 // If your app has no need to navigate or only needs to navigate to known pages,
 // it is a good idea to limit navigation outright to that known scope,
