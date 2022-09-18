@@ -1,7 +1,7 @@
 import Window from './Screen/Window';
 
 export default function Screen({ windows, selectedWindow, hiddenWindow, launchOpen, children }) {
-    return <div className="grow" style={{marginInline: 'calc(-1 * 550px)', paddingInline: '550px'}}>
+    return <div className="grow" style={{marginInline: 'calc(-1 * 95vw)', paddingInline: '95vw'}}>
         {children}
         {windows.value.map((win, index) => <Window
             key={win.title}

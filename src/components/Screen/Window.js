@@ -16,7 +16,7 @@ export const Window = ({ win, index, windows, selectedWindow, launchOpen, hidden
             visibility: hiddenWindow.value.includes(win) ? "hidden" : "visible"
         }}
         default={{
-            x: (index + 1) * 100,
+            x: window.innerWidth + ((index + 1) * 50),
             y: (index + 1) * 100,
             width: 640,
             height: 480,
