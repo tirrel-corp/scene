@@ -10,7 +10,7 @@ export default function HeaderBar({ selectedWindow, toggleMenu, toggleNotifs }) 
       <div className="flex gap-2">
         <button
           id="hamburger-toggle"
-          className="text-white flex-1 flex flex-column justify-center items-center"
+          className="border-none text-white flex-1 flex flex-column justify-center items-center"
           onClick={toggleMenu}>
           <svg width="15" height="13" className="icon inline">
             <use href="/icons.svg#hamburger" />
@@ -18,7 +18,7 @@ export default function HeaderBar({ selectedWindow, toggleMenu, toggleNotifs }) 
         </button>
         <button
           id="notifications-toggle"
-          className={`text-white flex-1 flex flex-column justify-center items-center ${hasUnseen ? 'bg-rose-400' : ''}`}
+          className={`border-none text-white flex-1 flex flex-column justify-center items-center ${hasUnseen ? 'bg-rose-400' : ''}`}
           onClick={toggleNotifs}>
           <svg width="15" height="18" className="icon inline">
             <use href="/icons.svg#bell" />
