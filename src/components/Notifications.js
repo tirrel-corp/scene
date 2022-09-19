@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import _ from 'lodash';
 import { harkBinToId } from '@urbit/api';
 import { useHarkStore } from '../state/hark';
@@ -11,6 +12,15 @@ const Notifications = props => {
   const { seen, unseen } = harkStore;
   const empty = Object.values(unseen).length === 0
     && Object.values(seen).length === 0;
+
+  const lastVisible = useRef(visible.value);
+  useEffect(() => {
+    const previous = lastVisible.current;
+    if (!previous && visible.value) {
+      useHarkStore.getState().opened();
+    }
+    lastVisible.current = visible.value;
+  }, [visible]);
 
   return (
     <div
