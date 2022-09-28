@@ -19,7 +19,8 @@ export default function Search({ allies, treaties, apps }) {
     return <div className="relative w-full max-w-md flex items-center justify-center"><input
         type="text"
         placeholder="Search for providers..."
-        className="rounded-xl my-4 p-1"
+        className="rounded-xl my-4 p-1 bg-[rgba(0,0,0,0.1)] text-white"
+        autoCorrect={"false"}
         onFocus={() => setPromptOpen(true)}
         onBlur={() => {
             if (query === "") {
@@ -58,16 +59,16 @@ export default function Search({ allies, treaties, apps }) {
 }
 
 const Prompt = ({ allies, apps, siggedAlly, treaties, setPromptOpen, currentApp, query }) => {
-    return <div className="bg-white absolute top-14 self-center w-full rounded-xl shadow-md shadow-[rgba(0,0,0,0.1)] p-4 flex justify-center items-center min-h-[200px] max-h-[500px] overflow-y-auto">
+    return <div className="bg-black text-white absolute top-14 self-center w-full rounded-xl shadow-md shadow-[rgba(0,0,0,0.1)] p-4 flex justify-center items-center min-h-[200px] max-h-[500px] overflow-y-auto">
         {query === ""
-            ? <p className="text-gray-500 text-xs p-4">Please enter a valid <code>@p</code> to search for applications.</p>
+            ? <p className=" text-xs p-4">Please enter a valid <code>@p</code> to search for applications.</p>
             : <div className='flex flex-col space-y-2 w-full min-h-0 h-full self-start'>
                 {currentApp.value?.desk && <AppInfo apps={apps} currentApp={currentApp} setPromptOpen={setPromptOpen} />}
                 {!currentApp.value?.desk && ob.isValidPatp(siggedAlly) && Object.values(allies.value?.[siggedAlly] || {})?.map((charge) => {
                     if (treaties.value?.[charge]) {
                         const app = treaties?.value?.[charge];
                         return <div
-                            className="p-2 hover:bg-[rgba(0,0,0,0.1)] rounded-xl flex justify-between w-full items-center cursor-pointer"
+                            className="p-2 hover:bg-[rgba(255,255,255,0.1)] rounded-xl flex justify-between w-full items-center cursor-pointer"
                             key={app.desk}
                             onClick={() => {
                                 setPromptOpen(true);
