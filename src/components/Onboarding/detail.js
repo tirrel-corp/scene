@@ -4,15 +4,6 @@ import { Link, useOutletContext, useNavigate } from "react-router-dom";
 import { useForm } from 'react-hook-form';
 import Sigil from "../sigil";
 
-const validate = (fullName, line1, city, state, postal, email, setError) => {
-    if (!(/(?:(\w+-?\w+)) (?:(\w+))(?: (\w+))?$/.test(fullName) && line1 && city && state && postal && email)) {
-        setError(true);
-        return false;
-    } else {
-        return true
-    }
-}
-
 export default function PayDetailScreen() {
     const { planet, credit, setCredit } = useOutletContext();
 
