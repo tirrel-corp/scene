@@ -1,4 +1,5 @@
 import { useState } from "react"
+import cn from 'classnames';
 import { Link, useOutletContext, useNavigate } from "react-router-dom";
 import { useForm } from 'react-hook-form';
 import Sigil from "../sigil";
@@ -17,15 +18,6 @@ export default function PayDetailScreen() {
 
     const { register, handleSubmit, watch, formState: { errors } } = useForm({
         mode: 'onBlur',
-        defaultValues: {
-            name: '',
-            line1: '',
-            line2: '',
-            city: '',
-            state: '',
-            postal: '',
-            email: '',
-        },
     });
     const email = watch('email');
 
@@ -49,11 +41,14 @@ export default function PayDetailScreen() {
             >
                 <p>Full name</p>
                 <input
-                    className="w-full p-3 border-b bg-transparent placeholder-shown:!border-white invalid:border-red-500"
+                    className={cn("w-full p-3 border-b bg-transparent border-white",
+                        {"border-red-500": !!errors?.name}
+                    )}
                     type="text"
                     placeholder="John Smith"
                     autoComplete="cc-given-name"
                     id="name"
+                    aria-invalid={!!errors?.name}
                     {...register('name', {
                         required: true,
                         minLength: 1,
@@ -65,15 +60,18 @@ export default function PayDetailScreen() {
                 />
                 <p>Billing address</p>
                 <input
-                    className="w-full p-3 border-b  bg-transparent invalid:border-red-500 placeholder-shown:!border-white"
+                    className={cn("w-full p-3 border-b bg-transparent border-white",
+                        {"border-red-500": !!errors?.line1}
+                    )}
                     type="text"
                     placeholder="200 Cherry Ln"
                     autoComplete="address-level1"
                     id="address1"
+                    aria-invalid={!!errors?.line1}
                     {...register('line1', { required: true })}
                 />
                 <input
-                    className="w-full p-3 border-b   bg-transparent"
+                    className="w-full p-3 border-b bg-transparent"
                     type="text"
                     placeholder="Apt G"
                     autoComplete="address-level2"
@@ -82,21 +80,27 @@ export default function PayDetailScreen() {
                 />
                 <p>City</p>
                 <input
-                    className="w-full p-3 border-b   bg-transparent invalid:border-red-500 placeholder-shown:!border-white"
+                    className={cn("w-full p-3 border-b bg-transparent border-white",
+                        {"border-red-500": !!errors?.city}
+                    )}
                     type="text"
                     placeholder="Verduria"
                     id="city"
+                    aria-invalid={!!errors?.city}
                     {...register('city', { required: true })}
                 />
                 <div className="flex justify-between">
                     <div className="flex flex-col space-y-2">
                         <p>State</p>
                         <input
-                            className="w-full p-3 border-b max-w-[4rem] bg-transparent  invalid:border-red-500 placeholder-shown:!border-white"
+                            className={cn("w-full p-3 border-b max-w-[4rem] bg-transparent border-white",
+                                {"border-red-500": !!errors?.state}
+                            )}
                             type="text"
                             placeholder="MN"
                             autoComplete="address-level1"
                             id="state"
+                            aria-invalid={!!errors?.state}
                             {...register('state', {
                                 required: true,
                                 maxLength: 2,
@@ -106,11 +110,14 @@ export default function PayDetailScreen() {
                     <div className="flex flex-col space-y-2">
                         <p>Postal code</p>
                         <input
-                            className="w-full p-3 border-b bg-transparent invalid:border-red-500 placeholder-shown:!border-white"
+                            className={cn("w-full p-3 border-b bg-transparent border-white",
+                                {"border-red-500": !!errors?.postal}
+                            )}
                             type="text"
                             placeholder="88888"
                             autoComplete="postal-code"
                             id="postal"
+                            aria-invalid={!!errors?.postal}
                             {...register('postal', {
                                 required: true,
                                 minLength: 5,
@@ -121,10 +128,13 @@ export default function PayDetailScreen() {
                 </div>
                 <p>Email address</p>
                 <input
-                    className="w-full p-3 border-b   bg-transparent invalid:border-red-500 placeholder-shown:!border-white"
+                    className={cn("w-full p-3 border-b bg-transparent border-white",
+                        {"border-red-500": errors?.email}
+                    )}
                     type="email"
                     placeholder="john@apple.seed"
                     id="email"
+                    aria-invalid={!!errors?.email}
                     {...register('email', { required: true })}
                 />
                 <p>Confirm email address</p>
