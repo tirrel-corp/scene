@@ -7,8 +7,27 @@ import CardInput from './creditCardInput';
 import Sigil from "../sigil";
 
 const validate = (ccNum, exp, cvv, setError) => {
-    if (!(ccNum && exp && cvv)) {
-        setError(true);
+    setError(false);
+    let errors = {
+        ccNum: undefined,
+        exp: undefined,
+        cvv: undefined,
+    };
+    let foundError = false;
+    if (ccNum.length !== 16) {
+        errors.ccNum = "Invalid card number";
+        foundError = true;
+    }
+    if (exp.length !== 5) {
+        errors.exp = "Invalid expiration";
+        foundError = true;
+    }
+    if (cvv.length !== 3) {
+        errors.cvv = "Invalid CVV";
+        foundError = true;
+    }
+    if (foundError) {
+        setError(errors);
         return false;
     } else {
         return true
@@ -34,7 +53,9 @@ export default function PayScreen() {
             <div className="flex-col space-y-4">
                 <p>Credit card number</p>
                 <CardInput
-                    className="w-full p-3 border-b bg-transparent monospace"
+                    className={cn("w-full p-3 border-b bg-transparent monospace",
+                        {"border-red-500": !!error?.ccNum}
+                    )}
                     placeholder="0000 0000 0000 0000"
                     onChange={setCcNum}
                 />
@@ -42,7 +63,9 @@ export default function PayScreen() {
                     <div className="flex-col space-y-4">
                         <p>Expiration</p>
                         <ExpInput
-                            className="w-full max-w-[6rem] p-3 border-b bg-transparent monospace"
+                            className={cn("w-full max-w-[6rem] p-3 border-b bg-transparent monospace",
+                                {"border-red-500": !!error?.exp}
+                            )}
                             placeholder="01/99"
                             onChange={setExp}
                         />
@@ -53,7 +76,9 @@ export default function PayScreen() {
                             type="text"
                             autoComplete="cc-csc"
                             inputMode="numeric"
-                            className="w-full p-3 border-b bg-transparent"
+                            className={cn("w-full p-3 border-b bg-transparent",
+                                {"border-red-500": !!error?.cvv}
+                            )}
                             placeholder="212"
                             maxLength="3"
                             value={cvv}
