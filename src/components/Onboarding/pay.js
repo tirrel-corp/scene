@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import cn from 'classnames';
 import { useNewAcctContext } from "./new";
+import ExpInput from './expInput';
+import CardInput from './creditCardInput';
 import Sigil from "../sigil";
 
 const validate = (ccNum, exp, cvv, setError) => {
@@ -30,30 +33,29 @@ export default function PayScreen() {
             </div>
             <div className="flex-col space-y-4">
                 <p>Credit card number</p>
-                <input
-                    type="number"
-                    autoComplete="cc-number"
-                    value={ccNum}
-                    onChange={(e) => setCcNum(e.target.value)}
-                    className="w-full p-3 border-b bg-transparent"
+                <CardInput
+                    className="w-full p-3 border-b bg-transparent monospace"
+                    placeholder="0000 0000 0000 0000"
+                    onChange={setCcNum}
                 />
                 <div className="flex space-x-4">
                     <div className="flex-col space-y-4">
                         <p>Expiration</p>
-                        <input
-                            type="text"
-                            autoComplete="cc-exp"
-                            className="w-full max-w-[6rem] p-3 border-b bg-transparent"
-                            value={exp}
-                            onChange={(e) => setExp(e.target.value)}
+                        <ExpInput
+                            className="w-full max-w-[6rem] p-3 border-b bg-transparent monospace"
+                            placeholder="01/99"
+                            onChange={setExp}
                         />
                     </div>
                     <div className="flex-col space-y-4">
                         <p>CVV</p>
                         <input
-                            type="number"
+                            type="text"
                             autoComplete="cc-csc"
+                            inputMode="numeric"
                             className="w-full p-3 border-b bg-transparent"
+                            placeholder="212"
+                            maxLength="3"
                             value={cvv}
                             onChange={(e) => setCvv(e.target.value)}
                         />
