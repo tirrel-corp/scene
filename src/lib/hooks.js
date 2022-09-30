@@ -1,4 +1,5 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
+import { useLocation } from 'react-router';
 
 export const useClickOutside = (parentRefs, callback) => {
   if (!Array.isArray(parentRefs)) {
@@ -33,4 +34,10 @@ export function useOutsideAlerter(ref, callback) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [callback, ref]);
+}
+
+export function useQuery() {
+  const { search } = useLocation();
+
+  return useMemo(() => new URLSearchParams(search), [search]);
 }
