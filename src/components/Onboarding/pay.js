@@ -1,11 +1,33 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import cn from 'classnames';
 import { useNewAcctContext } from "./new";
+import ExpInput from './expInput';
+import CardInput from './creditCardInput';
 import Sigil from "../sigil";
 
 const validate = (ccNum, exp, cvv, setError) => {
-    if (!(ccNum && exp && cvv)) {
-        setError(true);
+    setError(false);
+    let errors = {
+        ccNum: undefined,
+        exp: undefined,
+        cvv: undefined,
+    };
+    let foundError = false;
+    if (ccNum.length !== 16) {
+        errors.ccNum = "Invalid card number";
+        foundError = true;
+    }
+    if (exp.length !== 5) {
+        errors.exp = "Invalid expiration";
+        foundError = true;
+    }
+    if (cvv.length !== 3) {
+        errors.cvv = "Invalid CVV";
+        foundError = true;
+    }
+    if (foundError) {
+        setError(errors);
         return false;
     } else {
         return true
@@ -30,30 +52,35 @@ export default function PayScreen() {
             </div>
             <div className="flex-col space-y-4">
                 <p>Credit card number</p>
-                <input
-                    type="number"
-                    autoComplete="cc-number"
-                    value={ccNum}
-                    onChange={(e) => setCcNum(e.target.value)}
-                    className="w-full p-3 border-b bg-transparent"
+                <CardInput
+                    className={cn("w-full p-3 border-b bg-transparent monospace",
+                        {"border-red-500": !!error?.ccNum}
+                    )}
+                    placeholder="0000 0000 0000 0000"
+                    onChange={setCcNum}
                 />
                 <div className="flex space-x-4">
                     <div className="flex-col space-y-4">
                         <p>Expiration</p>
-                        <input
-                            type="text"
-                            autoComplete="cc-exp"
-                            className="w-full max-w-[6rem] p-3 border-b bg-transparent"
-                            value={exp}
-                            onChange={(e) => setExp(e.target.value)}
+                        <ExpInput
+                            className={cn("w-full max-w-[6rem] p-3 border-b bg-transparent monospace",
+                                {"border-red-500": !!error?.exp}
+                            )}
+                            placeholder="01/99"
+                            onChange={setExp}
                         />
                     </div>
                     <div className="flex-col space-y-4">
                         <p>CVV</p>
                         <input
-                            type="number"
+                            type="text"
                             autoComplete="cc-csc"
-                            className="w-full p-3 border-b bg-transparent"
+                            inputMode="numeric"
+                            className={cn("w-full p-3 border-b bg-transparent",
+                                {"border-red-500": !!error?.cvv}
+                            )}
+                            placeholder="212"
+                            maxLength="3"
                             value={cvv}
                             onChange={(e) => setCvv(e.target.value)}
                         />
