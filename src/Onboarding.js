@@ -9,12 +9,17 @@ export default function Onboarding() {
     const query = useQuery();
     const token = query.get("token");
 
+    // We receive a "deepLink" event from electron.js when the OS sends us a scene:// link.
+    // The scene:// link looks like `scene://?token=34232rfwefwefw` or etc.
+    // We hand the ?token= param to the react-router as is, and navigate to it.
     useEffect(() => {
         ipcRenderer.on('deepLink', (event, url) => {
             navigate(url.slice(8));
         })
     }, [navigate]);
 
+    // Because we are simultaneously listening to the token param in the useQuery() hook,
+    // when it arrives, we can then instantiate the session.
     useEffect(() => {
         if (token) {
             //TODO instantiate session, get cookie
