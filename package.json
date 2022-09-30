@@ -1,5 +1,5 @@
 {
-  "name": "Desktop",
+  "name": "desktop",
   "version": "0.0.1",
   "author": "Tirrel Corporation",
   "description": "Your reliable, pliable, desirable Urbit desktop",
@@ -48,8 +48,8 @@
     "electron:package:linux": "cross-env NODE_ENV=production npm run build && electron-builder -l -c.extraMetadata.main=build/electron.js"
   },
   "build": {
-    "appId": "com.tirrel.desktop",
-    "productName": "Desktop",
+    "appId": "com.tirrel.scene",
+    "productName": "Scene",
     "files": [
       "build/**/*",
       "node_modules/**/*"
@@ -57,6 +57,14 @@
     "directories": {
       "buildResources": "public"
     },
+    "protocols": [
+      {
+        "name": "scene",
+        "schemes": [
+          "scene"
+        ]
+      }
+    ],
     "mac": {
       "target": "dmg"
     },

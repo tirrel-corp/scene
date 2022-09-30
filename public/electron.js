@@ -6,9 +6,10 @@ require("dotenv").config();
 const { default: installExtension, REACT_DEVELOPER_TOOLS } = require('electron-devtools-installer');
 const { localStorage } = require("electron-browser-storage");
 
+let mainWindow;
 // Create the native browser window.
 function createWindow(authData) {
-    const mainWindow = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
         // Set the path of an additional "preload" script that can be used to
@@ -22,12 +23,13 @@ function createWindow(authData) {
         },
     });
 
+    // Open external links in other browsers (i.e. target="_blank").
     const ses = mainWindow.webContents.session;
     mainWindow.webContents.setWindowOpenHandler(({ url }) => {
         return shell.openExternal(url)
     })
 
-
+    // Rewrite cookies for the ship since Urbit doesn't do this and Chromium needs it.
     if (authData?.url || process.env.REACT_APP_URL) {
         ses.webRequest.onHeadersReceived(
             { urls: [`${authData?.url || process.env.REACT_APP_URL}/*/*`] },
@@ -43,6 +45,15 @@ function createWindow(authData) {
                 callback({ cancel: false, responseHeaders: details.responseHeaders });
             },
         );
+    }
+
+    // Register our protocol, scene://.
+    if (process.defaultApp) {
+        if (process.argv.length >= 2) {
+            app.setAsDefaultProtocolClient('scene', process.execPath, [path.resolve(process.argv[1])])
+        }
+    } else {
+        app.setAsDefaultProtocolClient('scene')
     }
 
     // In production, set the initial browser path to the local bundle generated
@@ -78,25 +89,46 @@ function setupLocalFilesNormalizerProxy() {
     );
 }
 
-// This method will be called when Electron has finished its initialization and
-// is ready to create the browser windows.
-// Some APIs can only be used after this event occurs.
-app.whenReady().then(async () => {
-    const authData = await localStorage.getItem("tirrel-desktop-auth") || "{}";
-    installExtension(REACT_DEVELOPER_TOOLS)
-        .then((name) => console.log(`Added Extension:  ${name}`))
-        .catch((err) => console.log('An error occurred: ', err));
-    createWindow(JSON.parse(authData || "{}"));
-    setupLocalFilesNormalizerProxy();
+const gotTheLock = app.requestSingleInstanceLock();
 
-    app.on("activate", function async() {
-        // On macOS it's common to re-create a window in the app when the
-        // dock icon is clicked and there are no other windows open.
-        if (BrowserWindow.getAllWindows().length === 0) {
-            createWindow(JSON.parse(authData || "{}"));
+if (!gotTheLock) {
+    app.quit()
+} else {
+    app.on('second-instance', (e, argv, workingDirectory) => {
+        // Someone tried to run a second instance, we should focus our window.
+        if (mainWindow) {
+            if (mainWindow.isMinimized()) mainWindow.restore()
+            mainWindow.focus()
+        }
+        if (process.platform !== 'darwin') {
+            // Find the arg that is our custom protocol url and store it
+            const deepLink = argv.find((arg) => arg.startsWith('scene://'));
+            if (deepLink) {
+                mainWindow.webContents.send('deepLink', deepLink);
+            }
         }
     });
-});
+
+    app.whenReady().then(async () => {
+        const authData = await localStorage.getItem("tirrel-desktop-auth") || "{}";
+        installExtension(REACT_DEVELOPER_TOOLS)
+            .then((name) => console.log(`Added Extension:  ${name}`))
+            .catch((err) => console.log('An error occurred: ', err));
+        createWindow(JSON.parse(authData || "{}"));
+        setupLocalFilesNormalizerProxy();
+
+        app.on("activate", function async() {
+            // On macOS it's common to re-create a window in the app when the
+            // dock icon is clicked and there are no other windows open.
+            if (BrowserWindow.getAllWindows().length === 0) {
+                createWindow(JSON.parse(authData || "{}"));
+            }
+        });
+    });
+    app.on('open-url', (event, url) => {
+        mainWindow.webContents.send('deepLink', url);
+    })
+}
 
 // Quit when all windows are closed, except on macOS.
 // There, it's common for applications and their menu bar to stay active until
@@ -107,21 +139,9 @@ app.on("window-all-closed", function () {
     }
 });
 
+// See src/components/Onboarding/confirm.js.
+// We respawn the app once we set the cookies so that we relaunch into the desktop.
 ipcMain.on('respawn', () => {
     app.relaunch();
     app.quit(0);
 })
-
-// If your app has no need to navigate or only needs to navigate to known pages,
-// it is a good idea to limit navigation outright to that known scope,
-// disallowing any other kinds of navigation.
-// const allowedNavigationDestinations = "https://my-electron-app.com";
-// app.on("web-contents-created", (event, contents) => {
-//     contents.on("will-navigate", (event, navigationUrl) => {
-//         const parsedUrl = new URL(navigationUrl);
-
-//         if (!allowedNavigationDestinations.includes(parsedUrl.origin)) {
-//             event.preventDefault();
-//         }
-//     });
-// });
