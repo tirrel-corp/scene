@@ -37,5 +37,6 @@ export default function Welcome() {
                 <button className="bg-white hover:bg-transparent hover:text-white hover:!opacity-100 text-[#6184FF] p-2" onClick={() => sendEmail()}>Send</button>
             </div> : <p className="text-white">Check your email for a login link.</p>}
         </div>
+        {process.env.REACT_APP_DEBUG && <Link to="/debug"><button className="text-white">Sign in with a non-Tirrel ship</button></Link>}
     </div>
 }

@@ -4,11 +4,10 @@ const path = require("path");
 const url = require("url");
 require("dotenv").config();
 const { default: installExtension, REACT_DEVELOPER_TOOLS } = require('electron-devtools-installer');
-const { localStorage } = require("electron-browser-storage");
 
 let mainWindow;
 // Create the native browser window.
-function createWindow(authData) {
+function createWindow() {
     mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
@@ -29,23 +28,25 @@ function createWindow(authData) {
         return shell.openExternal(url)
     })
 
-    // Rewrite cookies for the ship since Urbit doesn't do this and Chromium needs it.
-    if (authData?.url || process.env.REACT_APP_URL) {
-        ses.webRequest.onHeadersReceived(
-            { urls: [`${authData?.url || process.env.REACT_APP_URL}/*/*`] },
-            (details, callback) => {
-                if (
-                    details.responseHeaders &&
-                    details.responseHeaders['set-cookie'] &&
-                    details.responseHeaders['set-cookie'].length &&
-                    !details.responseHeaders['set-cookie'][0].includes('SameSite=none')
-                ) {
-                    details.responseHeaders['set-cookie'][0] = details.responseHeaders['set-cookie'][0] + '; SameSite=none; Secure';
-                }
-                callback({ cancel: false, responseHeaders: details.responseHeaders });
-            },
-        );
-    }
+    getAuth().then((res) => {
+        // Rewrite cookies for the ship since Urbit doesn't do this and Chromium needs it.
+        if (res?.url || process.env.REACT_APP_URL) {
+            ses.webRequest.onHeadersReceived(
+                { urls: [`${res?.url || process.env.REACT_APP_URL}/*/*`] },
+                (details, callback) => {
+                    if (
+                        details.responseHeaders &&
+                        details.responseHeaders['set-cookie'] &&
+                        details.responseHeaders['set-cookie'].length &&
+                        !details.responseHeaders['set-cookie'][0].includes('SameSite=none')
+                    ) {
+                        details.responseHeaders['set-cookie'][0] = details.responseHeaders['set-cookie'][0] + '; SameSite=none; Secure';
+                    }
+                    callback({ cancel: false, responseHeaders: details.responseHeaders });
+                },
+            );
+        }
+    });
 
     // Register our protocol, scene://.
     if (process.defaultApp) {
@@ -72,6 +73,11 @@ function createWindow(authData) {
     if (!app.isPackaged) {
         mainWindow.webContents.openDevTools();
     }
+}
+
+async function getAuth() {
+    const storage = await mainWindow.webContents.executeJavaScript(`window.localStorage.getItem("tirrel-desktop-auth")`) || {};
+    return JSON.parse(storage);
 }
 
 // Setup a local proxy to adjust the paths of requested files when loading
@@ -110,21 +116,21 @@ if (!gotTheLock) {
     });
 
     app.whenReady().then(async () => {
-        const authData = await localStorage.getItem("tirrel-desktop-auth") || "{}";
         installExtension(REACT_DEVELOPER_TOOLS)
             .then((name) => console.log(`Added Extension:  ${name}`))
             .catch((err) => console.log('An error occurred: ', err));
-        createWindow(JSON.parse(authData || "{}"));
         setupLocalFilesNormalizerProxy();
-
+    });
+    app.on('ready', async () => {
+        createWindow();
         app.on("activate", function async() {
             // On macOS it's common to re-create a window in the app when the
             // dock icon is clicked and there are no other windows open.
             if (BrowserWindow.getAllWindows().length === 0) {
-                createWindow(JSON.parse(authData || "{}"));
+                createWindow();
             }
         });
-    });
+    })
     app.on('open-url', (event, url) => {
         mainWindow.webContents.send('deepLink', url);
     })

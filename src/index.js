@@ -15,28 +15,23 @@ import PlanetList from "./components/Onboarding/planetList"
 import PayDetailScreen from './components/Onboarding/detail';
 import PayScreen from "./components/Onboarding/pay";
 import ConfirmScreen from "./components/Onboarding/confirm";
+import Debug from "./components/Onboarding/debug";
 import 'tippy.js/dist/tippy.css';
 
-const rootLoader = async () => {
-  const data = await authLoader();
-  if (data.ship) {
-    return redirect("/app");
-  }
-}
-
 const authLoader = async () => {
-  return window.localStorage.getItem("tirrel-desktop-auth") || {
+  const auth = await window.localStorage.getItem("tirrel-desktop-auth") || {
     ship: process.env.REACT_APP_SHIP,
     code: process.env.REACT_APP_CODE,
     url: process.env.REACT_APP_URL
   };
+  return JSON.parse(auth)
 };
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Onboarding />,
-    loader: rootLoader,
+    loader: authLoader,
     children: [
       {
         path: "",
@@ -67,6 +62,10 @@ const router = createBrowserRouter([
             element: <ConfirmScreen />
           }
         ]
+      },
+      {
+        path: 'debug',
+        element: <Debug />
       }
     ]
   },
@@ -74,7 +73,7 @@ const router = createBrowserRouter([
     path: '/app',
     element: <App />,
     loader: authLoader
-  }
+  },
 ])
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

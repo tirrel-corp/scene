@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate, useOutletContext } from "react-router";
+import { useLoaderData } from "react-router-dom";
 import { useQuery } from "./lib/hooks";
 import { tirrelServer } from "./lib/constants";
 
@@ -10,6 +11,7 @@ export default function Onboarding() {
     const query = useQuery();
     const token = query.get("token");
     const [session, setSession] = useState('');
+    const auth = useLoaderData();
 
     // We receive a "deepLink" event from electron.js when the OS sends us a scene:// link.
     // The scene:// link looks like `scene://?token=34232rfwefwefw` or etc.
@@ -38,6 +40,12 @@ export default function Onboarding() {
             }
         }
     }, [session.id, session.stage, token]);
+
+    useEffect(() => {
+        if (auth.ship) {
+            navigate("/app")
+        }
+    }, [auth.ship])
 
     return <div className="h-screen w-screen bg-cover flex flex-col items-center justify-center" style={{ backgroundImage: "url('/moon.png')" }}>
         <Outlet context={{ session, setSession }} />
