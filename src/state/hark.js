@@ -4,21 +4,16 @@ import {
   makePatDa,
   decToUd,
   unixToDa,
-  Timebox,
   harkBinToId,
   opened,
-  HarkBin,
-  HarkLid,
   archive,
-  HarkContent,
-  NotificationGraphConfig,
   archiveAll
 } from '@urbit/api';
 /* eslint-disable-next-line camelcase */
 import produce from 'immer';
 import _ from 'lodash';
 import { api } from './api';
-import { BaseState, createState, createSubscription, reduceStateN } from './base';
+import { createState, createSubscription, reduceStateN } from './base';
 // import { mockNotifications } from './mock-data';
 import { useMockData } from './util';
 
