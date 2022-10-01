@@ -18,7 +18,7 @@ npm run electron:package:linux
 
 ## Debug builds
 
-Debug builds let you pass any ship in, instead of just hosted ships. To create one, set `REACT_APP_DEBUG` to true in your .env file. For example, this would create a macOS debug build:
+Debug builds let you pass any ship in, instead of just hosted ships. To create one, set `REACT_APP_DEBUG` to true in your .env file.
 
 ## Roadmap
 
