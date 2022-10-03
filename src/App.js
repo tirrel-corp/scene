@@ -102,6 +102,13 @@ function App() {
       </Screen>
       <HamburgerMenu
         visible={{ value: showMenu, set: setShowMenu }}
+        nativeNotifs={{
+          value: showNativeNotifs,
+          set: next => {
+            setShowNativeNotifs(next);
+            window.localStorage.setItem('nativeNotifs', JSON.stringify(next));
+          },
+        }}
       />
       <Notifications
         visible={{ value: showNotifs, set: setShowNotifs }}
