@@ -4,25 +4,16 @@ import {
   makePatDa,
   decToUd,
   unixToDa,
-  Timebox,
   harkBinToId,
   opened,
-  HarkBin,
-  HarkLid,
   archive,
-  HarkContent,
-  NotificationGraphConfig,
   archiveAll
 } from '@urbit/api';
 /* eslint-disable-next-line camelcase */
 import produce from 'immer';
 import _ from 'lodash';
 import { api } from './api';
-import { BaseState, createState, createSubscription, reduceStateN } from './base';
-// import { mockNotifications } from './mock-data';
-import { useMockData } from './util';
-
-const mockNotifications = {}
+import { createState, createSubscription, reduceStateN } from './base';
 
 // export interface HarkState {
 //   seen: Timebox;
@@ -64,7 +55,7 @@ export const useHarkStore = createState(
   'Hark',
   (set, get) => ({
     seen: {},
-    unseen: useMockData ? mockNotifications : {},
+    unseen: {},
     archive: new BigIntOrderedMap(),
     webNotes: {},
     notificationsGraphConfig: {
@@ -90,9 +81,6 @@ export const useHarkStore = createState(
         const binId = harkBinToId(bin);
         delete draft[seen][binId];
       });
-      if (useMockData) {
-        return;
-      }
       await api.poke(archive(bin, lid));
     },
     opened: async () => {
@@ -123,6 +111,26 @@ export const useHarkStore = createState(
       createSubscription('hark-store', '/updates', (u) => {
         /* eslint-ignore-next-line camelcase */
         reduceHark(u);
+      }),
+    () =>
+      createSubscription('hark-store', '/notes', (n) => {
+        if (!('add-note' in n)) {
+          return;
+        }
+        const nativeNotifs = window.localStorage.getItem('nativeNotifs');
+        if (!nativeNotifs || !JSON.parse(nativeNotifs)) {
+          return;
+        }
+        const { bin, body } = n['add-note'];
+        const binId = harkBinToId(bin);
+        const { title, content } = body;
+
+        const note = new Notification(harkContentsToPlainText(title), {
+          body: harkContentsToPlainText(content),
+          tag: binId,
+          renotify: true
+        });
+        note.onclick = () => {};
       })
   ]
 );

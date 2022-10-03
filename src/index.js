@@ -19,12 +19,15 @@ import Debug from "./components/Onboarding/debug";
 import 'tippy.js/dist/tippy.css';
 
 const authLoader = async () => {
-  const auth = await window.localStorage.getItem("tirrel-desktop-auth") || {
+  const stored = window.localStorage.getItem("tirrel-desktop-auth");
+  if (!!stored) {
+    return JSON.parse(stored);
+  }
+  return {
     ship: process.env.REACT_APP_SHIP,
     code: process.env.REACT_APP_CODE,
     url: process.env.REACT_APP_URL
   };
-  return JSON.parse(auth)
 };
 
 const router = createBrowserRouter([
