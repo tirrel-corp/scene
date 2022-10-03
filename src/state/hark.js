@@ -14,10 +14,6 @@ import produce from 'immer';
 import _ from 'lodash';
 import { api } from './api';
 import { createState, createSubscription, reduceStateN } from './base';
-// import { mockNotifications } from './mock-data';
-import { useMockData } from './util';
-
-const mockNotifications = {}
 
 // export interface HarkState {
 //   seen: Timebox;
@@ -59,7 +55,7 @@ export const useHarkStore = createState(
   'Hark',
   (set, get) => ({
     seen: {},
-    unseen: useMockData ? mockNotifications : {},
+    unseen: {},
     archive: new BigIntOrderedMap(),
     webNotes: {},
     notificationsGraphConfig: {
@@ -85,9 +81,6 @@ export const useHarkStore = createState(
         const binId = harkBinToId(bin);
         delete draft[seen][binId];
       });
-      if (useMockData) {
-        return;
-      }
       await api.poke(archive(bin, lid));
     },
     opened: async () => {
