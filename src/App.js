@@ -24,6 +24,7 @@ function App() {
   const [selectedWindow, setSelectedWindow] = useState([]);
   const [launchOpen, setLaunchOpen] = useState(false);
   const [showNotifs, setShowNotifs] = useState(false);
+  const [showNativeNotifs, setShowNativeNotifs] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
 
   useEffect(() => {
@@ -36,6 +37,14 @@ function App() {
       allySubscription(setAllies);
 
       useHarkStore.getState().initialize(api);
+
+      const nativeNotifsSetting = window.localStorage.getItem('nativeNotifs');
+      if (!!nativeNotifsSetting) {
+        setShowNativeNotifs(JSON.parse(nativeNotifsSetting))
+      } else {
+        window.localStorage.setItem('nativeNotifs', JSON.stringify(true));
+        setShowNativeNotifs(true);
+      }
     }
 
     init();

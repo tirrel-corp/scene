@@ -111,6 +111,26 @@ export const useHarkStore = createState(
       createSubscription('hark-store', '/updates', (u) => {
         /* eslint-ignore-next-line camelcase */
         reduceHark(u);
+      }),
+    () =>
+      createSubscription('hark-store', '/notes', (n) => {
+        if (!('add-note' in n)) {
+          return;
+        }
+        const nativeNotifs = window.localStorage.getItem('nativeNotifs');
+        if (!nativeNotifs || !JSON.parse(nativeNotifs)) {
+          return;
+        }
+        const { bin, body } = n['add-note'];
+        const binId = harkBinToId(bin);
+        const { title, content } = body;
+
+        const note = new Notification(harkContentsToPlainText(title), {
+          body: harkContentsToPlainText(content),
+          tag: binId,
+          renotify: true
+        });
+        note.onclick = () => {};
       })
   ]
 );
