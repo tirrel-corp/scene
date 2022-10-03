@@ -1,0 +1,1 @@
+export const tirrelServer = process.env.REACT_APP_TIRRELSERVER;

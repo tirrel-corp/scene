@@ -7,7 +7,7 @@ import RefreshIcon from '../icons/refresh';
 
 export const Window = ({ win, index, windows, selectedWindow, launchOpen, hiddenWindow }) => {
     const [key, setKey] = useState(0);
-    const href = 'glob' in win.chad ? `${process.env.REACT_APP_URL}/apps/${win.href.glob.base}` : `${process.env.REACT_APP_URL}${win.href.site}`;
+    const href = 'glob' in win.chad ? `${window.url}/apps/${win.href.glob.base}` : `${window.url}${win.href.site}`;
     return <Rnd
         bounds="window"
         className="rounded-xl overflow-hidden shadow-md shadow-[rgba(0,0,0,0.1]"
