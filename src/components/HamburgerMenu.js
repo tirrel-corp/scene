@@ -8,6 +8,7 @@ const HamburgerMenu = props => {
       id="hamburger"
       className={`${visible.value ? 'shown' : ''}`}>
       <section className="flex flex-col gap-2">
+        <NotificationsToggle />
         <BackgroundInput onSave={() => visible.set(false)} />
       </section>
     </div>
@@ -57,6 +58,49 @@ const BackgroundInput = props => {
           />
           <button disabled={!validity} onClick={handleSave}>
             Save
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+};
+
+const NotificationsToggle = props => {
+  const [state, setState] = useState(() => {
+    let init = window.localStorage.getItem('nativeNotifs');
+    if (!init || !JSON.parse(init)) {
+      return false;
+    }
+    return true;
+  });
+  const toggle = () => {
+    const prev = window.localStorage.getItem('nativeNotifs');
+    let next;
+    if (!prev || !JSON.parse(prev)) {
+      next = true;
+    } else {
+      next = false;
+    }
+    setState(next);
+    window.localStorage.setItem('nativeNotifs', JSON.stringify(next));
+  }
+  return (
+    <div className="rounded bg-neutral-500 text-white overflow-hidden">
+      <header className="bg-neutral-600 text-xs px-2 py-1">
+        Native Notifications
+      </header>
+      <div className="flex flex-col gap-1 p-2">
+        <div className="flex gap-1 items-center">
+          <div className="grow">
+            <p>
+              Native notifications are { state
+                ? <span>enabled</span>
+                : <span>disabled</span>
+              }
+            </p>
+          </div>
+          <button onClick={toggle}>
+            Toggle
           </button>
         </div>
       </div>
