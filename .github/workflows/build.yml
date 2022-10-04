@@ -24,9 +24,17 @@ jobs:
         with:
           github_token: ${{ secrets.github_token }}
 
+          # macOS code signing cert, see link for details (from the action author)
+          # https://samuelmeuli.com/blog/2019-04-07-packaging-and-publishing-an-electron-app/
+          # mac_certs: ${{ secrets.mac_certs }}
+          # mac_certs_password: ${{ secrets.mac_certs_password }}
+
           # Publish this release after building if the commit is tagged with
           # a version eg. v1.0.1
           release: ${{ startsWith(github.ref, 'refs/tags/v') }}
 
           # additional args to electron-builder"
           args: "-c.extraMetadata.main=build/electron.js"
+        env:
+          DO_KEY_ID: ${{ secrets.DO_KEY_ID }}
+          DO_SECRET_KEY: ${{ secrets.DO_SECRET_KEY }}
