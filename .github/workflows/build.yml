@@ -16,8 +16,7 @@ jobs:
 
       - name: Install Node, NPM
         uses: actions/setup-node@v3
-        with:
-          node-version: 16
+        run: "npm ci --legacy-peer-deps"
 
       - name: Build/release Scene
         uses: samuelmeuli/action-electron-builder@v1
