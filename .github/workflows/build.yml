@@ -16,6 +16,8 @@ jobs:
 
       - name: Install Node, NPM
         uses: actions/setup-node@v3
+      
+      - name: Install with legacy peer deps
         run: "npm ci --legacy-peer-deps"
 
       - name: Build/release Scene
