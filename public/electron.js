@@ -4,6 +4,7 @@ const path = require("path");
 const url = require("url");
 require("dotenv").config();
 const { default: installExtension, REACT_DEVELOPER_TOOLS } = require('electron-devtools-installer');
+const { autoUpdater } = require("electron-updater");
 
 let mainWindow;
 // Create the native browser window.
@@ -120,6 +121,10 @@ if (!gotTheLock) {
             .then((name) => console.log(`Added Extension:  ${name}`))
             .catch((err) => console.log('An error occurred: ', err));
         setupLocalFilesNormalizerProxy();
+    });
+    app.on('ready', async () => {
+        await autoUpdater.checkForUpdatesAndNotify();
+        console.debug('checked for updates');
     });
     app.on('ready', async () => {
         createWindow();

@@ -19,6 +19,7 @@
     "classnames": "^2.3.1",
     "dotenv": "^16.0.2",
     "electron-browser-storage": "^1.0.7",
+    "electron-updater": "^5.2.1",
     "immer": "^9.0.15",
     "lodash": "^4.17.21",
     "postcss": "^8.4.16",
@@ -73,6 +74,11 @@
     },
     "linux": {
       "target": "deb"
+    },
+    "publish": {
+      "provider": "spaces",
+      "name": "tirrel",
+      "region": "sfo3"
     }
   },
   "eslintConfig": {
