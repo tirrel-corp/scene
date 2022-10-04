@@ -20,7 +20,7 @@ jobs:
           node-version: 16
 
       - name: Build/release Scene
-        uses: samuelmeuli/action-electorn-builder@v1
+        uses: samuelmeuli/action-electron-builder@v1
         with:
           github_token: ${{ secrets.github_token }}
 
