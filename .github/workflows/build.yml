@@ -1,0 +1,32 @@
+name: Build/release
+
+on: push
+
+jobs:
+  release:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v3
+
+      - name: Install Node, NPM
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Build/release Scene
+        uses: samuelmeuli/action-electorn-builder@v1
+        with:
+          github_token: ${{ secrets.github_token }}
+
+          # Publish this release after building if the commit is tagged with
+          # a version eg. v1.0.1
+          release: ${{ startsWith(github.ref, 'refs/tags/v') }}
+
+          # additional args to electron-builder"
+          args: "-c.extraMetadata.main=build/electron.js"
