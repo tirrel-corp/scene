@@ -47,9 +47,9 @@
     "electron:start": "concurrently -k \"cross-env BROWSER=none npm run start start\" \"wait-on http://localhost:3000 && electronmon . \"",
     "electron:package:mac": "cross-env NODE_ENV=production npm run build && electron-builder -m -c.extraMetadata.main=build/electron.js",
     "electron:package:win": "cross-env NODE_ENV=production npm run build && electron-builder -w -c.extraMetadata.main=build/electron.js",
-    "electron:package:linux": "cross-env NODE_ENV=production npm run build && electron-builder -l -c.extraMetadata.main=build/electron.js"
+    "electron:package:linux": "cross-env NODE_ENV=production npm run build && electron-builder -l -c.extraMetadata.main=build/electron.js",
     "electron:package:all": "cross-env node_env=production npm run build && electron-builder -m -w -l -c.extraMetadata.main=build/electron.js",
-    "electron:publish": "cross-env node_env=production npm run build && electron-builder -m -w -l -c.extraMetadata.main=build/electron.js --publish always",
+    "electron:publish": "cross-env node_env=production npm run build && electron-builder -m -w -l -c.extraMetadata.main=build/electron.js --publish always"
   },
   "build": {
     "appId": "com.tirrel.scene",
