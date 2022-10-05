@@ -14,12 +14,9 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v3
 
-      - name: Install Node, NPM
+      - name: Install Node, NPM, Yarn
         uses: actions/setup-node@v3
       
-      - name: Install with legacy peer deps
-        run: "npm ci --legacy-peer-deps"
-
       - name: Build/release Scene
         uses: samuelmeuli/action-electron-builder@v1
         with:
@@ -39,3 +36,4 @@ jobs:
         env:
           DO_KEY_ID: ${{ secrets.DO_KEY_ID }}
           DO_SECRET_KEY: ${{ secrets.DO_SECRET_KEY }}
+          CI: false
