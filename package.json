@@ -1,8 +1,11 @@
 {
   "name": "Scene",
   "version": "0.0.1-draft",
-  "author": "Tirrel Corporation",
-  "email": "support@tirrel.io",
+  "author": {
+    "name": "Tirrel Corporation",
+    "email": "support@tirrel.io",
+    "url": "https://tirrel.io/"
+  },
   "description": "Your reliable, pliable, desirable Urbit desktop",
   "license": "UNLICENSED",
   "private": true,
