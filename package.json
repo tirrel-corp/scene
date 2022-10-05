@@ -1,6 +1,6 @@
 {
   "name": "Scene",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": {
     "name": "Tirrel Corporation",
     "email": "support@tirrel.io",
@@ -23,6 +23,7 @@
     "classnames": "^2.3.1",
     "dotenv": "^16.0.2",
     "electron-browser-storage": "^1.0.7",
+    "electron-devtools-installer": "^3.2.0",
     "electron-updater": "^5.2.1",
     "immer": "^9.0.15",
     "lodash": "^4.17.21",
@@ -110,7 +111,6 @@
     "cross-env": "^7.0.3",
     "electron": "^20.1.2",
     "electron-builder": "^23.3.3",
-    "electron-devtools-installer": "^3.2.0",
     "electronmon": "^2.0.2",
     "wait-on": "^6.0.1"
   }
