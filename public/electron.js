@@ -121,10 +121,7 @@ if (!gotTheLock) {
             .then((name) => console.log(`Added Extension:  ${name}`))
             .catch((err) => console.log('An error occurred: ', err));
         setupLocalFilesNormalizerProxy();
-    });
-    app.on('ready', async () => {
         await autoUpdater.checkForUpdatesAndNotify();
-        console.debug('checked for updates');
     });
     app.on('ready', async () => {
         createWindow();
