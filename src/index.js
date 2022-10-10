@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {
-  createBrowserRouter,
+  createHashRouter,
   redirect,
   RouterProvider
 } from 'react-router-dom';
@@ -32,7 +32,7 @@ const authLoader = () => {
   };
 };
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: "/",
     element: <Onboarding />,
