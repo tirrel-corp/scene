@@ -36,4 +36,5 @@ jobs:
         env:
           DO_KEY_ID: ${{ secrets.DO_KEY_ID }}
           DO_SECRET_KEY: ${{ secrets.DO_SECRET_KEY }}
+          # Force env.CI false so that the linter won't treat warnings as errors
           CI: false
