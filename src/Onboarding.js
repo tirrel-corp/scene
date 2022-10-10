@@ -47,11 +47,11 @@ export default function Onboarding() {
         }
     }, [auth.ship])
 
-    return <div className="h-screen w-screen bg-cover flex flex-col items-center justify-center" style={{ backgroundImage: "url('/moon.png')" }}>
+    return (
+    <div className="h-screen w-screen bg-cover flex flex-col items-center justify-center" style={{ backgroundImage: "url('moon.png')" }}>
         <Outlet context={{ session, setSession }} />
-    </div>;
+    </div>
+    );
 }
 
-export function useSessionContext() {
-    return useOutletContext();
-}
+export const useSessionContext = useOutletContext;
