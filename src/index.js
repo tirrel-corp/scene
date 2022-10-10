@@ -6,7 +6,6 @@ import {
   RouterProvider
 } from 'react-router-dom';
 import './css/index.css';
-import App from './App';
 import Onboarding from "./Onboarding";
 import Login from "./components/Onboarding/login";
 import Welcome from "./components/Onboarding/welcome";
@@ -16,9 +15,12 @@ import PayDetailScreen from './components/Onboarding/detail';
 import PayScreen from "./components/Onboarding/pay";
 import ConfirmScreen from "./components/Onboarding/confirm";
 import Debug from "./components/Onboarding/debug";
+import Sigil from "./components/sigil";
 import 'tippy.js/dist/tippy.css';
 
-const authLoader = async () => {
+const App = React.lazy(() => import('./App'));
+
+const authLoader = () => {
   const stored = window.localStorage.getItem("tirrel-desktop-auth");
   if (!!stored) {
     return JSON.parse(stored);
@@ -74,7 +76,17 @@ const router = createBrowserRouter([
   },
   {
     path: '/app',
-    element: <App />,
+    element: (
+      <React.Suspense fallback={
+        <div className="w-100 h-100 flex justify-center items-center">
+          <div className="spinner">
+            <Sigil patp="~tirrel" color="#3045B1" />
+          </div>
+        </div>
+        }>
+        <App />
+      </React.Suspense>
+    ),
     loader: authLoader
   },
 ])
