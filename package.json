@@ -1,7 +1,11 @@
 {
-  "name": "desktop",
-  "version": "0.0.1",
-  "author": "Tirrel Corporation",
+  "name": "Scene",
+  "version": "0.0.4",
+  "author": {
+    "name": "Tirrel Corporation",
+    "email": "support@tirrel.io",
+    "url": "https://tirrel.io/"
+  },
   "description": "Your reliable, pliable, desirable Urbit desktop",
   "license": "UNLICENSED",
   "private": true,
@@ -19,6 +23,8 @@
     "classnames": "^2.3.1",
     "dotenv": "^16.0.2",
     "electron-browser-storage": "^1.0.7",
+    "electron-devtools-installer": "^3.2.0",
+    "electron-updater": "^5.2.1",
     "immer": "^9.0.15",
     "lodash": "^4.17.21",
     "postcss": "^8.4.16",
@@ -38,14 +44,15 @@
   },
   "scripts": {
     "start": "react-app-rewired start",
-    "dev": "npm run electron:start",
+    "dev": "yarn run electron:start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
-    "electron:start": "concurrently -k \"cross-env BROWSER=none npm run start start\" \"wait-on http://localhost:3000 && electronmon . \"",
-    "electron:package:mac": "cross-env NODE_ENV=production npm run build && electron-builder -m -c.extraMetadata.main=build/electron.js",
-    "electron:package:win": "cross-env NODE_ENV=production npm run build && electron-builder -w -c.extraMetadata.main=build/electron.js",
-    "electron:package:linux": "cross-env NODE_ENV=production npm run build && electron-builder -l -c.extraMetadata.main=build/electron.js"
+    "electron:start": "concurrently -k \"cross-env BROWSER=none yarn run start start\" \"wait-on http://localhost:3000 && electronmon . \"",
+    "electron:package:mac": "cross-env NODE_ENV=production yarn run build && electron-builder -m -c.extraMetadata.main=build/electron.js",
+    "electron:package:win": "cross-env NODE_ENV=production yarn run build && electron-builder -w -c.extraMetadata.main=build/electron.js",
+    "electron:package:linux": "cross-env NODE_ENV=production yarn run build && electron-builder -l -c.extraMetadata.main=build/electron.js",
+    "electron:package:all": "cross-env node_env=production yarn run build && electron-builder -m -w -l -c.extraMetadata.main=build/electron.js"
   },
   "build": {
     "appId": "com.tirrel.scene",
@@ -66,13 +73,22 @@
       }
     ],
     "mac": {
-      "target": "dmg"
+      "target": "dmg",
+      "category": "public.app-category.lifestyle"
     },
     "win": {
       "target": "nsis"
     },
     "linux": {
       "target": "deb"
+    },
+    "dmg": {
+      "icon": false
+    },
+    "publish": {
+      "provider": "spaces",
+      "name": "tirrel",
+      "region": "sfo3"
     }
   },
   "eslintConfig": {
@@ -94,7 +110,6 @@
     "cross-env": "^7.0.3",
     "electron": "^20.1.2",
     "electron-builder": "^23.3.3",
-    "electron-devtools-installer": "^3.2.0",
     "electronmon": "^2.0.2",
     "wait-on": "^6.0.1"
   }

@@ -127,3 +127,12 @@ button:active {
         filter: blur(0px);
     }
 }
+
+.spinner {
+  animation: spin 3.5s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: perspective(500px) rotateY(0turn); }
+  100% { transform: perspective(500px) rotateY(1turn); }
+}
