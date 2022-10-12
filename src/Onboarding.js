@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate, useOutletContext } from "react-router";
-import { useLoaderData } from "react-router-dom";
-import { useQuery } from "./lib/hooks";
+import { useLoaderData, useSearchParams } from "react-router-dom";
 import { tirrelServer } from "./lib/constants";
 
 const { ipcRenderer } = require("electron");
 
 export default function Onboarding() {
     const navigate = useNavigate();
-    const query = useQuery();
+    const [query, setQuery] = useSearchParams();
     const token = query.get("token");
-    const [session, setSession] = useState('');
+    const [session, setSession] = useState({stage: undefined, id: undefined });
     const auth = useLoaderData();
 
     // We receive a "deepLink" event from electron.js when the OS sends us a scene:// link.

@@ -35,9 +35,3 @@ export function useOutsideAlerter(ref, callback) {
     };
   }, [callback, ref]);
 }
-
-export function useQuery() {
-  const { search } = useLocation();
-
-  return useMemo(() => new URLSearchParams(search), [search]);
-}
