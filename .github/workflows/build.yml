@@ -38,6 +38,11 @@ jobs:
           DO_KEY_ID: ${{ secrets.DO_KEY_ID }}
           DO_SECRET_KEY: ${{ secrets.DO_SECRET_KEY }}
 
+          # Code signing certificate (.p12 file, base64-encoded) and password.
+          # See https://www.electron.build/code-signing for details on envvars.
+          CSC_LINK: ${{ secrets.APPLE_DEVELOPMENT_CERT_BASE64 }}
+          CSC_KEY_PASSWORD: ${{ secrets.APPLE_DEVELOPMENT_CERT_PASSWORD }}
+
           # Apple developer account id and single-app password.
           # electron-builder-notarize will sign in to apple's notarization
           # server with our apple id, upload the application bundle, and get
