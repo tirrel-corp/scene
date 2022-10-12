@@ -9,8 +9,10 @@
 /coverage
 
 # production
-/build
 /dist
+/build
+# save the entitlements file for macOS code signing
+!build/entitlements.mac.plist
 
 # misc
 .DS_Store
