@@ -43,7 +43,7 @@ jobs:
           # server with our apple id, upload the application bundle, and get
           # back a signed bundle for release.
           APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_ID_PASSWORD: ${{ sercrets.APPLE_ID_APP_SPECIFIC_PASSWORD }}
+          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_APP_SPECIFIC_PASSWORD }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
 
           # Force env.CI false so that the linter won't treat warnings as errors
