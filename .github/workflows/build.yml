@@ -48,3 +48,6 @@ jobs:
 
           # Force env.CI false so that the linter won't treat warnings as errors
           CI: false
+
+          # produce a version with the debug flag on, so that we can sign into non-tirrel ships
+          REACT_APP_DEBUG: 1
