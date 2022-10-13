@@ -6,12 +6,12 @@ import { useSessionContext } from "../../Onboarding";
 export default function Welcome() {
     const [email, setEmail] = useState("");
     const [sent, setSent] = useState(false);
-    const { session, setSession } = useSessionContext();
+    const { setSession } = useSessionContext();
 
     const sendEmail = () => {
         setSent(true);
         console.log('submitEmail');
-        fetch(`${tirrelServer}/third/session/${session.id || ""}`, {
+        fetch(`${tirrelServer}/third/session`, {
             method: 'POST',
             headers: {
                 'Content-type': 'text/json',
@@ -19,13 +19,10 @@ export default function Welcome() {
             credentials: 'include',
             body: `email=${encodeURIComponent(email)}`,
         }).then((res) => res.json())
-            .then((res) => {
-                console.log('frame', res)
-                setSession({
-                    stage: res.grate,
-                    id: session.id
-                });
-            })
+        .then((res) => {
+            console.log('frame', res);
+            setSession(p => ({...p, stage: res.grate }));
+        })
     }
 
     return <div className="mt-auto self-start pb-28 pl-28 flex space-y-8 flex-col items-center justify-center font-inter antialiased">
@@ -37,7 +34,7 @@ export default function Welcome() {
                     <input className="text-white bg-transparent border-b grow p-2" type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
                     <button
                         className="bg-white hover:bg-transparent hover:text-white hover:!opacity-100 text-[#6184FF] p-2"
-                        onClick={() => sendEmail()}>
+                        onClick={sendEmail}>
                             Send
                     </button>
                 </form>

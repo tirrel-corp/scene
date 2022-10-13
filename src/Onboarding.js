@@ -16,7 +16,10 @@ export default function Onboarding() {
     // The scene:// link looks like `scene://?token=34232rfwefwefw` or etc.
     // We hand the ?token= param to the react-router as is, and navigate to it.
     useEffect(() => {
-        ipcRenderer.on('deepLink', (event, url) => {
+        ipcRenderer.once('deepLink', (event, url) => {
+            console.debug('deepLink');
+            console.debug(typeof url);
+            console.debug(url.slice(8));
             navigate(url.slice(8));
         })
     }, [navigate]);
@@ -24,20 +27,19 @@ export default function Onboarding() {
     // Because we are simultaneously listening to the token param in the useQuery() hook,
     // when it arrives, we can then instantiate the session.
     useEffect(() => {
-        if (token) {
-            if (token !== null && session.stage !== 'logged in') {
-                console.log('token submit');
-                fetch(`${tirrelServer}/third/session/${session.id || ""}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-type': 'text/json',
-                        'action': 'login',
-                    },
-                    credentials: 'include',
-                    body: atob(token),
-                }).then(res => res.json())
-            }
-        }
+        if (!token) { return; }
+        if (session?.stage === 'logged in') { return; }
+        console.log('token submit');
+        fetch(`${tirrelServer}/third/session/${session.id || ""}`, {
+            method: 'POST',
+            headers: {
+                'Content-type': 'text/json',
+                'action': 'login',
+            },
+            credentials: 'include',
+            body: atob(token),
+        }).then(res => res.json())
+
     }, [session.id, session.stage, token]);
 
     useEffect(() => {
