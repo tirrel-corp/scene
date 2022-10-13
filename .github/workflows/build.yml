@@ -24,7 +24,7 @@ jobs:
 
           # macOS code signing cert, see link for details (from the action author)
           # https://samuelmeuli.com/blog/2019-04-07-packaging-and-publishing-an-electron-app/
-          mac_certs: ${{ secrets.TIRREL_DEVELOPMENT_ID_BASE64 }}
+          mac_certs: ${{ secrets.TIRREL_DEVELOPMENT_CERT_BASE64 }}
           mac_certs_password: ${{ secrets.TIRREL_DEVELOPMENT_CERT_PASSWORD }}
 
           # Publish this release after building if the commit is tagged with
