@@ -24,7 +24,7 @@ jobs:
 
           # macOS code signing cert, see link for details (from the action author)
           # https://samuelmeuli.com/blog/2019-04-07-packaging-and-publishing-an-electron-app/
-          mac_certs: ${{ secrets.APPLE_DEVELOPMENT_CERT_BASE64 }}
+          mac_certs: ${{ secrets.TIRREL_DEVELOPMENT_ID_BASE64 }}
           mac_certs_password: ${{ secrets.APPLE_DEVELOPMENT_CERT_PASSWORD }}
 
           # Publish this release after building if the commit is tagged with
@@ -40,8 +40,8 @@ jobs:
 
           # Code signing certificate (.p12 file, base64-encoded) and password.
           # See https://www.electron.build/code-signing for details on envvars.
-          CSC_LINK: ${{ secrets.APPLE_DEVELOPMENT_CERT_BASE64 }}
-          CSC_KEY_PASSWORD: ${{ secrets.APPLE_DEVELOPMENT_CERT_PASSWORD }}
+          # CSC_LINK: ${{ secrets.TIRREL_DEVELOPMENT_ID_BASE64 }}
+          # CSC_KEY_PASSWORD: ${{ secrets.APPLE_DEVELOPMENT_CERT_PASSWORD }}
 
           # Apple developer account id and single-app password.
           # electron-builder-notarize will sign in to apple's notarization
