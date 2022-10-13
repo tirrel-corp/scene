@@ -24,8 +24,8 @@ jobs:
 
           # macOS code signing cert, see link for details (from the action author)
           # https://samuelmeuli.com/blog/2019-04-07-packaging-and-publishing-an-electron-app/
-          # mac_certs: ${{ secrets.mac_certs }}
-          # mac_certs_password: ${{ secrets.mac_certs_password }}
+          mac_certs: ${{ secrets.TIRREL_DEVELOPMENT_CERT_BASE64 }}
+          mac_certs_password: ${{ secrets.TIRREL_DEVELOPMENT_CERT_PASSWORD }}
 
           # Publish this release after building if the commit is tagged with
           # a version eg. v1.0.1
@@ -34,7 +34,17 @@ jobs:
           # additional args to electron-builder"
           args: "-c.extraMetadata.main=build/electron.js"
         env:
+          # DO credentials for Spaces upload
           DO_KEY_ID: ${{ secrets.DO_KEY_ID }}
           DO_SECRET_KEY: ${{ secrets.DO_SECRET_KEY }}
+
+          # Apple developer account id and single-app password.
+          # electron-builder-notarize will sign in to apple's notarization
+          # server with our apple id, upload the application bundle, and get
+          # back a signed bundle for release.
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+
           # Force env.CI false so that the linter won't treat warnings as errors
           CI: false
