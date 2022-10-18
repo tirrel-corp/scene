@@ -11,7 +11,7 @@ export default function Welcome() {
     const sendEmail = () => {
         setSent(true);
         console.log('submitEmail');
-        fetch(`${tirrelServer}/third/session`, {
+        fetch(`${tirrelServer}/third/session/`, {
             method: 'POST',
             headers: {
                 'Content-type': 'text/json',
