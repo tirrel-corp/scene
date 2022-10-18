@@ -5,11 +5,16 @@ import { tirrelServer } from "./lib/constants";
 
 const { ipcRenderer } = require("electron");
 
+const SID_KEY = 'scene__session-id';
+
 export default function Onboarding() {
     const navigate = useNavigate();
     const [query, setQuery] = useSearchParams();
     const token = query.get("token");
-    const [session, setSession] = useState({stage: undefined, id: undefined });
+    const [session, setSession] = useState({
+        stage: undefined,
+        id: window.sessionStorage.getItem(SID_KEY) || undefined,
+    });
     const [accountState, setAccountState] = useState();
     const auth = useLoaderData();
 
@@ -21,6 +26,14 @@ export default function Onboarding() {
             navigate(url.slice(8));
         })
     }, [navigate]);
+
+    // store session id in sessionStorage in case things get out of hand
+    useEffect(() => {
+        const prev = window.sessionStorage.getItem(SID_KEY);
+        if (!prev && !!session?.id) {
+            window.sessionStorage.setItem(SID_KEY, session.id);
+        }
+    }, [session?.id]);
 
     // Because we are simultaneously listening to the token param in the useQuery() hook,
     // when it arrives, we can then instantiate the session.
