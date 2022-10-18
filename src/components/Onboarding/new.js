@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Outlet, useOutletContext } from "react-router-dom";
 
 export default function NewAccount() {
+    // pull session id from parent Onboarding context
+    const { session } = useOutletContext();
     const [planet, setPlanet] = useState("");
     const [credit, setCredit] = useState({})
     const [billing, setBilling] = useState({});
@@ -9,7 +11,15 @@ export default function NewAccount() {
     return (
         <>
             <Outlet
-                context={{ planet, setPlanet, credit, setCredit, billing, setBilling }}
+                context={{
+                    planet,
+                    setPlanet,
+                    credit,
+                    setCredit,
+                    billing,
+                    setBilling,
+                    session
+                }}
             />
             <div className="flex justify-between text-white w-full p-12">
                 <div className="flex space-x-4 items-center">
