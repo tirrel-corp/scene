@@ -29,14 +29,21 @@ export default function PlanetList() {
                     <div
                         key={patp}
                         onClick={() => setPlanet(patp)}
-                        className="bg-[#6184FF] flex flex-col p-4 rounded-xl text-white items-center justify-center space-y-4 cursor-pointer hover:brightness-110">
+                        className={[
+                            "bg-[#6184FF] flex flex-col p-4 rounded-xl",
+                            "text-white items-center justify-center space-y-4",
+                            "cursor-pointer hover:brightness-110 border-2",
+                            planet === patp
+                                ? 'border-currentColor'
+                                : 'border-transparent'
+                        ].join(' ')}>
                         <Sigil patp={patp} color="#6184FF" />
                         <p className="font-inter pb-2">{patp}</p>
                     </div>
                 ))}
             </div>
         )}
-        <Link to="detail" className={[
+        <Link to="/new/detail" className={[
                 'rounded-full px-4 py-2 bg-[rgba(217,217,217,0.2)]',
                 'text-white hover:brightness-110 text-xl',
                 !planet ? 'hidden pointer-events-none' : ''
