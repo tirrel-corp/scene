@@ -15,7 +15,7 @@ import PayDetailScreen from './components/Onboarding/detail';
 import PayScreen from "./components/Onboarding/pay";
 import ConfirmScreen from "./components/Onboarding/confirm";
 import Debug from "./components/Onboarding/debug";
-import Sigil from "./components/sigil";
+import Spinner from "./components/Spinner";
 import 'tippy.js/dist/tippy.css';
 
 const App = React.lazy(() => import('./App'));
@@ -79,9 +79,7 @@ const router = createHashRouter([
     element: (
       <React.Suspense fallback={
         <div className="w-100 h-100 flex justify-center items-center">
-          <div className="spinner">
-            <Sigil patp="~tirrel" color="#3045B1" />
-          </div>
+          <Spinner />
         </div>
         }>
         <App />
