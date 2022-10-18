@@ -36,12 +36,12 @@ export default function PlanetList() {
                 ))}
             </div>
         )}
-        <Link to="detail">
-            <a className={[
+        <Link to="detail" className={[
                 'rounded-full px-4 py-2 bg-[rgba(217,217,217,0.2)]',
                 'text-white hover:brightness-110 text-xl',
                 !planet ? 'hidden pointer-events-none' : ''
-            ].join(' ')}>Continue</a>
+            ].join(' ')}>
+            Continue
         </Link>
     </div>
     )
