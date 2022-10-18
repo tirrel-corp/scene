@@ -9,6 +9,7 @@ export default function PayDetailScreen() {
 
     const { register, handleSubmit, watch, formState: { errors } } = useForm({
         mode: 'onBlur',
+        defaultValues: credit ? credit : {},
     });
     const email = watch('email');
 
