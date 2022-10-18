@@ -80,7 +80,7 @@ export default function Onboarding() {
         if (!session?.id) { return; }
         if (!!accountState?.ships) { return; }
         navigate("/new");
-    }, [session?.id, accountState?.ships, navigate]);
+    }, [session?.id, accountState?.ships]);
 
     useEffect(() => {
         if (auth.ship) {
