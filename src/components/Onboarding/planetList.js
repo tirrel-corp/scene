@@ -1,26 +1,48 @@
+import { useState, useEffect } from 'react';
 import { Link, useOutletContext } from "react-router-dom";
-import Sigil from "../sigil";
+import Sigil from '../sigil';
+import Spinner from '../Spinner';
+import { tirrelServer } from '../../lib/constants';
 
 export default function PlanetList() {
     const { planet, setPlanet } = useOutletContext();
-    console.log(planet)
-    //TODO fetch available planets from api
-    return <div className="grow flex flex-col space-y-12 items-center justify-center antialiased font-inter">
+
+    const [loading, setLoading] = useState(true);
+    const [inventory, setInventory] = useState([]);
+
+    useEffect(() => {
+        fetch(`${tirrelServer}/third/inventory`, {
+            method: 'GET',
+            credentials: 'include',
+        }).then(res => res.json())
+        .then(res => setInventory(res.ships))
+        .then(() => setLoading(false))
+    }, []);
+
+    return (
+    <div className="grow flex flex-col space-y-12 items-center justify-center antialiased font-inter">
         <h2 className="text-5xl text-white font-light">Choose your planet.</h2>
         <h2 className="text-5xl text-white font-light">Hosting for just $20/month.</h2>
-        <div className="flex flex-col space-y-8 items-center justify-center">
-            <div className="flex space-x-4">
-                {new Array(6).fill(
+        {loading ? <Spinner /> : (
+            <div className="flex flex-wrap justify-center gap-4 max-w-4xl">
+                {inventory.slice(10).map(patp => (
                     <div
-                        onClick={() => setPlanet("~haddef-sigwen")}
+                        key={patp}
+                        onClick={() => setPlanet(patp)}
                         className="bg-[#6184FF] flex flex-col p-4 rounded-xl text-white items-center justify-center space-y-4 cursor-pointer hover:brightness-110">
-                        <Sigil patp="~haddef-sigwen" color="#6184FF" />
-                        <p className="font-inter pb-2">~haddef-sigwen</p>
-                    </div>)}
+                        <Sigil patp={patp} color="#6184FF" />
+                        <p className="font-inter pb-2">{patp}</p>
+                    </div>
+                ))}
             </div>
-            <Link to="detail">
-                <a className="rounded-full px-4 py-2 bg-[rgba(217,217,217,0.2)] text-white hover:brightness-110 text-xl">Continue</a>
-            </Link>
-        </div>
+        )}
+        <Link to="detail">
+            <a className={[
+                'rounded-full px-4 py-2 bg-[rgba(217,217,217,0.2)]',
+                'text-white hover:brightness-110 text-xl',
+                !planet ? 'hidden pointer-events-none' : ''
+            ].join(' ')}>Continue</a>
+        </Link>
     </div>
+    )
 }
