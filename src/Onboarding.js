@@ -10,6 +10,7 @@ export default function Onboarding() {
     const [query, setQuery] = useSearchParams();
     const token = query.get("token");
     const [session, setSession] = useState({stage: undefined, id: undefined });
+    const [accountState, setAccountState] = useState();
     const auth = useLoaderData();
 
     // We receive a "deepLink" event from electron.js when the OS sends us a scene:// link.
@@ -48,6 +49,25 @@ export default function Onboarding() {
         .then(res => setSession(p => ({...p, id: res.session })))
 
     }, [session.id, session.stage, token]);
+
+    // fetch account details once session id is available
+    useEffect(() => {
+        if (!session?.id) { return; }
+        fetch(`${tirrelServer}/third/details`, {
+            method: 'GET',
+            credentials: 'include',
+        }).then(res => res.json())
+        .then(res => {
+            setAccountState(res);
+        })
+    }, [session?.id]);
+
+    // if no ships are attached to the account, start the new account flow
+    useEffect(() => {
+        if (!session?.id) { return; }
+        if (!!accountState?.ships) { return; }
+        navigate("/new");
+    }, [session?.id, accountState?.ships, navigate]);
 
     useEffect(() => {
         if (auth.ship) {
