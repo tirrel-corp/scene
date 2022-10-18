@@ -25,8 +25,10 @@ export default function Onboarding() {
     // when it arrives, we can then instantiate the session.
     useEffect(() => {
         if (!token) { return; }
+        if (session?.id) { return; }
         if (session?.stage === 'logged in') { return; }
         console.log('token submit');
+        // dispatch the token from the email; the response sets the auth cookie
         fetch(`${tirrelServer}/third/session/${session.id || ""}`, {
             method: 'POST',
             headers: {
@@ -36,6 +38,14 @@ export default function Onboarding() {
             credentials: 'include',
             body: atob(token),
         }).then(res => res.json())
+        .then(res => setSession(p => ({...p, stage: res.grate})))
+        // make another request to /third/session/ with the auth cookie, this
+        // will yield our sesision id
+        .then(() => fetch(`${tirrelServer}/third/session/`, {
+            method: 'GET',
+            credentials: 'include',
+        })).then(res => res.json())
+        .then(res => setSession(p => ({...p, id: res.session })))
 
     }, [session.id, session.stage, token]);
 
