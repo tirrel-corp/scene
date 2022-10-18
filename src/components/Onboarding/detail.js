@@ -5,11 +5,11 @@ import { useForm } from 'react-hook-form';
 import Sigil from "../sigil";
 
 export default function PayDetailScreen() {
-    const { planet, credit, setCredit } = useOutletContext();
+    const { planet, billing, setBilling } = useOutletContext();
 
     const { register, handleSubmit, watch, formState: { errors } } = useForm({
         mode: 'onBlur',
-        defaultValues: credit ? credit : {},
+        defaultValues: billing ? billing : {},
     });
     const email = watch('email');
 
@@ -27,7 +27,7 @@ export default function PayDetailScreen() {
             <form
                 className="flex-col space-y-4"
                 onSubmit={handleSubmit((data) => {
-                    setCredit(data);
+                    setBilling(data);
                     navigate('/new/pay');
                 })}
             >
