@@ -17,9 +17,6 @@ export default function Onboarding() {
     // We hand the ?token= param to the react-router as is, and navigate to it.
     useEffect(() => {
         ipcRenderer.once('deepLink', (event, url) => {
-            console.debug('deepLink');
-            console.debug(typeof url);
-            console.debug(url.slice(8));
             navigate(url.slice(8));
         })
     }, [navigate]);
