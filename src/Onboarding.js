@@ -82,7 +82,9 @@ export default function Onboarding() {
     // if no ships are attached to the account, start the new account flow
     useEffect(() => {
         if (!session?.id) { return; }
-        if (!!accountState?.ships) { return; }
+        if (!!accountState?.ships) {
+            navigate("/dashboard");
+        }
         navigate("/new");
     }, [session?.id, accountState?.ships]);
 
