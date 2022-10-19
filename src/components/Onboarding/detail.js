@@ -103,14 +103,14 @@ export default function PayDetailScreen() {
                         <p>Postal code</p>
                         <input
                             className={cn("w-full p-3 border-b bg-transparent border-white",
-                                {"border-red-500": !!errors?.postal}
+                                {"border-red-500": !!errors?.postalCode}
                             )}
                             type="text"
                             placeholder="88888"
                             autoComplete="postal-code"
-                            id="postal"
+                            id="postalCode"
                             aria-invalid={!!errors?.postal}
-                            {...register('postal', {
+                            {...register('postalCode', {
                                 required: true,
                                 minLength: 5,
                                 maxLength: 5,
