@@ -95,10 +95,10 @@ function ConfirmPayment(props) {
                 </div>
                 <p>{planet}</p>
             </div>
-            <div className="flex flex-col space-y-4">
+            <div className="flex flex-col space-y-4 text-[#DDD] font-extralight min-w-[40ch]">
                 <h2 className="border-b-2 pb-2 border-[#6184FF]">Summary</h2>
                 <div className="flex flex-col space-y-1">
-                    <div className="flex justify-between">
+                    <div className="flex justify-between text-white font-bold">
                         <p>Planet</p>
                         <p>$25.00 USD</p>
                     </div>
@@ -107,13 +107,13 @@ function ConfirmPayment(props) {
                     <p>Technical Support</p>
                 </div>
                 <div className="flex flex-col space-y-1">
-                    <div className="flex justify-between">
+                    <div className="flex justify-between text-white font-bold">
                         <p>Hosting</p>
                         <p>$20.00 USD</p>
                     </div>
                     <p>Monthly renewal</p>
                 </div>
-                <div className="flex justify-between border-t-2 pt-2 border-[#6184FF]">
+                <div className="flex justify-between border-t-2 pt-2 border-[#6184FF] text-white font-bold">
                     <p>Total</p>
                     <p>$45.00 USD</p>
                 </div>
