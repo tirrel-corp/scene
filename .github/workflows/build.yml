@@ -50,7 +50,7 @@ jobs:
           CIRCLE_PUBLIC_KEY: ${{ secrets.PRODUCTION_CIRCLE_PUBLIC_KEY }}
 
           # Production tirrel server
-          REACT_APP_TIRRELSERVER: "https://planet.one/"
+          REACT_APP_TIRRELSERVER: "https://planet.one"
 
           # Force env.CI false so that the linter won't treat warnings as errors
           CI: false
