@@ -96,7 +96,7 @@ export default function Onboarding() {
     }, [auth.ship])
 
     return (
-    <div className="h-screen w-screen bg-cover flex flex-col items-center justify-center" style={{ backgroundImage: "url('moon.png')" }}>
+    <div className="h-screen w-screen bg-cover flex flex-col items-center justify-center bg-[#2c2c2c]">
         <Outlet context={{
             session,
             setSession,
