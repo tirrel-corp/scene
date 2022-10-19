@@ -46,7 +46,7 @@ export default function PlanetList() {
         <Link to="/new/detail" className={[
                 'rounded-full px-4 py-2 bg-[rgba(217,217,217,0.2)]',
                 'text-white hover:brightness-110 text-xl',
-                !planet ? 'hidden pointer-events-none' : ''
+                !planet ? 'invisible pointer-events-none' : ''
             ].join(' ')}>
             Continue
         </Link>
