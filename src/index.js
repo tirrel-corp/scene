@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 import './css/index.css';
 import Onboarding from "./Onboarding";
+import Dashboard from './Dashboard';
 import Login from "./components/Onboarding/login";
 import Welcome from "./components/Onboarding/welcome";
 import NewAccount from './components/Onboarding/new';
@@ -67,6 +68,10 @@ const router = createHashRouter([
             element: <ConfirmScreen />
           }
         ]
+      },
+      {
+        path: "dashboard",
+        element: <Dashboard />
       },
       {
         path: 'debug',
