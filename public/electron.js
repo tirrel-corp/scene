@@ -15,7 +15,7 @@ function createWindow() {
         // Set the path of an additional "preload" script that can be used to
         // communicate between node-land and browser-land.
         webPreferences: {
-            title: "Desktop",
+            title: "Scene",
             preload: path.join(__dirname, "preload.js"),
             webSecurity: false,
             nodeIntegration: true,
