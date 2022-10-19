@@ -8,13 +8,14 @@ export const buyUrl = `${tirrelServer}/third/buy`
 export const createCard = async (cardDetails, billingDetails) => {
   const decodedPublicKey = await openpgp.readKey({ armoredKey: atob(publicKey) });
 
+  const toEncrypt = { number: cardDetails.number, cvv: cardDetails.cvv };
   const encryptedData = await openpgp.encrypt({
-    message: await openpgp.createMessage({ text: JSON.stringify(cardDetails) }),
+    message: await openpgp.createMessage({ text: JSON.stringify(toEncrypt) }),
     encryptionKeys: decodedPublicKey,
   }).then(message => btoa(message));
 
   let data = {
-    billingDetails,
+    billingDetails: {...billingDetails, country: 'US'},
     email: billingDetails.email,
     expMonth: cardDetails.expMonth,
     expYear: cardDetails.expYear,
@@ -23,13 +24,13 @@ export const createCard = async (cardDetails, billingDetails) => {
     keyId: 'key1', // TODO 
   }
   const target = createCardUrl;
-  await fetch(target, {
+  const res = await fetch(target, {
     method: 'POST',
     headers: { 'Content-type': 'text/json' },
     body: JSON.stringify(data)
   });
 
-  return;
+  return res;
 }
 
 export const buyPlanet = async (session, planet) => {
