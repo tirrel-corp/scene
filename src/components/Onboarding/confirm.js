@@ -1,9 +1,11 @@
-import { useNewAcctContext } from "./new";
+import { useOutletContext } from 'react-router';
 import Sigil from "../sigil";
+import { createCard, buyPlanet } from '../../lib/payment';
 const ipc = require('electron').ipcRenderer;
 
 export default function ConfirmScreen() {
-    const { planet, credit } = useNewAcctContext();
+    const { planet, credit, billing, session } = useOutletContext();
+    console.debug({planet, credit, billing, session})
 
     // Set our auth and respawn the app to instantiate the desktop
     const respawn = () => {
@@ -15,7 +17,29 @@ export default function ConfirmScreen() {
         ipc.send('respawn');
     }
 
-    return <div className="grow flex justify-center items-center text-white">
+    const onConfirm = async () => {
+        try {
+            console.debug('creating card');
+            const cardResult = await createCard(credit, billing) 
+            console.debug(cardResult);
+            console.debug(`buying planet ${planet}`);
+            const purchaseResult = await buyPlanet(session, planet)
+            console.debug(purchaseResult);
+        } catch (err) {
+            console.error(err.message);
+        }
+    }
+
+    return (
+        <div className="grow flex justify-center items-center text-white">
+            <ConfirmPayment planet={planet} credit={credit} onConfirm={onConfirm} />
+        </div>
+    )
+}
+
+function ConfirmPayment(props) {
+    const { planet, credit, onConfirm } = props;
+    return (
         <div className="flex space-x-12">
             <div className="flex flex-col space-y-8 items-center">
                 <p>Reserved for 15 minutes</p>
@@ -48,8 +72,12 @@ export default function ConfirmScreen() {
                 </div>
                 <p>Card ending {credit?.ccNum?.slice(-4)} will be charged.</p>
                 {/* On click -> grab ship details from API, then call respawn() */}
-                <a className="mt-8 block rounded-full px-4 py-2 bg-[rgba(217,217,217,0.2)] text-white hover:brightness-110 text-xl text-center">Confirm and pay</a>
+                <button
+                    onClick={onConfirm}
+                    className="mt-8 block rounded-full px-4 py-2 bg-[rgba(217,217,217,0.2)] text-white hover:brightness-110 text-xl text-center">
+                        Confirm and pay
+                </button>
             </div>
         </div>
-    </div>
+    );
 }
