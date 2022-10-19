@@ -86,14 +86,14 @@ export default function PayDetailScreen() {
                         <p>State</p>
                         <input
                             className={cn("w-full p-3 border-b max-w-[4rem] bg-transparent border-white",
-                                {"border-red-500": !!errors?.state}
+                                {"border-red-500": !!errors?.district}
                             )}
                             type="text"
                             placeholder="MN"
                             autoComplete="address-level1"
-                            id="state"
-                            aria-invalid={!!errors?.state}
-                            {...register('state', {
+                            id="district"
+                            aria-invalid={!!errors?.district}
+                            {...register('district', {
                                 required: true,
                                 maxLength: 2,
                             })}
