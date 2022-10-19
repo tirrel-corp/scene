@@ -4,8 +4,15 @@ import { createCard, buyPlanet } from '../../lib/payment';
 const ipc = require('electron').ipcRenderer;
 
 export default function ConfirmScreen() {
-    const { planet, credit, billing, session } = useOutletContext();
-    console.debug({planet, credit, billing, session})
+    const ctx = useOutletContext();
+    const {
+        planet,
+        credit,
+        billing,
+        session,
+        accountState,
+        updateAccountState
+    } = ctx;
 
     // Set our auth and respawn the app to instantiate the desktop
     const respawn = () => {
@@ -19,12 +26,13 @@ export default function ConfirmScreen() {
 
     const onConfirm = async () => {
         try {
-            console.debug('creating card');
             const cardResult = await createCard(credit, billing) 
             console.debug(cardResult);
-            console.debug(`buying planet ${planet}`);
-            const purchaseResult = await buyPlanet(session, planet)
+            // wait for card to be verified
+            await new Promise(resolve => setTimeout(resolve, 5000))
+            const purchaseResult = await buyPlanet(session.id, planet)
             console.debug(purchaseResult);
+            await updateAccountState();
         } catch (err) {
             console.error(err.message);
         }
