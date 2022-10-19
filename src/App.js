@@ -74,7 +74,7 @@ function App() {
     <div
       className="bg-[#e4e4e4] h-screen w-screen flex flex-col absolute"
       style={{
-        backgroundImage: bgImage ? `url(${bgImage})` : undefined,
+        backgroundImage: bgImage ? `url(${bgImage})` : "url('scene-default-bg-2560.jpg')",
         backgroundSize: 'cover',
       }}>
       <HeaderBar
