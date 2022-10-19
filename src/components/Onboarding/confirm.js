@@ -118,7 +118,7 @@ function ConfirmPayment(props) {
                     <p>Total</p>
                     <p>$45.00 USD</p>
                 </div>
-                <p>Card ending {credit?.ccNum?.slice(-4)} will be charged.</p>
+                <p>Card ending {credit?.number?.slice(-4)} will be charged.</p>
                 {/* On click -> grab ship details from API, then call respawn() */}
                 <button
                     onClick={onConfirm}
