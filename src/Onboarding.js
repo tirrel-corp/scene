@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Outlet, useNavigate, useOutletContext } from "react-router";
 import { useLoaderData, useSearchParams } from "react-router-dom";
 import { tirrelServer } from "./lib/constants";
@@ -6,6 +6,12 @@ import { tirrelServer } from "./lib/constants";
 const { ipcRenderer } = require("electron");
 
 const SID_KEY = 'scene__session-id';
+
+const getAccountState = () =>
+    fetch(`${tirrelServer}/third/details`, {
+        method: 'GET',
+        credentials: 'include',
+    }).then(res => res.json())
 
 export default function Onboarding() {
     const navigate = useNavigate();
@@ -17,6 +23,10 @@ export default function Onboarding() {
     });
     const [accountState, setAccountState] = useState();
     const auth = useLoaderData();
+
+    const updateAccountState = useCallback(() =>
+        getAccountState().then(res => setAccountState(res)),
+    [setAccountState])
 
     // We receive a "deepLink" event from electron.js when the OS sends us a scene:// link.
     // The scene:// link looks like `scene://?token=34232rfwefwefw` or etc.
@@ -66,13 +76,7 @@ export default function Onboarding() {
     // fetch account details once session id is available
     useEffect(() => {
         if (!session?.id) { return; }
-        fetch(`${tirrelServer}/third/details`, {
-            method: 'GET',
-            credentials: 'include',
-        }).then(res => res.json())
-        .then(res => {
-            setAccountState(res);
-        })
+        updateAccountState();
     }, [session?.id]);
 
     // if no ships are attached to the account, start the new account flow
@@ -90,7 +94,12 @@ export default function Onboarding() {
 
     return (
     <div className="h-screen w-screen bg-cover flex flex-col items-center justify-center" style={{ backgroundImage: "url('moon.png')" }}>
-        <Outlet context={{ session, setSession }} />
+        <Outlet context={{
+            session,
+            setSession,
+            accountState,
+            updateAccountState,
+        }} />
     </div>
     );
 }
