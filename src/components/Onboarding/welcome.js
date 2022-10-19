@@ -33,7 +33,7 @@ export default function Welcome() {
                 <form className="flex min-w-0 w-full space-x-4 items-center">
                     <input className="text-white bg-transparent border-b grow p-2" type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
                     <button
-                        className="bg-white hover:bg-transparent hover:text-white hover:!opacity-100 text-[#6184FF] p-2"
+                        className="hover:bg-gray-600 bg-transparent text-white p-2"
                         onClick={sendEmail}>
                             Send
                     </button>
