@@ -1,5 +1,8 @@
+import { useState } from 'react';
 import { useOutletContext } from 'react-router';
+import { Link } from 'react-router-dom';
 import Sigil from "../sigil";
+import Spinner from "../Spinner";
 import { createCard, buyPlanet } from '../../lib/payment';
 const ipc = require('electron').ipcRenderer;
 
@@ -14,6 +17,9 @@ export default function ConfirmScreen() {
         updateAccountState
     } = ctx;
 
+    const [stage, setStage] = useState('pending');
+    const [error, setError] = useState();
+
     // Set our auth and respawn the app to instantiate the desktop
     const respawn = () => {
         window.localStorage.setItem("tirrel-desktop-auth", JSON.stringify({
@@ -25,6 +31,7 @@ export default function ConfirmScreen() {
     }
 
     const onConfirm = async () => {
+        setStage('in-progress');
         try {
             const cardResult = await createCard(credit, billing) 
             console.debug(cardResult);
@@ -33,14 +40,47 @@ export default function ConfirmScreen() {
             const purchaseResult = await buyPlanet(session.id, planet)
             console.debug(purchaseResult);
             await updateAccountState();
+            if (accountState?.ships) {
+                setStage('purchase-complete');
+            }
         } catch (err) {
+            setStage('error');
+            setError(err);
             console.error(err.message);
         }
     }
 
     return (
         <div className="grow flex justify-center items-center text-white">
-            <ConfirmPayment planet={planet} credit={credit} onConfirm={onConfirm} />
+            {stage === 'pending' && (<ConfirmPayment planet={planet} credit={credit} onConfirm={onConfirm} />)}
+            {stage === 'in-progress' && (
+                <div className="flex flex-col gap-8 items-center">
+                    <p>Completing your purchase...</p>
+                    <Spinner />
+                </div>
+            )}
+            {stage === 'purchase-complete' && (
+                <div classname="flex flex-col gap-8 items-center">
+                    <h2>All set!</h2>
+                    <Sigil patp={planet} color="#6184FF" />
+                    <p>{planet} is all yours. Let's get it set up for you.</p>
+                    <Link to="/dashboard" className="mt-8 block rounded-full px-4 py-2 bg-[rgba(217,217,217,0.2)] text-white hover:brightness-110 text-xl text-center">
+                        Dashboard
+                    </Link>
+                </div>
+            )}
+            {stage === 'error' && (
+                <div className="flex flex-col gap-8 items-center">
+                    <h2>Something went wrong.</h2>
+                    <p>Sorry about that. Here are some more details:</p>
+                    <p className="text-red-600">
+                        {error.message}
+                    </p>
+                    <Link to="/dashboard" className="mt-8 block rounded-full px-4 py-2 bg-[rgba(217,217,217,0.2)] text-white hover:brightness-110 text-xl text-center">
+                        Go Back
+                    </Link>
+                </div>
+            )}
         </div>
     )
 }
