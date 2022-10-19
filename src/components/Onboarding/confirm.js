@@ -90,7 +90,6 @@ function ConfirmPayment(props) {
     return (
         <div className="flex space-x-12">
             <div className="flex flex-col space-y-8 items-center">
-                <p>Reserved for 15 minutes</p>
                 <div className="rounded-xl overflow-hidden">
                     <Sigil patp={planet || "~zod"} color="#6184FF" />
                 </div>
