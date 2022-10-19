@@ -84,6 +84,7 @@ export default function Onboarding() {
         if (!session?.id) { return; }
         if (!!accountState?.ships) {
             navigate("/dashboard");
+            return;
         }
         navigate("/new");
     }, [session?.id, accountState?.ships]);
