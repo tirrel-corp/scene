@@ -25,19 +25,18 @@ export default function PlanetList() {
         <h2 className="text-5xl text-white font-light">Hosting for just $20/month.</h2>
         {loading ? <Spinner /> : (
             <div className="flex flex-wrap justify-center gap-4 max-w-4xl">
-                {inventory.slice(10).map(patp => (
-                    <div
-                        key={patp}
+                {inventory.slice(0,10).map(({who: patp}) => (
+                    <div key={patp}
                         onClick={() => setPlanet(patp)}
                         className={[
-                            "bg-[#6184FF] flex flex-col p-4 rounded-xl",
+                        "bg-[#6184FF] flex flex-col p-4 rounded-xl",
                             "text-white items-center justify-center space-y-4",
                             "cursor-pointer hover:brightness-110 border-2",
                             planet === patp
                                 ? 'border-currentColor'
                                 : 'border-transparent'
                         ].join(' ')}>
-                        <Sigil patp={patp} color="#6184FF" />
+                            <Sigil patp={patp} color="#6184FF" />
                         <p className="font-inter pb-2">{patp}</p>
                     </div>
                 ))}
