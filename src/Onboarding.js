@@ -17,6 +17,15 @@ export default function Onboarding() {
     const navigate = useNavigate();
     const [query, setQuery] = useSearchParams();
     const token = query.get("token");
+    const dl_ship = query.get("patp");
+    const dl_code = query.get("code");
+    const dl_url = query.get("url");
+
+    if (!!dl_ship && !!dl_code && !!dl_url) {
+        const auth = { ship: dl_ship, code: dl_code, url: dl_url };
+        window.localStorage.setItem('tirrel-desktop-auth', JSON.parse(auth));
+        navigate("/");
+    }
     const [session, setSession] = useState({
         stage: undefined,
         id: window.sessionStorage.getItem(SID_KEY) || undefined,
