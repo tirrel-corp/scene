@@ -27,9 +27,9 @@ const authLoader = () => {
     return JSON.parse(stored);
   }
   return {
-    ship: process.env.REACT_APP_SHIP,
-    code: process.env.REACT_APP_CODE,
-    url: process.env.REACT_APP_URL
+    ship: process.env.REACT_APP_SHIP || undefined,
+    code: process.env.REACT_APP_CODE || undefined,
+    url: process.env.REACT_APP_URL || undefined
   };
 };
 
