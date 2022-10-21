@@ -23,7 +23,7 @@ export default function Onboarding() {
 
     if (!!dl_ship && !!dl_code && !!dl_url) {
         const auth = { ship: dl_ship, code: dl_code, url: dl_url };
-        window.localStorage.setItem('tirrel-desktop-auth', JSON.parse(auth));
+        window.localStorage.setItem('tirrel-desktop-auth', JSON.stringify(auth));
         navigate("/");
     }
     const [session, setSession] = useState({
