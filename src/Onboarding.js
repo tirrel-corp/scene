@@ -15,23 +15,36 @@ const getAccountState = () =>
 
 export default function Onboarding() {
     const navigate = useNavigate();
+
+    const auth = useLoaderData();
+    useEffect(() => {
+        if (auth.ship) {
+            navigate("/app")
+        }
+    }, [auth.ship])
+
     const [query, setQuery] = useSearchParams();
     const token = query.get("token");
-    const dl_ship = query.get("patp");
-    const dl_code = query.get("code");
-    const dl_url = query.get("url");
+    useEffect(() => {
+        const dl_ship = query.get("patp");
+        const dl_code = query.get("code");
+        const dl_url = query.get("url");
+        if (!auth?.ship && !!dl_ship && !!dl_code && !!dl_url) {
+            const auth = {
+                ship: dl_ship.replace('~', ''),
+                code: dl_code,
+                url: `https://${dl_url}`
+            };
+            window.localStorage.setItem('tirrel-desktop-auth', JSON.stringify(auth));
+            window.location.reload();
+        }
+    }, [auth, query]);
 
-    if (!!dl_ship && !!dl_code && !!dl_url) {
-        const auth = { ship: dl_ship, code: dl_code, url: dl_url };
-        window.localStorage.setItem('tirrel-desktop-auth', JSON.stringify(auth));
-        navigate("/");
-    }
     const [session, setSession] = useState({
         stage: undefined,
         id: window.sessionStorage.getItem(SID_KEY) || undefined,
     });
     const [accountState, setAccountState] = useState();
-    const auth = useLoaderData();
 
     const updateAccountState = useCallback(() =>
         getAccountState().then(res => setAccountState(res)),
@@ -97,12 +110,6 @@ export default function Onboarding() {
         }
         navigate("/new");
     }, [session?.id, accountState?.ships]);
-
-    useEffect(() => {
-        if (auth.ship) {
-            navigate("/app")
-        }
-    }, [auth.ship])
 
     return (
     <div className="h-screen w-screen bg-cover flex flex-col items-center justify-center bg-[#2c2c2c]">
