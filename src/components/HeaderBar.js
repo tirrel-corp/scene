@@ -2,6 +2,8 @@ import { useHarkStore } from '../state/hark.js';
 import { useState, useRef } from 'react';
 import { api } from "../state/api";
 import { useOutsideAlerter } from '../lib/hooks';
+import HamburgerIcon from './icons/hamburger';
+import BellIcon from './icons/bell';
 import { docketUninstall } from '@urbit/api';
 
 export default function HeaderBar({ selectedWindow, windows, toggleMenu, toggleNotifs }) {
@@ -46,17 +48,13 @@ export default function HeaderBar({ selectedWindow, windows, toggleMenu, toggleN
           id="hamburger-toggle"
           className="border-none text-white flex-1 flex flex-column justify-center items-center"
           onClick={toggleMenu}>
-          <svg width="15" height="13" className="icon inline">
-            <use href="/icons.svg#hamburger" />
-          </svg>
+          <HamburgerIcon />
         </button>
         <button
           id="notifications-toggle"
           className={`border-none text-white flex-1 flex flex-column justify-center items-center ${hasUnseen ? 'bg-rose-400' : ''}`}
           onClick={toggleNotifs}>
-          <svg width="15" height="18" className="icon inline">
-            <use href="/icons.svg#bell" />
-          </svg>
+          <BellIcon />
         </button>
       </div>
     </div>
