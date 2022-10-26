@@ -80,7 +80,6 @@
       "hardenedRuntime": "true",
       "gatekeeperAssess": false,
       "entitlements": "./node_modules/electron-builder-notarize/entitlements.mac.inherit.plist",
-      "target": "dmg",
       "category": "public.app-category.lifestyle"
     },
     "win": {
