@@ -123,7 +123,7 @@ if (!gotTheLock) {
         setupLocalFilesNormalizerProxy();
         // check once on startup and then again every half hour
         autoUpdater.checkForUpdatesAndNotify();
-        setInterval(() => autoUpdater.checkForUpdatesAndNotify(), 30000);
+        setInterval(() => autoUpdater.checkForUpdatesAndNotify(), 1800000);
     });
     app.on('ready', async () => {
         createWindow();
