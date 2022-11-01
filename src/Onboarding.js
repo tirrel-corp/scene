@@ -112,7 +112,15 @@ export default function Onboarding() {
     }, [session?.id, accountState?.ships]);
 
     return (
-    <div className="h-screen w-screen bg-cover flex flex-col items-center justify-center bg-[#2c2c2c]">
+    <div className="h-screen w-screen bg-cover flex flex-col items-center justify-center"
+        style={{
+            backgroundColor: 'black',
+            backgroundImage: "url('scene-large-stroke.svg')",
+            backgroundSize: 'calc(max(25vw, 340px))',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+        }}
+    >
         <Outlet context={{
             session,
             setSession,

@@ -26,7 +26,7 @@ export default function Welcome() {
   }
 
   return (
-    <div className="mt-auto self-start pb-28 pl-28 flex space-y-8 flex-col items-center justify-center font-inter antialiased">
+    <div className="mt-auto self-start pb-28 pl-28 flex space-y-8 flex-col items-center justify-center font-inter antialiased bg-[#0005] rounded-lg pt-4 pr-4">
       <p className="text-xl text-white">Welcome to Scene, by ~tirrel</p>
       <div className="flex flex-col space-y-4 items-center">
         <p className="text-white">To sign up or log in, enter your email to receive a sign-in link.</p>
