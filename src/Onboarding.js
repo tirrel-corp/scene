@@ -33,7 +33,7 @@ export default function Onboarding() {
             const auth = {
                 ship: dl_ship.replace('~', ''),
                 code: dl_code,
-                url: `https://${dl_url}`
+                url: dl_url,
             };
             window.localStorage.setItem('tirrel-desktop-auth', JSON.stringify(auth));
             window.location.reload();
