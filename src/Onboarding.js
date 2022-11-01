@@ -115,10 +115,10 @@ export default function Onboarding() {
     <div className="h-screen w-screen bg-cover flex flex-col items-center justify-center"
         style={{
             backgroundColor: 'black',
-            backgroundImage: "url('scene-large-stroke.svg')",
-            backgroundSize: 'calc(max(25vw, 340px))',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
+            backgroundImage: "url('tirrel-mark.png'), url('scene-large-stroke.svg')",
+            backgroundSize: 'auto, calc(max(25vw, 340px))',
+            backgroundPosition: 'bottom 2vh center, center',
+            backgroundRepeat: 'no-repeat, no-repeat',
         }}
     >
         <Outlet context={{
