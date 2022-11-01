@@ -13,14 +13,14 @@ export default function DebugMenu() {
         ipc.send('respawn');
     }
 
-    return <div className="flex flex-col space-y-4 text-white">
-        <p>To enter your own ship into storage for desktop usage, enter the following details.</p>
-        <p>Ship name</p>
-        <input type="text" className="bg-transparent border-b p-2" placeholder="haddef-sigwen" value={ship} onChange={(e) => setShip(e.target.value)} />
+    return <div className="flex flex-col space-y-4 text-white p-5 rounded-lg bg-[#000A]">
+        <p>To sign in to your ship, please provide the following details.</p>
+        <p>Ship name (without the leading ~)</p>
+        <input type="text" className="bg-transparent border-b p-2" placeholder="sidfus-tirlyx" value={ship} onChange={(e) => setShip(e.target.value)} />
         <p>URL</p>
-        <input type="text" className="bg-transparent border-b p-2" placeholder="https://haddef-sigwen.arvo.network" value={url} onChange={(e) => setUrl(e.target.value)} />
-        <p>+code</p>
-        <input type="text" className="bg-transparent border-b p-2" placeholder="nicetry-feds-sampel-harlet" value={code} onChange={(e) => setCode(e.target.value)} />
-        <button onClick={() => respawn()}>Set</button>
+        <input type="text" className="bg-transparent border-b p-2" placeholder="https://sidfus-tirlyx.arvo.planet.one" value={url} onChange={(e) => setUrl(e.target.value)} />
+        <p>Access Key (+code)</p>
+        <input type="text" className="bg-transparent border-b p-2" placeholder="lidlut-tabwed-pillex-ridrup" value={code} onChange={(e) => setCode(e.target.value)} />
+        <button onClick={() => respawn()}>Relaunch</button>
     </div>
 }
