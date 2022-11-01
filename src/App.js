@@ -29,6 +29,7 @@ function App() {
 
   useEffect(() => {
     async function init() {
+      await api.connect();
       const charges = (await api.scry(scryCharges));
       const allies = (await api.scry(scryAllies));
       setApps(charges);
