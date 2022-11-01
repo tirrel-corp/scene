@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Outlet, useNavigate, useOutletContext } from "react-router";
 import { useLoaderData, useSearchParams } from "react-router-dom";
 import { tirrelServer } from "./lib/constants";
+import { setAuth } from "./lib/auth";
 
 const { ipcRenderer } = require("electron");
 
@@ -30,12 +31,11 @@ export default function Onboarding() {
         const dl_code = query.get("code");
         const dl_url = query.get("url");
         if (!auth?.ship && !!dl_ship && !!dl_code && !!dl_url) {
-            const auth = {
-                ship: dl_ship.replace('~', ''),
+            setAuth({
+                ship: dl_ship,
                 code: dl_code,
                 url: dl_url,
-            };
-            window.localStorage.setItem('tirrel-desktop-auth', JSON.stringify(auth));
+            });
             window.location.reload();
         }
     }, [auth, query]);

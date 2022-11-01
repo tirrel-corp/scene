@@ -1,20 +1,20 @@
 import { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router';
 import Sigil from './components/sigil';
-import { makeShipUrl } from './lib/utils';
+import { setAuth } from './lib/auth';
 const ipc = require('electron').ipcRenderer;
+
+const respawn = (details) => {
+  setAuth({
+    ship: details.patp,
+    url: details.url,
+    code: details.code,
+  });
+  ipc.send('respawn');
+}
 
 const Dashboard = props => {
   const { session, accountState, updateAccountState } = useOutletContext();
-
-  const respawn = () => {
-      window.localStorage.setItem("tirrel-desktop-auth", JSON.stringify({
-          ship: accountState.ships.patp,
-          url: makeShipUrl(accountState.ships.patp),
-          code: accountState.ships.code,
-      }));
-      ipc.send('respawn');
-  }
 
   const firstShip = accountState?.ships?.[0]
 
@@ -43,7 +43,7 @@ const Dashboard = props => {
           </div>
         )}
         {firstShip?.shipStatus === 'running' && (
-          <button onClick={respawn} className="block rounded-full px-4 py-2 bg-[rgba(217,217,217,0.2)] text-white text-xl text-center cursor-not-allowed">
+          <button onClick={respawn(firstShip)} className="block rounded-full px-4 py-2 bg-[rgba(217,217,217,0.2)] text-white text-xl text-center cursor-not-allowed">
             Launch
           </button>
         )}

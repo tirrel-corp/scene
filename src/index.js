@@ -17,14 +17,15 @@ import PayScreen from "./components/Onboarding/pay";
 import ConfirmScreen from "./components/Onboarding/confirm";
 import Debug from "./components/Onboarding/debug";
 import Spinner from "./components/Spinner";
+import { getAuth } from "./lib/auth";
 import 'tippy.js/dist/tippy.css';
 
 const App = React.lazy(() => import('./App'));
 
 const authLoader = () => {
-  const stored = window.localStorage.getItem("tirrel-desktop-auth");
+  const stored = getAuth();
   if (!!stored) {
-    return JSON.parse(stored);
+    return stored;
   }
   return {
     ship: process.env.REACT_APP_SHIP || undefined,

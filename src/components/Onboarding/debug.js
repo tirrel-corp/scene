@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { setAuth } from '../../lib/auth';
 
 const ipc = require('electron').ipcRenderer;
 
@@ -8,13 +9,10 @@ export default function DebugMenu() {
     const [code, setCode] = useState('');
 
     const respawn = () => {
-        window.localStorage.setItem("tirrel-desktop-auth", JSON.stringify({
-            ship,
-            url,
-            code
-        }));
+        setAuth({ ship, url, code });
         ipc.send('respawn');
     }
+
     return <div className="flex flex-col space-y-4 text-white">
         <p>To enter your own ship into storage for desktop usage, enter the following details.</p>
         <p>Ship name</p>

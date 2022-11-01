@@ -1,5 +1,3 @@
-import { shipHost } from './constants';
-
 export const normalizeDocket = (docket, desk) => {
     return { ...docket, desk, color: normalizeUrbitColor(docket.color) }
 };
@@ -20,5 +18,3 @@ export const normalizeUrbitColor = (color) => {
     const lengthAdjustedColor = colorString.padEnd(6, colorString.slice(0, -1));
     return `#${lengthAdjustedColor}`
 }
-
-export const makeShipUrl = patp => `https://${patp}.${shipHost}`;

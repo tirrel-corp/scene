@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import Sigil from "../sigil";
 import Spinner from "../Spinner";
 import { createCard, buyPlanet } from '../../lib/payment';
-const ipc = require('electron').ipcRenderer;
 
 export default function ConfirmScreen() {
     const ctx = useOutletContext();
@@ -19,16 +18,6 @@ export default function ConfirmScreen() {
 
     const [stage, setStage] = useState('pending');
     const [error, setError] = useState();
-
-    // Set our auth and respawn the app to instantiate the desktop
-    const respawn = () => {
-        window.localStorage.setItem("tirrel-desktop-auth", JSON.stringify({
-            ship: '',
-            url: '',
-            code: ''
-        }));
-        ipc.send('respawn');
-    }
 
     const onConfirm = async () => {
         setStage('in-progress');
