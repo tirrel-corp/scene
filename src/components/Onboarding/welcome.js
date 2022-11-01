@@ -42,6 +42,10 @@ export default function Welcome() {
                 <p className="text-white">Check your email for a login link.</p>
             )}
         </div>
-        {process.env.REACT_APP_DEBUG && <Link to="/debug"><button className="text-white">Sign in with a non-Tirrel ship</button></Link>}
+        <Link to="/debug">
+            <button className="text-white">
+                Sign in with a non-Tirrel ship
+            </button>
+        </Link>
     </div>
 }
