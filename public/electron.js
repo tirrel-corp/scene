@@ -77,8 +77,8 @@ function createWindow() {
 }
 
 async function getAuth() {
-    const storage = await mainWindow.webContents.executeJavaScript(`window.localStorage.getItem("tirrel-desktop-auth")`) || {};
-    return JSON.parse(storage);
+    const storage = await mainWindow.webContents.executeJavaScript(`window.localStorage.getItem("tirrel-desktop-auth")`);
+    return storage ? JSON.parse(storage) : {};
 }
 
 // Setup a local proxy to adjust the paths of requested files when loading
