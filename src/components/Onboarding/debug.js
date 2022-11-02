@@ -2,8 +2,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { setAuth } from '../../lib/auth';
 
-const ipc = require('electron').ipcRenderer;
-
 export default function DebugMenu() {
   const navigate = useNavigate();
   const [ship, setShip] = useState('');
@@ -12,7 +10,7 @@ export default function DebugMenu() {
 
   const respawn = () => {
     setAuth({ ship, url, code });
-    ipc.send('respawn');
+    navigate('/app');
   }
 
   return (

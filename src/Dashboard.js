@@ -1,20 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import Sigil from './components/sigil';
 import { setAuth } from './lib/auth';
-const ipc = require('electron').ipcRenderer;
-
-const respawn = (details) => {
-  setAuth({
-    ship: details.patp,
-    url: details.url,
-    code: details.code,
-  });
-  ipc.send('respawn');
-}
 
 const Dashboard = props => {
   const { session, accountState, updateAccountState } = useOutletContext();
+  const navigate = useNavigate();
 
   const firstShip = accountState?.ships?.[0]
 
@@ -26,6 +18,15 @@ const Dashboard = props => {
     const shipStatusPoll = setInterval(() => updateAccountState(), 5000)
     return () => clearInterval(shipStatusPoll);
   }, [accountState?.ships]);
+
+  const respawn = (details) => {
+    setAuth({
+      ship: details.patp,
+      url: details.url,
+      code: details.code,
+    });
+    navigate('/');
+  }
 
   return (
     <div className="grow flex flex-col space-y-12 items-center justify-center antialiased font-inter text-white">

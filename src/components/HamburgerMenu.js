@@ -1,11 +1,10 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getAuth, clearAuth } from '../lib/auth';
-
-const ipc = require('electron').ipcRenderer;
 
 const HamburgerMenu = props => {
   const { nativeNotifs, visible } = props;
-
+  const navigate = useNavigate();
   const auth = getAuth();
 
   return (
@@ -19,7 +18,7 @@ const HamburgerMenu = props => {
           ship={auth?.ship}
           handleLogout={() => {
             clearAuth();
-            ipc.send('respawn');
+            navigate('/');
           }}
         />
       </section>
