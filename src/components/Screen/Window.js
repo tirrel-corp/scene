@@ -9,7 +9,7 @@ export const Window = ({ win, index, windows, selectedWindow, launchOpen, hidden
     const [key, setKey] = useState(0);
     const href = 'glob' in win.chad ? `${window.url}/apps/${win.href.glob.base}` : `${window.url}${win.href.site}`;
     return <Rnd
-        bounds="window"
+        bounds="parent"
         className="rounded-xl overflow-hidden shadow-md shadow-[rgba(0,0,0,0.1]"
         style={{
             zIndex: ([...selectedWindow.value].reverse().indexOf(win) + 1) * 10,
