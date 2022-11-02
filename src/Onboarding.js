@@ -54,9 +54,11 @@ export default function Onboarding() {
     // The scene:// link looks like `scene://?token=34232rfwefwefw` or etc.
     // We hand the ?token= param to the react-router as is, and navigate to it.
     useEffect(() => {
-        ipcRenderer.once('deepLink', (event, url) => {
+        const deepLinkListener = (event, url) => {
             navigate(url.slice(8));
-        })
+        }
+        ipcRenderer.on('deepLink', deepLinkListener);
+        return () => ipcRenderer.removeListener('deepLink', deepLinkListener);
     }, [navigate]);
 
     // store session id in sessionStorage in case things get out of hand
