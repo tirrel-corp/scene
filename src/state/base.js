@@ -8,7 +8,6 @@ import {
 import { compose } from 'lodash/fp';
 import _ from 'lodash';
 import create from 'zustand';
-import { persist } from 'zustand/middleware';
 import { api } from './api';
 import { createStorageKey, storageVersion, useMockData } from './util';
 
@@ -116,11 +115,6 @@ export const createState = (name, properties, blacklist, subscriptions) =>
       },
       ...(typeof properties === 'function' ? (properties)(set, get) : properties)
     }),
-    {
-      blacklist,
-      name: stateStorageKey(name),
-      migrate: () => {},
-    }
   );
 
 export async function doOptimistically(state, action, call, reduce) {
