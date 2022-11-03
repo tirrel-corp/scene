@@ -14,6 +14,9 @@ import Launchpad from './components/Screen/Launchpad';
 import Search from './components/Screen/Search';
 import HamburgerMenu from './components/HamburgerMenu';
 import { useClickOutside } from './lib/hooks';
+import { setAuth } from './lib/auth';
+
+const { ipcRenderer } = require("electron");
 
 function App() {
   const [apps, setApps] = useReducer(chargeReducer, {});
@@ -49,6 +52,24 @@ function App() {
     }
 
     init();
+  }, []);
+
+  useEffect(() => {
+    const deepLinkListener = (event, url) => {
+      const params = new URL(url).searchParams;
+      if (!params.has('patp') || !params.has('code') || !params.has('url')) {
+        // TODO alert if the url is malformed?
+        return;
+      }
+      const newAuth = {
+        ship: params.get('patp'),
+        code: params.get('code'),
+        url: params.get('url'),
+      }
+      setAuth(newAuth);
+    }
+    ipcRenderer.on('deepLink', deepLinkListener);
+    return () => ipcRenderer.removeListener('deepLink', deepLinkListener);
   }, []);
 
   useClickOutside([

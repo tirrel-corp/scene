@@ -18,7 +18,6 @@ const HamburgerMenu = props => {
           ship={auth?.ship}
           handleLogout={() => {
             clearAuth();
-            navigate('/');
           }}
         />
       </section>
