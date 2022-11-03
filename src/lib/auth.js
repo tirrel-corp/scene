@@ -24,6 +24,7 @@ export const setAuth = input => {
     }
 
     window.localStorage.setItem('tirrel-desktop-auth', JSON.stringify(auth));
+    window.scene.respawn();
 }
 
 export const clearAuth = () => {
