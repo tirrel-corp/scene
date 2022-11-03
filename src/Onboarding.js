@@ -114,7 +114,7 @@ export default function Onboarding() {
     }, [session?.id, accountState?.ships]);
 
     return (
-    <div className="h-screen w-screen bg-cover flex flex-col items-center justify-center font-inter antialiased"
+    <div className="h-screen w-screen bg-cover flex justify-start items-center font-inter antialiased"
         style={{
             backgroundColor: 'black',
             backgroundImage: "url('tirrel-mark.png'), url('scene-large-stroke.svg')",

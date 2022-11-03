@@ -14,7 +14,7 @@ export default function DebugMenu() {
   }
 
   return (
-    <div className="flex flex-col space-y-5 text-white rounded-lg p-5 bg-[#000A]">
+    <div className="flex flex-col space-y-5 text-white rounded-lg p-20 bg-[#000A]">
       <div className="flex flex-row">
         <button className="px-4" onClick={() => navigate(-1)}>
           &#10094;&nbsp;Back
