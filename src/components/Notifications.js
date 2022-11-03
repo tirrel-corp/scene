@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import _ from 'lodash';
 import { harkBinToId } from '@urbit/api';
+import CrossCircle from './icons/cross-circle';
 import { useHarkStore } from '../state/hark';
 
 const MAX_CONTENTS = 3;
@@ -105,9 +106,7 @@ const Notification = props => {
         <DocketImage {...charge} />
         <h2>{charge?.title || notification.bin.place.desk}</h2>
         <button className="archive ml-auto" onClick={archiveNoFollow}>
-          <svg width="9" height="9" className="icon inline">
-            <use href="/icons.svg#cross-circle" />
-          </svg>
+          <CrossCircle />
         </button>
       </header>
       <article>
