@@ -28,6 +28,7 @@ export const setAuth = input => {
 
 export const clearAuth = () => {
     window.localStorage.removeItem('tirrel-desktop-auth');
+    window.scene.respawn();
 }
 
 export const getAuth = () => {
