@@ -91,7 +91,7 @@ const Notification = props => {
     useHarkStore.getState().archiveNote(notification.bin, lid);
   };
 
-  const archiveNoFollow = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const archiveNoFollow = (e) => {
     e.preventDefault();
     e.stopPropagation();
     archive();
