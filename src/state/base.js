@@ -93,36 +93,34 @@ export function createSubscription(app, path, e) {
 
 export const createState = (name, properties, blacklist, subscriptions) =>
   create(
-    persist(
-      (set, get) => ({
-        initialize: async (airlock) => {
-          await Promise.all(subscriptions.map((sub) => airlock.subscribe(sub(set, get))));
-        },
-        set: (fn) => stateSetter(fn, set, get),
-        optSet: (fn) => {
-          return optStateSetter(fn, set, get);
-        },
-        patches: {},
-        addPatch: (id, patch) => {
-          set((s) => ({ ...s, patches: { ...s.patches, [id]: patch } }));
-        },
-        removePatch: (id) => {
-          set((s) => ({ ...s, patches: _.omit(s.patches, id) }));
-        },
-        rollback: (id) => {
-          set((state) => {
-            const applying = state.patches[id];
-            return { ...applyPatches(state, applying), patches: _.omit(state.patches, id) };
-          });
-        },
-        ...(typeof properties === 'function' ? (properties)(set, get) : properties)
-      }),
-      {
-        blacklist,
-        name: stateStorageKey(name),
-        migrate: () => {},
-      }
-    )
+    (set, get) => ({
+      initialize: async (airlock) => {
+        await Promise.all(subscriptions.map((sub) => airlock.subscribe(sub(set, get))));
+      },
+      set: (fn) => stateSetter(fn, set, get),
+      optSet: (fn) => {
+        return optStateSetter(fn, set, get);
+      },
+      patches: {},
+      addPatch: (id, patch) => {
+        set((s) => ({ ...s, patches: { ...s.patches, [id]: patch } }));
+      },
+      removePatch: (id) => {
+        set((s) => ({ ...s, patches: _.omit(s.patches, id) }));
+      },
+      rollback: (id) => {
+        set((state) => {
+          const applying = state.patches[id];
+          return { ...applyPatches(state, applying), patches: _.omit(state.patches, id) };
+        });
+      },
+      ...(typeof properties === 'function' ? (properties)(set, get) : properties)
+    }),
+    {
+      blacklist,
+      name: stateStorageKey(name),
+      migrate: () => {},
+    }
   );
 
 export async function doOptimistically(state, action, call, reduce) {
