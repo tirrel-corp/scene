@@ -1,3 +1,4 @@
+const ipcRenderer = require('electron').ipcRenderer;
 // All of the Node.js APIs are available in the preload process.
 // It has the same sandbox as a Chrome extension.
 // const { contextBridge } = require("electron");
@@ -8,3 +9,9 @@
 // process.once("loaded", () => {
 //     contextBridge.exposeInMainWorld("versions", process.versions);
 // });
+
+window.scene = {
+  respawn: () => {
+    ipcRenderer.send('respawn');
+  }
+}
