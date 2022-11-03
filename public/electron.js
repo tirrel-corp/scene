@@ -52,9 +52,11 @@ function createWindow() {
     // Register our protocol, scene://.
     if (process.defaultApp) {
         if (process.argv.length >= 2) {
-            app.setAsDefaultProtocolClient('scene', process.execPath, [path.resolve(process.argv[1])])
+            app.removeAsDefaultProtocolClient('scene', process.execPath, [path.resolve(process.argv[0])]);
+            app.setAsDefaultProtocolClient('scene', process.execPath, [path.resolve(process.argv[0])])
         }
     } else {
+        app.removeAsDefaultProtocolClient('scene');
         app.setAsDefaultProtocolClient('scene')
     }
 
