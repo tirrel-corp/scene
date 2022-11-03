@@ -117,7 +117,7 @@ export default function Onboarding() {
     <div className="h-screen w-screen bg-cover flex justify-start items-center font-inter antialiased"
         style={{
             backgroundColor: 'black',
-            backgroundImage: "url('tirrel-mark.png'), url('scene-large-stroke.svg')",
+            backgroundImage: "url('tirrel-mark.svg'), url('scene-large-stroke.svg')",
             backgroundSize: 'auto, calc(max(25vw, 340px))',
             backgroundPosition: 'bottom 2vh center, center',
             backgroundRepeat: 'no-repeat, no-repeat',
