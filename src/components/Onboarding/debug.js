@@ -13,16 +13,8 @@ export default function DebugMenu() {
 
   console.debug(errors);
 
-  const testCreds = async ({code, url}) => {
+  const testCreds = async ({ship, code, url}) => {
     try {
-      const who = await fetch(`${url}/who.json`, {
-        credentials: 'include',
-      })
-      if (!who.ok) {
-        throw new Error(`Could not find an urbit ship at ${url}`);
-      }
-      const found = await who.json();
-
       const auth = await fetch(`${url}/~/login`, {
         method: 'POST',
         credentials: 'include',
@@ -31,10 +23,10 @@ export default function DebugMenu() {
         })
       });
       if (!auth.ok) {
-        throw new Error(`Could not log in as ~${found.who} with code ${code}`);
+        throw new Error(`Could not log in as ~${ship} with code ${code}`);
       }
 
-      setAuth({ship: found.who, code, url})
+      setAuth({ship, code, url})
     } catch (err) {
       setError('url', {type: 'custom', message: err?.message || err});
     }
@@ -51,6 +43,17 @@ export default function DebugMenu() {
       <form
         onSubmit={handleSubmit(testCreds)}
         className="flex flex-col space-y-4">
+        <p>Ship name</p>
+        <input
+          type="text"
+          className={`bg-transparent border-b p-2 ${errors?.code ? 'border-red-600' : ''}`}
+          placeholder="lidlut-tabwed-pillex-ridrup"
+          {...register('ship', {
+            required: true,
+            minLength: 13,
+            validate: v => ob.isValidPatp(v) || ob.isValidPatp(`~${v}`),
+          })}
+        />
         <p>URL</p>
         <input
           type="url"
