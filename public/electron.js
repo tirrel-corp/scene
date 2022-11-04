@@ -2,15 +2,21 @@
 const { app, BrowserWindow, ipcMain, protocol, shell } = require("electron");
 const path = require("path");
 const url = require("url");
-const log = require("electron-log");
+// const log = require("electron-log");
 require("dotenv").config();
 const { default: installExtension, REACT_DEVELOPER_TOOLS } = require('electron-devtools-installer');
 const { autoUpdater } = require("electron-updater");
 
+const fs = require('fs');
+const log = toWrite => fs.appendFileSync('/Users/acs/SCENE_LOG.txt', `${toWrite}\n`);
+
+log('START');
+
 let mainWindow;
+let dl_url;
 // Create the native browser window.
-function createWindow() {
-    log.info('createWindow');
+function createWindow(dl_url) {
+    log(`createWindow ${dl_url}`);
     mainWindow = new BrowserWindow({
         width: 1280,
         height: 720,
@@ -31,8 +37,8 @@ function createWindow() {
         return shell.openExternal(url)
     })
 
-    getAuth().then((res) => {
-        log.info('getAuthCallback');
+    getAuth(dl_url).then((res) => {
+        log('getAuthCallback');
         // Rewrite cookies for the ship since Urbit doesn't do this and Chromium needs it.
         if (res?.url || process.env.REACT_APP_URL) {
             ses.webRequest.onHeadersReceived(
@@ -54,11 +60,14 @@ function createWindow() {
 
     // Register our protocol, scene://.
     if (process.defaultApp) {
+        log('process.defaultApp');
         if (process.argv.length >= 2) {
+            log('process.argv.length >= 2');
             app.removeAsDefaultProtocolClient('scene', process.execPath, [path.resolve(process.argv[0])]);
             app.setAsDefaultProtocolClient('scene', process.execPath, [path.resolve(process.argv[0])])
         }
     } else {
+        log('not process.defaultApp');
         app.removeAsDefaultProtocolClient('scene');
         app.setAsDefaultProtocolClient('scene')
     }
@@ -81,18 +90,32 @@ function createWindow() {
     }
 }
 
-async function getAuth() {
-    log.info('getAuth 2');
-    const deepLink = process.argv.find((arg) => arg.startsWith('scene://'));
-    log.info('after deepLink');
+app.on('open-url', (event, url) => {
+    log('open-url')
+    if (mainWindow) {
+        event.preventDefault();
+        mainWindow.webContents.send('deepLink', url);
+    } else {
+        dl_url = url;
+    }
+})
 
-    var newAuth = null;
+async function getAuth(dl_url) {
+    log('getAuth 2');
+    const deepLink = dl_url || process.argv.find((arg) => arg.startsWith('scene://'));
+    log('after deepLink');
+    log('enumerating process.argv');
+    for (const v of process.argv) {
+        log(v);
+    }
+
+    let newAuth;
     if (deepLink) {
-    log.info(`hasDeepLink ${deepLink}`);
+    log(`hasDeepLink ${deepLink}`);
       const params = new URL(deepLink).searchParams;
 
       if (params.has('patp') && params.has('code') && params.has('url')) {
-        log.info(`hasParams ${params}`);
+        log(`hasParams ${params}`);
 
         newAuth = {
           ship: params.get('patp'),
@@ -102,47 +125,47 @@ async function getAuth() {
 
         if (newAuth.ship.startsWith('~')) {
             newAuth.ship = newAuth.ship.replace(/^~/, '');
-            log.info(`sig`);
+            log(`sig`);
         }
         if (!newAuth.url.startsWith('https://')) {
-            log.info(`https`);
+            log(`https`);
             if (/^(?:.*:\/\/)/.test(newAuth.url)) {
-                log.info('https 2');
+                log('https 2');
                 // starts with some other protocol like http? replace it with https
                 newAuth.url = newAuth.url.replace(/^(?:.*:\/\/)/, 'https://')
             } else {
-                log.info('https 3');
+                log('https 3');
                 // doesn't start with a protocol but it should
                 newAuth.url = `https://${newAuth.url}`
             }
         }
 
-        log.info(`good Munging`)
+        log(`good Munging`)
 
       } else {
-        log.info(`badDeepLink ${deepLink}`)
+        log(`badDeepLink ${deepLink}`)
         throw new Error(`bad deep link ${deepLink}`)
       }
     } else {
-      log.info(`noDeepLink`)
+      log(`noDeepLink`)
     }
     if (newAuth) {
       const oldStorage = await mainWindow.webContents.executeJavaScript(`window.localStorage.getItem("tirrel-desktop-auth")`);
       if (oldStorage === JSON.stringify(newAuth)) {
-        log.info(`we good`)
+        log(`we good`)
         return newAuth;
       }
 
-      log.info(`newAuth ${JSON.stringify(newAuth)}`)
+      log(`newAuth ${JSON.stringify(newAuth)}`)
       await mainWindow.webContents.executeJavaScript(`window.localStorage.setItem("tirrel-desktop-auth", '${JSON.stringify(newAuth)}')`);  // note security vulnerability
       const newArgs = process.argv.filter((arg) => !arg.startsWith('scene://'));
-      log.info(`oldArgs ${process.argv}`);
-      log.info(`newArgs ${newArgs}`);
+      log(`oldArgs ${process.argv}`);
+      log(`newArgs ${newArgs}`);
       app.relaunch({ args: newArgs });
       app.quit(0);
     } else {
       const storage = await mainWindow.webContents.executeJavaScript(`window.localStorage.getItem("tirrel-desktop-auth")`);
-      log.info(`oldAuth ${storage}`);
+      log(`oldAuth ${storage}`);
       return storage ? JSON.parse(storage) : {};
     }
 }
@@ -162,13 +185,16 @@ function setupLocalFilesNormalizerProxy() {
     );
 }
 
+log('before requestSingleInstanceLock');
 const gotTheLock = app.requestSingleInstanceLock();
 
 if (!gotTheLock) {
+    log('did not get the lock');
     app.quit()
 } else {
+    log('got the lock');
     app.on('second-instance', (e, argv, workingDirectory) => {
-        log.info('second-instance')
+        log('second-instance')
         // Someone tried to run a second instance, we should focus our window.
         if (mainWindow) {
             if (mainWindow.isMinimized()) mainWindow.restore()
@@ -178,14 +204,14 @@ if (!gotTheLock) {
             // Find the arg that is our custom protocol url and store it
             const deepLink = argv.find((arg) => arg.startsWith('scene://'));
             if (deepLink) {
-                log.info('deepLink');
+                log('deepLink');
                 mainWindow.webContents.send('deepLink', deepLink);
             }
         }
     });
 
     app.whenReady().then(async () => {
-        log.info('whenReady')
+        log('whenReady')
         installExtension(REACT_DEVELOPER_TOOLS)
             .then((name) => console.log(`Added Extension:  ${name}`))
             .catch((err) => console.log('An error occurred: ', err));
@@ -195,28 +221,25 @@ if (!gotTheLock) {
         setInterval(() => autoUpdater.checkForUpdatesAndNotify(), 1800000);
     });
     app.on('ready', async () => {
-        log.info('ready')
-        createWindow();
+        log('ready')
+        log(`dl_url: ${dl_url}`);
+        createWindow(dl_url);
         app.on("activate", function async() {
-            log.info('activate')
+            log('activate')
             // On macOS it's common to re-create a window in the app when the
             // dock icon is clicked and there are no other windows open.
             if (BrowserWindow.getAllWindows().length === 0) {
-                createWindow();
+                createWindow(dl_url);
             }
         });
         if (process.platform !== 'darwin') {
             // Find the arg that is our custom protocol url and store it
             const deepLink = argv.find((arg) => arg.startsWith('scene://'));
             if (deepLink) {
-                log.info('deepLink')
+                log('deepLink')
                 mainWindow.webContents.send('deepLink', deepLink);
             }
         }
-    })
-    app.on('open-url', (event, url) => {
-        log.info('open-url')
-        mainWindow.webContents.send('deepLink', url);
     })
 }
 
@@ -232,7 +255,7 @@ app.on("window-all-closed", function () {
 // See src/components/Onboarding/confirm.js.
 // We respawn the app once we set the cookies so that we relaunch into the desktop.
 ipcMain.on('respawn', () => {
-    log.info('respawn')
+    log('respawn')
     app.relaunch();
     app.quit(0);
 })
