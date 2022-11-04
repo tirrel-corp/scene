@@ -13,6 +13,9 @@ export const setAuth = input => {
     if (input.ship.startsWith('~')) {
         auth.ship = input.ship.replace(/^~/, '');
     }
+    if (input.code.startsWith('~')) {
+        auth.code = input.code.replace(/^~/, '');
+    }
     if (!input.url.startsWith('https://')) {
         if (/^(?:.*:\/\/)/.test(input.url)) {
             // starts with some other protocol like http? replace it with https
