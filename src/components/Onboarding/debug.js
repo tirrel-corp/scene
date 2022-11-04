@@ -47,7 +47,7 @@ export default function DebugMenu() {
         <input
           type="text"
           className={`bg-transparent border-b p-2 ${errors?.code ? 'border-red-600' : ''}`}
-          placeholder="lidlut-tabwed-pillex-ridrup"
+          placeholder="sidfus-tirlyx"
           {...register('ship', {
             required: true,
             minLength: 13,
