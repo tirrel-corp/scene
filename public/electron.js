@@ -1,5 +1,12 @@
 // Module to control the application lifecycle and the native browser window.
-const { app, BrowserWindow, ipcMain, protocol, shell } = require("electron");
+const {
+    app,
+    BrowserWindow,
+    ipcMain,
+    protocol,
+    screen,
+    shell,
+} = require("electron");
 const path = require("path");
 const url = require("url");
 require("dotenv").config();
@@ -10,9 +17,11 @@ let mainWindow;
 let dl_url;
 // Create the native browser window.
 function createWindow(dl_url) {
+    const mainScreen = screen.getPrimaryDisplay();
     mainWindow = new BrowserWindow({
-        width: 1280,
-        height: 720,
+        width: mainScreen.size.width,
+        height: mainScreen.size.height,
+        backgroundColor: 'black',
         // Set the path of an additional "preload" script that can be used to
         // communicate between node-land and browser-land.
         webPreferences: {
