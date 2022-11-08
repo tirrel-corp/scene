@@ -27,26 +27,32 @@ export const Window = ({ win, index, windows, selectedWindow, launchOpen, hidden
                 className="h-8 bg-transparent text-white w-full flex justify-between items-center px-1"
                 onMouseDown={() => selectedWindow.set([win, ...selectedWindow.value.filter((e) => e !== win)])}
             >
-                <div className="pl-2 flex space-x-2 items-center">
+                <div
+                    style={{
+                        '--close-icon-bg': '#FF605C',
+                        '--minimize-icon-bg': '#FFBD44',
+                        '--refresh-icon-bg': '#2FB3FF',
+                    }}
+                    className="px-2 flex space-x-2 items-center">
                     <a
-                        className="text-black cursor-pointer hover:opacity-80"
-                        onClick={() => setKey(key + 1)}
-                    >
-                        <RefreshIcon />
-                    </a>
-                    <a
-                        className="text-black cursor-pointer hover:opacity-80"
-                        onClick={() => hiddenWindow.set([...hiddenWindow.value, win])}>
-                        <MinimizeIcon />
-                    </a>
-                    <a
-                        className="text-black bg-white overflow-hidden rounded-[100px] cursor-pointer hover:opacity-80"
+                        className="text-black bg-white overflow-hidden rounded-[100px] cursor-pointer hover:brightness-75"
                         onClick={() => {
                             windows.set(windows.value.filter((e) => e !== win));
                             selectedWindow.set(selectedWindow.value.filter((e) => e !== win))
                         }}
                     >
                         <CloseIcon />
+                    </a>
+                    <a
+                        className="text-black cursor-pointer hover:brightness-75"
+                        onClick={() => hiddenWindow.set([...hiddenWindow.value, win])}>
+                        <MinimizeIcon />
+                    </a>
+                    <a
+                        className="text-black cursor-pointer hover:brightness-75"
+                        onClick={() => setKey(key + 1)}
+                    >
+                        <RefreshIcon />
                     </a>
                 </div>
             </div>
