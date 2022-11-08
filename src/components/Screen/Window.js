@@ -10,7 +10,7 @@ export const Window = ({ win, index, windows, selectedWindow, launchOpen, hidden
     const href = 'glob' in win.chad ? `${window.url}/apps/${win.href.glob.base}` : `${window.url}${win.href.site}`;
     return <Rnd
         bounds="parent"
-        className="rounded-xl overflow-hidden shadow-md shadow-[rgba(0,0,0,0.1]"
+        className="rounded-xl overflow-hidden shadow-xl shadow-[rgba(0,0,0,0.2)]"
         style={{
             zIndex: ([...selectedWindow.value].reverse().indexOf(win) + 1) * 10,
             visibility: hiddenWindow.value.includes(win) ? "hidden" : "visible"
@@ -22,9 +22,9 @@ export const Window = ({ win, index, windows, selectedWindow, launchOpen, hidden
             height: 480,
         }}
     >
-        <div className="w-full h-full flex flex-col bg-[#cecece] cursor-default">
+        <div className="w-full h-full flex flex-col bg-[#EEE] cursor-default">
             <div
-                className="min-h-[2.25rem] bg-transparent text-white w-full flex justify-between items-center px-1"
+                className="min-h-[2.25rem] bg-gradient-to-b from-[#0000] to-[#0003] text-white w-full flex justify-between items-center px-1"
                 onMouseDown={() => selectedWindow.set([win, ...selectedWindow.value.filter((e) => e !== win)])}
             >
                 <div
