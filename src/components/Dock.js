@@ -17,7 +17,7 @@ export default function Dock({ windows, focusByCharge, launchOpen }) {
         })}
         <Tippy key="launch" content="Launchpad">
             <a
-                className="cursor-pointer hover:brightness-110"
+                className="cursor-pointer hover:brightness-110 px-[11px] py-[13px]"
                 onClick={() => launchOpen.set(!launchOpen.value)}
             >
                 <LaunchpadIcon />
