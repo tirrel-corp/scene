@@ -14,7 +14,7 @@ export default function HeaderBar({ selectedWindow, windows, toggleMenu, toggleN
   useOutsideAlerter(windowMenuRef, () => setWindowMenu(false));
 
   return (
-    <div className="text-white w-full bg-[rgba(0,0,0,0.5)] flex justify-between items-center min-h-[2.25rem] px-4 cursor-default border-b border-[rgba(0,0,0,0.15)] z-[9999]">
+    <div className="text-white w-full bg-[rgba(0,0,0,0.5)] backdrop-blur-sm flex justify-between items-center min-h-[2.25rem] px-4 cursor-default border-b border-[rgba(0,0,0,0.15)] z-[9999]">
       <p
         className="relative rounded-lg hover:bg-[rgba(255,255,255,0.1)]"
         onClick={() => setWindowMenu(!windowMenu)}
