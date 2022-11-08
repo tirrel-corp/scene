@@ -24,7 +24,7 @@ export const Window = ({ win, index, windows, selectedWindow, launchOpen, hidden
     >
         <div className="w-full h-full flex flex-col bg-[#cecece] cursor-default">
             <div
-                className="h-8 bg-transparent text-white w-full flex justify-between items-center px-1"
+                className="min-h-[2.25rem] bg-transparent text-white w-full flex justify-between items-center px-1"
                 onMouseDown={() => selectedWindow.set([win, ...selectedWindow.value.filter((e) => e !== win)])}
             >
                 <div
