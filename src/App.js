@@ -72,14 +72,14 @@ function App() {
     return () => ipcRenderer.removeListener('deepLink', deepLinkListener);
   }, []);
 
-  useClickOutside([
-    { current: document.getElementById('notifications') },
-    { current: document.getElementById('notifications-toggle') },
-  ], () => setShowNotifs(false));
-  useClickOutside([
-    { current: document.getElementById('hamburger') },
-    { current: document.getElementById('hamburger-toggle') },
-  ], () => setShowHamburger(false));
+  useClickOutside(
+    ['notifications', 'notifications-toggle'],
+    () => setShowNotifs(false)
+  );
+  useClickOutside(
+    ['hamburger', 'hamburger-toggle'],
+    () => setShowHamburger(false)
+  );
 
   const focusByCharge = useCallback(charge => {
     setWindows(prev => (!prev.includes(charge)

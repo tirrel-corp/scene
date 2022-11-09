@@ -1,21 +1,22 @@
-import { useEffect, useMemo } from 'react';
-import { useLocation } from 'react-router';
+import { useEffect } from "react";
 
-export const useClickOutside = (parentRefs, callback) => {
-  if (!Array.isArray(parentRefs)) {
-    throw new Error('useClickOutside requires an array of parentRefs');
+export const useClickOutside = (ids, callback) => {
+  if (!Array.isArray(ids) || !ids.every((id) => typeof id === "string")) {
+    throw new Error("useClickOutside requires an array of ids");
   }
 
   useEffect(() => {
-    const handleClickOutside = ev => {
-      if (parentRefs.every(r => !r.current.contains(ev.target))) {
+    const handleClickOutside = (ev) => {
+      if (
+        ids.every((id) => !document.getElementById(id)?.contains?.(ev.target))
+      ) {
         callback();
       }
-    }
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
-  }, [parentRefs, callback]);
-}
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, [ids, callback]);
+};
 
 export function useOutsideAlerter(ref, callback) {
   useEffect(() => {
@@ -24,7 +25,7 @@ export function useOutsideAlerter(ref, callback) {
      */
     function handleClickOutside(event) {
       if (ref.current && !ref.current.contains(event.target)) {
-        callback()
+        callback();
       }
     }
     // Bind the event listener
