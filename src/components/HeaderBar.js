@@ -1,3 +1,4 @@
+import { sigil, reactRenderer } from '@tlon/sigil-js';
 import { useHarkStore } from '../state/hark.js';
 import { useState, useRef } from 'react';
 import { api } from "../state/api";
@@ -5,16 +6,37 @@ import { useOutsideAlerter } from '../lib/hooks';
 import HamburgerIcon from './icons/hamburger';
 import BellIcon from './icons/bell';
 import { docketUninstall } from '@urbit/api';
+import { getAuth } from '../lib/auth';
 
-export default function HeaderBar({ selectedWindow, windows, toggleMenu, toggleNotifs }) {
+export default function HeaderBar({
+  selectedWindow,
+  windows,
+  toggleHamburger,
+  toggleNotifs,
+  togglePlanetMenu,
+}) {
   const { unseen } = useHarkStore();
   const hasUnseen = Boolean(Object.keys(unseen).length);
+  const { ship: patp } = getAuth();
   const [windowMenu, setWindowMenu] = useState(false);
   const windowMenuRef = useRef(null);
   useOutsideAlerter(windowMenuRef, () => setWindowMenu(false));
 
   return (
     <div className="text-white w-full bg-[rgba(0,0,0,0.7)] backdrop-blur-sm flex justify-between items-center min-h-[2.25rem] px-4 cursor-default border-b border-[rgba(0,0,0,0.15)] z-[9999]">
+      <div>
+        <button
+          id="planet-menu-toggle"
+          onClick={togglePlanetMenu}
+          className="border-none rounded-lg px-2 bg-[#FFF3] text-white flex-1 flex flex-column justify-center items-center">
+          {sigil({
+            patp,
+            renderer: reactRenderer,
+            size: 16,
+            colors: ['transparent', 'white'],
+          })}
+        </button>
+      </div>
       <p
         className="relative rounded-lg hover:bg-[rgba(255,255,255,0.1)]"
         onClick={() => setWindowMenu(!windowMenu)}
@@ -47,7 +69,7 @@ export default function HeaderBar({ selectedWindow, windows, toggleMenu, toggleN
         <button
           id="hamburger-toggle"
           className="border-none text-white flex-1 flex flex-column justify-center items-center"
-          onClick={toggleMenu}>
+          onClick={toggleHamburger}>
           <HamburgerIcon />
         </button>
         <button

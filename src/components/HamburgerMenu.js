@@ -1,11 +1,7 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { getAuth, clearAuth } from '../lib/auth';
 
 const HamburgerMenu = props => {
   const { nativeNotifs, visible } = props;
-  const navigate = useNavigate();
-  const auth = getAuth();
 
   return (
     <div
@@ -14,12 +10,6 @@ const HamburgerMenu = props => {
       <section className="flex flex-col gap-2">
         <NotificationsToggle value={nativeNotifs.value} set={nativeNotifs.set} />
         <BackgroundInput onSave={() => visible.set(false)} />
-        <LogOut
-          ship={auth?.ship}
-          handleLogout={() => {
-            clearAuth();
-          }}
-        />
       </section>
     </div>
   );
@@ -101,27 +91,5 @@ const NotificationsToggle = props => {
     </div>
   )
 };
-
-const LogOut = props => {
-  return (
-    <div className="rounded bg-neutral-500 text-white overflow-hidden">
-      <header className="bg-neutral-600 text-xs px-2 py-1">
-        Log Out
-      </header>
-      <div className="flex flex-col gap-1 p-2">
-        <div className="flex gap-1 items-center">
-          <div className="grow">
-            <p>
-              Log out of <code>~{props.ship}</code>
-            </p>
-          </div>
-          <button onClick={props.handleLogout}>
-            Log Out
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export default HamburgerMenu;
