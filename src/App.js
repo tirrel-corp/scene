@@ -28,7 +28,7 @@ function App() {
   const [launchOpen, setLaunchOpen] = useState(false);
   const [showNotifs, setShowNotifs] = useState(false);
   const [showNativeNotifs, setShowNativeNotifs] = useState(false);
-  const [showMenu, setShowMenu] = useState(false);
+  const [showHamburger, setShowHamburger] = useState(false);
 
   useEffect(() => {
     async function init() {
@@ -79,7 +79,7 @@ function App() {
   useClickOutside([
     { current: document.getElementById('hamburger') },
     { current: document.getElementById('hamburger-toggle') },
-  ], () => setShowMenu(false));
+  ], () => setShowHamburger(false));
 
   const focusByCharge = useCallback(charge => {
     setWindows(prev => (!prev.includes(charge)
@@ -103,7 +103,7 @@ function App() {
         selectedWindow={{ value: selectedWindow, set: setSelectedWindow }}
         windows={{ value: windows, set: setWindows }}
         toggleNotifs={() => setShowNotifs(a => !a)}
-        toggleMenu={() => setShowMenu(a => !a)}
+        toggleMenu={() => setShowHamburger(a => !a)}
       />
       <Screen
         hiddenWindow={{ value: hiddenWindow, set: setHiddenWindow }}
@@ -123,7 +123,7 @@ function App() {
         </Launchpad>}
       </Screen>
       <HamburgerMenu
-        visible={{ value: showMenu, set: setShowMenu }}
+        visible={{ value: showHamburger, set: setShowHamburger }}
         nativeNotifs={{
           value: showNativeNotifs,
           set: next => {
