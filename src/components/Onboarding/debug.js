@@ -50,7 +50,6 @@ export default function DebugMenu() {
           placeholder="sidfus-tirlyx"
           {...register('ship', {
             required: true,
-            minLength: 13,
             validate: v => ob.isValidPatp(v) || ob.isValidPatp(`~${v}`),
           })}
         />
