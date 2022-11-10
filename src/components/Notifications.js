@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import _ from 'lodash';
 import { harkBinToId } from '@urbit/api';
-import CrossCircle from './icons/cross-circle';
+import CloseIcon from './icons/close';
 import { useHarkStore } from '../state/hark';
 
 const MAX_CONTENTS = 3;
@@ -25,7 +25,7 @@ const Notifications = props => {
   return (
     <div
       id="notifications"
-      className={`notifications text-zinc-200 ${visible.value ? 'shown' : ''}`}
+      className={`text-zinc-200 ${visible.value ? 'shown' : ''}`}
     >
       <section>
         {empty && (
@@ -105,8 +105,15 @@ const Notification = props => {
       <header>
         <DocketImage {...charge} />
         <h2>{charge?.title || notification.bin.place.desk}</h2>
-        <button className="archive ml-auto" onClick={archiveNoFollow}>
-          <CrossCircle />
+        <button
+          className="weird ml-auto hover:brightness-50"
+          style={{
+            transition: 'none',
+            "--close-icon-bg": "gainsboro",
+            "--close-icon-fg": "black",
+          }}
+          onClick={archiveNoFollow}>
+          <CloseIcon />
         </button>
       </header>
       <article>
