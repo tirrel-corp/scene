@@ -16,7 +16,7 @@ import PayDetailScreen from './components/Onboarding/detail';
 import PayScreen from "./components/Onboarding/pay";
 import ConfirmScreen from "./components/Onboarding/confirm";
 import Debug from "./components/Onboarding/debug";
-import Spinner from "./components/Spinner";
+import PulsingLogo from "./components/PulsingLogo";
 import { getAuth } from "./lib/auth";
 import 'tippy.js/dist/tippy.css';
 
@@ -84,8 +84,8 @@ const router = createHashRouter([
     path: '/app',
     element: (
       <React.Suspense fallback={
-        <div className="w-100 h-100 flex justify-center items-center">
-          <Spinner />
+        <div className="min-w-[100vw] min-h-[100vh] flex justify-center items-center">
+          <PulsingLogo />
         </div>
         }>
         <App />
