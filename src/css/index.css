@@ -37,7 +37,7 @@ button:active {
 #planet-menu {
   @apply z-[100] absolute max-h-[80vh] max-w-[35ch] overflow-y-auto p-2 invisible;
   min-width: calc(min(35ch, 100%));
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.3);
   border-radius: 0.75ch;
   filter: opacity(0%);
   transition: 150ms ease;
