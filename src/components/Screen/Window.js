@@ -51,8 +51,8 @@ export const Window = ({
             }}
             className="px-2 flex space-x-2 items-center"
           >
-            <a
-              className="text-black bg-white overflow-hidden rounded-full cursor-pointer hover:brightness-75"
+            <button
+              className="weird text-black bg-white rounded-full cursor-pointer hover:brightness-75"
               onClick={() => {
                 windows.set(windows.value.filter((e) => e !== win));
                 selectedWindow.set(
@@ -61,19 +61,19 @@ export const Window = ({
               }}
             >
               <CloseIcon />
-            </a>
-            <a
-              className="text-black cursor-pointer hover:brightness-75"
+            </button>
+            <button
+              className="weird text-black rounded-full cursor-pointer hover:brightness-75"
               onClick={() => hiddenWindow.set([...hiddenWindow.value, win])}
             >
               <MinimizeIcon />
-            </a>
-            <a
-              className="text-black cursor-pointer hover:brightness-75"
+            </button>
+            <button
+              className="weird text-black rounded-full cursor-pointer hover:brightness-75"
               onClick={() => setKey(key + 1)}
             >
               <RefreshIcon />
-            </a>
+            </button>
           </div>
         </div>
         <div

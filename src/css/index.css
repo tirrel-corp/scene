@@ -15,10 +15,12 @@ svg:not:has([height]) {
   @apply h-4;
 }
 
-button {
+button:not(.weird) {
   @apply border border-current rounded-lg;
   padding-inline: 0.25rem;
   padding-block: 0.25rem;
+}
+button {
   filter: none;
   transition: 150ms ease;
 }
