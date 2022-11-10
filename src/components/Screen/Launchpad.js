@@ -27,7 +27,7 @@ export default function Launchpad({
             )
             .filter((e) => e[0] !== "garden")
             .map(([desk, charge]) => (
-              <div className="flex flex-col items-center justify-center text-white space-y-4">
+              <div key={desk} className="flex flex-col items-center justify-center text-white space-y-4">
                 <div
                   className={cn(
                     "h-[125px] w-[125px] rounded-xl overflow-hidden mx-2 cursor-pointer",
@@ -37,7 +37,6 @@ export default function Launchpad({
                     }
                   )}
                   style={{ backgroundColor: charge.color }}
-                  key={desk}
                   onClick={() => {
                     if (!("install" in charge?.chad)) {
                       focusByCharge(charge);
