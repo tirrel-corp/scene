@@ -41,7 +41,7 @@ const Notifications = props => {
           .filter(([n, charge]) => charge?.title !== 'System')
           .map(([n, charge], idx) => (
             <Notification {...{
-              key: idx,
+              key: `unseen-${idx}`,
               className: 'unseen',
               notification: n,
               charge,
@@ -63,7 +63,7 @@ const Notifications = props => {
           .filter(([n, charge]) => charge?.title !== 'System')
           .map(([n, charge], idx) => (
             <Notification {...{
-              key: idx,
+              key: `seen-${idx}`,
               notification: n,
               charge,
               lid: { seen: null },
@@ -110,8 +110,9 @@ const Notification = props => {
         </button>
       </header>
       <article>
-        <h2>{notification.body[0].title.map(i =>
-          i.ship ? (<span className="ship">{i.ship}</span>) : (<span>{i.text}</span>)
+        <h2>{notification.body[0].title.map(i => i.ship
+            ? (<span key={i.ship} className="ship">{i.ship}</span>)
+            : (<span key={i.text}>{i.text}</span>)
         )}</h2>
         {_.take(contents, MAX_CONTENTS).map((cs, idx) => (
           <p key={idx}>
