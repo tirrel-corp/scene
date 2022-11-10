@@ -35,7 +35,7 @@ export const Window = ({ win, index, windows, selectedWindow, launchOpen, hidden
                     }}
                     className="px-2 flex space-x-2 items-center">
                     <a
-                        className="text-black bg-white overflow-hidden rounded-[100px] cursor-pointer hover:brightness-75"
+                        className="text-black bg-white overflow-hidden rounded-full cursor-pointer hover:brightness-75"
                         onClick={() => {
                             windows.set(windows.value.filter((e) => e !== win));
                             selectedWindow.set(selectedWindow.value.filter((e) => e !== win))

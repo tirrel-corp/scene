@@ -1,9 +1,18 @@
-// TODO fix the position of the minimize icon
-export default function MinimizeIcon() {
-    return <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="6.5" cy="6.5" r="6.5" fill="var(--minimize-icon-bg, black)" />
-        <path d="M3.58333 6H9.41667C9.7375 6 10 6.3375 10 6.75C10 7.1625 9.7375 7.5 9.41667 7.5H3.58333C3.2625 7.5 3 7.1625 3 6.75C3 6.3375 3.2625 6 3.58333 6Z" fill="white" />
+export default function MinimizeIcon({ ...rest }) {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...rest}
+    >
+      <circle cx="8" cy="8" r="8" fill="var(--minimize-icon-bg, black)" />
+      <path
+        d="M3.83333 7H12.1667C12.625 7 13 7.45 13 8C13 8.55 12.625 9 12.1667 9H3.83333C3.375 9 3 8.55 3 8C3 7.45 3.375 7 3.83333 7Z"
+        fill="var(--minimize-icon-fg, white)"
+      />
     </svg>
-
-
+  );
 }
