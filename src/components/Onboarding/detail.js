@@ -5,10 +5,11 @@ import { useForm } from 'react-hook-form';
 import Sigil from "../sigil";
 
 export default function PayDetailScreen() {
-    const { planet, credit, setCredit } = useOutletContext();
+    const { planet, billing, setBilling } = useOutletContext();
 
     const { register, handleSubmit, watch, formState: { errors } } = useForm({
         mode: 'onBlur',
+        defaultValues: billing ? billing : {},
     });
     const email = watch('email');
 
@@ -17,7 +18,6 @@ export default function PayDetailScreen() {
     return <div className="grow flex justify-center items-center text-white">
         <div className="flex space-x-12">
             <div className="flex flex-col space-y-8 items-center">
-                <p>Reserved for 15 minutes</p>
                 <div className="rounded-xl overflow-hidden">
                     <Sigil patp={planet || "~zod"} color="#6184FF" />
                 </div>
@@ -26,7 +26,7 @@ export default function PayDetailScreen() {
             <form
                 className="flex-col space-y-4"
                 onSubmit={handleSubmit((data) => {
-                    setCredit(data);
+                    setBilling(data);
                     navigate('/new/pay');
                 })}
             >
@@ -85,14 +85,14 @@ export default function PayDetailScreen() {
                         <p>State</p>
                         <input
                             className={cn("w-full p-3 border-b max-w-[4rem] bg-transparent border-white",
-                                {"border-red-500": !!errors?.state}
+                                {"border-red-500": !!errors?.district}
                             )}
                             type="text"
                             placeholder="MN"
                             autoComplete="address-level1"
-                            id="state"
-                            aria-invalid={!!errors?.state}
-                            {...register('state', {
+                            id="district"
+                            aria-invalid={!!errors?.district}
+                            {...register('district', {
                                 required: true,
                                 maxLength: 2,
                             })}
@@ -102,14 +102,14 @@ export default function PayDetailScreen() {
                         <p>Postal code</p>
                         <input
                             className={cn("w-full p-3 border-b bg-transparent border-white",
-                                {"border-red-500": !!errors?.postal}
+                                {"border-red-500": !!errors?.postalCode}
                             )}
                             type="text"
                             placeholder="88888"
                             autoComplete="postal-code"
-                            id="postal"
+                            id="postalCode"
                             aria-invalid={!!errors?.postal}
-                            {...register('postal', {
+                            {...register('postalCode', {
                                 required: true,
                                 minLength: 5,
                                 maxLength: 5,

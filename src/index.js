@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 import './css/index.css';
 import Onboarding from "./Onboarding";
+import Dashboard from './Dashboard';
 import Login from "./components/Onboarding/login";
 import Welcome from "./components/Onboarding/welcome";
 import NewAccount from './components/Onboarding/new';
@@ -15,20 +16,21 @@ import PayDetailScreen from './components/Onboarding/detail';
 import PayScreen from "./components/Onboarding/pay";
 import ConfirmScreen from "./components/Onboarding/confirm";
 import Debug from "./components/Onboarding/debug";
-import Sigil from "./components/sigil";
+import PulsingLogo from "./components/PulsingLogo";
+import { getAuth } from "./lib/auth";
 import 'tippy.js/dist/tippy.css';
 
 const App = React.lazy(() => import('./App'));
 
 const authLoader = () => {
-  const stored = window.localStorage.getItem("tirrel-desktop-auth");
+  const stored = getAuth();
   if (!!stored) {
-    return JSON.parse(stored);
+    return stored;
   }
   return {
-    ship: process.env.REACT_APP_SHIP,
-    code: process.env.REACT_APP_CODE,
-    url: process.env.REACT_APP_URL
+    ship: process.env.REACT_APP_SHIP || undefined,
+    code: process.env.REACT_APP_CODE || undefined,
+    url: process.env.REACT_APP_URL || undefined
   };
 };
 
@@ -69,6 +71,10 @@ const router = createHashRouter([
         ]
       },
       {
+        path: "dashboard",
+        element: <Dashboard />
+      },
+      {
         path: 'debug',
         element: <Debug />
       }
@@ -78,10 +84,8 @@ const router = createHashRouter([
     path: '/app',
     element: (
       <React.Suspense fallback={
-        <div className="w-100 h-100 flex justify-center items-center">
-          <div className="spinner">
-            <Sigil patp="~tirrel" color="#3045B1" />
-          </div>
+        <div className="min-w-[100vw] min-h-[100vh] flex justify-center items-center">
+          <PulsingLogo />
         </div>
         }>
         <App />

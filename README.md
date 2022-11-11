@@ -4,16 +4,23 @@
 
 ```bash
 cp .env.example .env ## set it to your ship and +code
-npm i --force ## so that sigil-js installs
-npm run dev ## spawns react + electron dev servers
+yarn install
+# Make sure that you aren't already running Scene.
+yarn dev ## spawns react + electron dev servers
 ```
 
 ## Distribution
 
-```
+```bash
 npm run electron:package:mac
 npm run electron:package:win
 npm run electron:package:linux
+```
+
+The result will be in `./dist`, for example:
+
+```bash
+open ./dist/Scene-0.0.12-arm64.dmg
 ```
 
 ## Debug builds

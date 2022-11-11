@@ -1,5 +1,12 @@
 // Module to control the application lifecycle and the native browser window.
-const { app, BrowserWindow, ipcMain, protocol, shell } = require("electron");
+const {
+    app,
+    BrowserWindow,
+    ipcMain,
+    protocol,
+    screen,
+    shell,
+} = require("electron");
 const path = require("path");
 const url = require("url");
 require("dotenv").config();
@@ -7,15 +14,18 @@ const { default: installExtension, REACT_DEVELOPER_TOOLS } = require('electron-d
 const { autoUpdater } = require("electron-updater");
 
 let mainWindow;
+let dl_url;
 // Create the native browser window.
-function createWindow() {
+function createWindow(dl_url) {
+    const mainScreen = screen.getPrimaryDisplay();
     mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: mainScreen.size.width,
+        height: mainScreen.size.height,
+        backgroundColor: 'black',
         // Set the path of an additional "preload" script that can be used to
         // communicate between node-land and browser-land.
         webPreferences: {
-            title: "Desktop",
+            title: "Scene",
             preload: path.join(__dirname, "preload.js"),
             webSecurity: false,
             nodeIntegration: true,
@@ -29,7 +39,7 @@ function createWindow() {
         return shell.openExternal(url)
     })
 
-    getAuth().then((res) => {
+    getAuth(dl_url).then((res) => {
         // Rewrite cookies for the ship since Urbit doesn't do this and Chromium needs it.
         if (res?.url || process.env.REACT_APP_URL) {
             ses.webRequest.onHeadersReceived(
@@ -52,9 +62,11 @@ function createWindow() {
     // Register our protocol, scene://.
     if (process.defaultApp) {
         if (process.argv.length >= 2) {
-            app.setAsDefaultProtocolClient('scene', process.execPath, [path.resolve(process.argv[1])])
+            app.removeAsDefaultProtocolClient('scene', process.execPath, [path.resolve(process.argv[0])]);
+            app.setAsDefaultProtocolClient('scene', process.execPath, [path.resolve(process.argv[0])])
         }
     } else {
+        app.removeAsDefaultProtocolClient('scene');
         app.setAsDefaultProtocolClient('scene')
     }
 
@@ -76,9 +88,58 @@ function createWindow() {
     }
 }
 
-async function getAuth() {
-    const storage = await mainWindow.webContents.executeJavaScript(`window.localStorage.getItem("tirrel-desktop-auth")`) || {};
-    return JSON.parse(storage);
+app.on('open-url', (event, url) => {
+    if (mainWindow) {
+        event.preventDefault();
+        mainWindow.webContents.send('deepLink', url);
+    } else {
+        dl_url = url;
+    }
+})
+
+async function getAuth(dl_url) {
+    const deepLink = dl_url || process.argv.find((arg) => arg.startsWith('scene://'));
+
+    let newAuth;
+    if (deepLink) {
+      const params = new URL(deepLink).searchParams;
+      if (params.has('patp') && params.has('code') && params.has('url')) {
+        newAuth = {
+          ship: params.get('patp'),
+          code: params.get('code'),
+          url: params.get('url'),
+        }
+        if (newAuth.ship.startsWith('~')) {
+            newAuth.ship = newAuth.ship.replace(/^~/, '');
+        }
+        if (!newAuth.url.startsWith('https://')) {
+            if (/^(?:.*:\/\/)/.test(newAuth.url)) {
+                // starts with some other protocol like http? replace it with https
+                newAuth.url = newAuth.url.replace(/^(?:.*:\/\/)/, 'https://')
+            } else {
+                // doesn't start with a protocol but it should
+                newAuth.url = `https://${newAuth.url}`
+            }
+        }
+      } else {
+        throw new Error(`bad deep link ${deepLink}`)
+      }
+    } else {
+    }
+    if (newAuth) {
+      const oldStorage = await mainWindow.webContents.executeJavaScript(`window.localStorage.getItem("tirrel-desktop-auth")`);
+      if (oldStorage === JSON.stringify(newAuth)) {
+        return newAuth;
+      }
+
+      await mainWindow.webContents.executeJavaScript(`window.localStorage.setItem("tirrel-desktop-auth", '${JSON.stringify(newAuth)}')`);  // note security vulnerability
+      const newArgs = process.argv.filter((arg) => !arg.startsWith('scene://'));
+      app.relaunch({ args: newArgs });
+      app.quit(0);
+    } else {
+      const storage = await mainWindow.webContents.executeJavaScript(`window.localStorage.getItem("tirrel-desktop-auth")`);
+      return storage ? JSON.parse(storage) : {};
+    }
 }
 
 // Setup a local proxy to adjust the paths of requested files when loading
@@ -118,23 +179,27 @@ if (!gotTheLock) {
 
     app.whenReady().then(async () => {
         installExtension(REACT_DEVELOPER_TOOLS)
-            .then((name) => console.log(`Added Extension:  ${name}`))
-            .catch((err) => console.log('An error occurred: ', err));
         setupLocalFilesNormalizerProxy();
-        await autoUpdater.checkForUpdatesAndNotify();
+        // check once on startup and then again every half hour
+        autoUpdater.checkForUpdatesAndNotify();
+        setInterval(() => autoUpdater.checkForUpdatesAndNotify(), 1800000);
     });
     app.on('ready', async () => {
-        createWindow();
+        createWindow(dl_url);
         app.on("activate", function async() {
             // On macOS it's common to re-create a window in the app when the
             // dock icon is clicked and there are no other windows open.
             if (BrowserWindow.getAllWindows().length === 0) {
-                createWindow();
+                createWindow(dl_url);
             }
         });
-    })
-    app.on('open-url', (event, url) => {
-        mainWindow.webContents.send('deepLink', url);
+        if (process.platform !== 'darwin') {
+            // Find the arg that is our custom protocol url and store it
+            const deepLink = argv.find((arg) => arg.startsWith('scene://'));
+            if (deepLink) {
+                mainWindow.webContents.send('deepLink', deepLink);
+            }
+        }
     })
 }
 

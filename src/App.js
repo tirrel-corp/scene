@@ -13,7 +13,11 @@ import { treatyReducer } from './state/treaties';
 import Launchpad from './components/Screen/Launchpad';
 import Search from './components/Screen/Search';
 import HamburgerMenu from './components/HamburgerMenu';
+import PlanetMenu from './components/PlanetMenu';
 import { useClickOutside } from './lib/hooks';
+import { setAuth } from './lib/auth';
+
+const { ipcRenderer } = require("electron");
 
 function App() {
   const [apps, setApps] = useReducer(chargeReducer, {});
@@ -25,10 +29,12 @@ function App() {
   const [launchOpen, setLaunchOpen] = useState(false);
   const [showNotifs, setShowNotifs] = useState(false);
   const [showNativeNotifs, setShowNativeNotifs] = useState(false);
-  const [showMenu, setShowMenu] = useState(false);
+  const [showHamburger, setShowHamburger] = useState(false);
+  const [showPlanetMenu, setShowPlanetMenu] = useState(false);
 
   useEffect(() => {
     async function init() {
+      await api.connect();
       const charges = (await api.scry(scryCharges));
       const allies = (await api.scry(scryAllies));
       setApps(charges);
@@ -50,14 +56,36 @@ function App() {
     init();
   }, []);
 
-  useClickOutside([
-    { current: document.getElementById('notifications') },
-    { current: document.getElementById('notifications-toggle') },
-  ], () => setShowNotifs(false));
-  useClickOutside([
-    { current: document.getElementById('hamburger') },
-    { current: document.getElementById('hamburger-toggle') },
-  ], () => setShowMenu(false));
+  useEffect(() => {
+    const deepLinkListener = (event, url) => {
+      const params = new URL(url).searchParams;
+      if (!params.has('patp') || !params.has('code') || !params.has('url')) {
+        // TODO alert if the url is malformed?
+        return;
+      }
+      const newAuth = {
+        ship: params.get('patp'),
+        code: params.get('code'),
+        url: params.get('url'),
+      }
+      setAuth(newAuth);
+    }
+    ipcRenderer.on('deepLink', deepLinkListener);
+    return () => ipcRenderer.removeListener('deepLink', deepLinkListener);
+  }, []);
+
+  useClickOutside(
+    ['notifications', 'notifications-toggle'],
+    () => setShowNotifs(false)
+  );
+  useClickOutside(
+    ['hamburger', 'hamburger-toggle'],
+    () => setShowHamburger(false)
+  );
+  useClickOutside(
+    ['planet-menu', 'planet-menu-toggle'],
+    () => setShowPlanetMenu(false)
+  );
 
   const focusByCharge = useCallback(charge => {
     setWindows(prev => (!prev.includes(charge)
@@ -66,7 +94,7 @@ function App() {
     ));
     setSelectedWindow(prev => ([charge, ...prev.filter(i => i !== charge)]));
     setHiddenWindow(prev => prev.filter(i => i !== charge));
-  }, [setWindows, setSelectedWindow, setHiddenWindow]);
+  }, []);
 
   const bgImage = window.localStorage.getItem('tirrel-desktop-background');
 
@@ -74,14 +102,15 @@ function App() {
     <div
       className="bg-[#e4e4e4] h-screen w-screen flex flex-col absolute"
       style={{
-        backgroundImage: bgImage ? `url(${bgImage})` : undefined,
+        backgroundImage: bgImage ? `url(${bgImage})` : "url('hallstatt.jpg')",
         backgroundSize: 'cover',
       }}>
       <HeaderBar
         selectedWindow={{ value: selectedWindow, set: setSelectedWindow }}
         windows={{ value: windows, set: setWindows }}
         toggleNotifs={() => setShowNotifs(a => !a)}
-        toggleMenu={() => setShowMenu(a => !a)}
+        toggleHamburger={() => setShowHamburger(a => !a)}
+        togglePlanetMenu={() => setShowPlanetMenu(a => !a)}
       />
       <Screen
         hiddenWindow={{ value: hiddenWindow, set: setHiddenWindow }}
@@ -100,8 +129,11 @@ function App() {
           />
         </Launchpad>}
       </Screen>
+      <PlanetMenu
+        visible={{ value: showPlanetMenu, set: setShowPlanetMenu }}
+      />
       <HamburgerMenu
-        visible={{ value: showMenu, set: setShowMenu }}
+        visible={{ value: showHamburger, set: setShowHamburger }}
         nativeNotifs={{
           value: showNativeNotifs,
           set: next => {

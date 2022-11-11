@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import _ from 'lodash';
 import { harkBinToId } from '@urbit/api';
+import CloseIcon from './icons/close';
 import { useHarkStore } from '../state/hark';
 
 const MAX_CONTENTS = 3;
@@ -24,7 +25,7 @@ const Notifications = props => {
   return (
     <div
       id="notifications"
-      className={`notifications text-zinc-200 ${visible.value ? 'shown' : ''}`}
+      className={`text-zinc-200 ${visible.value ? 'shown' : ''}`}
     >
       <section>
         {empty && (
@@ -40,7 +41,7 @@ const Notifications = props => {
           .filter(([n, charge]) => charge?.title !== 'System')
           .map(([n, charge], idx) => (
             <Notification {...{
-              key: idx,
+              key: `unseen-${idx}`,
               className: 'unseen',
               notification: n,
               charge,
@@ -62,7 +63,7 @@ const Notifications = props => {
           .filter(([n, charge]) => charge?.title !== 'System')
           .map(([n, charge], idx) => (
             <Notification {...{
-              key: idx,
+              key: `seen-${idx}`,
               notification: n,
               charge,
               lid: { seen: null },
@@ -91,7 +92,7 @@ const Notification = props => {
     useHarkStore.getState().archiveNote(notification.bin, lid);
   };
 
-  const archiveNoFollow = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const archiveNoFollow = (e) => {
     e.preventDefault();
     e.stopPropagation();
     archive();
@@ -104,15 +105,21 @@ const Notification = props => {
       <header>
         <DocketImage {...charge} />
         <h2>{charge?.title || notification.bin.place.desk}</h2>
-        <button className="archive ml-auto" onClick={archiveNoFollow}>
-          <svg width="9" height="9" className="icon inline">
-            <use href="/icons.svg#cross-circle" />
-          </svg>
+        <button
+          className="weird ml-auto hover:brightness-50"
+          style={{
+            transition: 'none',
+            "--close-icon-bg": "gainsboro",
+            "--close-icon-fg": "black",
+          }}
+          onClick={archiveNoFollow}>
+          <CloseIcon />
         </button>
       </header>
       <article>
-        <h2>{notification.body[0].title.map(i =>
-          i.ship ? (<span className="ship">{i.ship}</span>) : (<span>{i.text}</span>)
+        <h2>{notification.body[0].title.map(i => i.ship
+            ? (<span key={i.ship} className="ship">{i.ship}</span>)
+            : (<span key={i.text}>{i.text}</span>)
         )}</h2>
         {_.take(contents, MAX_CONTENTS).map((cs, idx) => (
           <p key={idx}>

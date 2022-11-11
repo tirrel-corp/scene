@@ -46,5 +46,11 @@ jobs:
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_APP_SPECIFIC_PASSWORD }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
 
+          # Inject our public key for encrypting sensitive Circle payloads
+          CIRCLE_PUBLIC_KEY: ${{ secrets.PRODUCTION_CIRCLE_PUBLIC_KEY }}
+
+          # Production tirrel server
+          REACT_APP_TIRRELSERVER: "https://planet.one"
+
           # Force env.CI false so that the linter won't treat warnings as errors
           CI: false

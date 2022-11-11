@@ -1,28 +1,96 @@
-import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { setAuth } from '../../lib/auth';
+import ob from 'urbit-ob';
 
-const ipc = require('electron').ipcRenderer;
 
 export default function DebugMenu() {
-    const [ship, setShip] = useState('');
-    const [url, setUrl] = useState('');
-    const [code, setCode] = useState('');
+  const navigate = useNavigate();
 
-    const respawn = () => {
-        window.localStorage.setItem("tirrel-desktop-auth", JSON.stringify({
-            ship,
-            url,
-            code
-        }));
-        ipc.send('respawn');
+  const { register, handleSubmit, formState: { errors }, setError } = useForm({
+    mode: 'onBlur',
+  });
+
+  console.debug(errors);
+
+  const testCreds = async ({ship, code, url}) => {
+    try {
+      const auth = await fetch(`${url}/~/login`, {
+        method: 'POST',
+        credentials: 'include',
+        body: new URLSearchParams({
+          'password': code,
+        })
+      });
+      if (!auth.ok) {
+        throw new Error(`Could not log in as ~${ship} with code ${code}`);
+      }
+
+      setAuth({ship, code, url})
+    } catch (err) {
+      setError('url', {type: 'custom', message: err?.message || err});
     }
-    return <div className="flex flex-col space-y-4 text-white">
-        <p>To enter your own ship into storage for desktop usage, enter the following details.</p>
+  }
+
+  return (
+    <div className="flex flex-col space-y-5 text-white rounded-lg p-20 max-w-[60ch]">
+      <div className="flex flex-row">
+        <button className="px-4" onClick={() => navigate(-1)}>
+          &#10094;&nbsp;Back
+        </button>
+      </div>
+      <p>To sign in to your ship, please provide the following details.</p>
+      <form
+        onSubmit={handleSubmit(testCreds)}
+        className="flex flex-col space-y-4">
         <p>Ship name</p>
-        <input type="text" className="bg-transparent border-b p-2" placeholder="haddef-sigwen" value={ship} onChange={(e) => setShip(e.target.value)} />
+        <input
+          type="text"
+          className={`bg-transparent border-b p-2 ${errors?.code ? 'border-red-600' : ''}`}
+          placeholder="sidfus-tirlyx"
+          {...register('ship', {
+            required: true,
+            validate: v => ob.isValidPatp(v) || ob.isValidPatp(`~${v}`),
+          })}
+        />
         <p>URL</p>
-        <input type="text" className="bg-transparent border-b p-2" placeholder="https://haddef-sigwen.arvo.network" value={url} onChange={(e) => setUrl(e.target.value)} />
-        <p>+code</p>
-        <input type="text" className="bg-transparent border-b p-2" placeholder="nicetry-feds-sampel-harlet" value={code} onChange={(e) => setCode(e.target.value)} />
-        <button onClick={() => respawn()}>Set</button>
+        <input
+          type="url"
+          className={`bg-transparent border-b p-2 ${errors?.url ? 'border-red-600' : ''}`}
+          placeholder="https://sidfus-tirlyx.arvo.planet.one"
+          {...register('url', {
+            required: true,
+            validate: v => {
+              try {
+                new URL(v);
+                return true;
+              } catch (err) {
+                return false;
+              }
+            }
+          })}
+        />
+        <p>Access Key (+code)</p>
+        <input
+          type="text"
+          className={`bg-transparent border-b p-2 ${errors?.code ? 'border-red-600' : ''}`}
+          placeholder="lidlut-tabwed-pillex-ridrup"
+          {...register('code', {
+            required: true,
+            minLength: 27,
+            validate: v => ob.isValidPatq(v) || ob.isValidPatq(`~${v}`),
+          })}
+        />
+        <button>Connect</button>
+      </form>
+      {Object.entries(errors)
+          .filter(([, err]) => err.type === 'custom')
+          .map(([key, err]) => (
+            <p className="border rounded-lg p-2 border-red-600" key={key}>
+              Error: {err?.message}
+            </p>
+          )
+      )}
     </div>
+  )
 }

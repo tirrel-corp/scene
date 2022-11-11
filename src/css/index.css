@@ -15,10 +15,12 @@ svg:not:has([height]) {
   @apply h-4;
 }
 
-button {
+button:not(.weird) {
   @apply border border-current rounded-lg;
   padding-inline: 0.25rem;
   padding-block: 0.25rem;
+}
+button {
   filter: none;
   transition: 150ms ease;
 }
@@ -31,13 +33,21 @@ button:active {
 }
 
 #notifications,
-#hamburger {
-  @apply z-[100] absolute right-4 top-12 max-h-[80vh] max-w-[35ch] overflow-y-auto p-2 invisible;
+#hamburger,
+#planet-menu {
+  @apply z-[100] absolute max-h-[80vh] max-w-[35ch] overflow-y-auto p-2 invisible;
   min-width: calc(min(35ch, 100%));
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.3);
   border-radius: 0.75ch;
   filter: opacity(0%);
-  transition: filter 150ms ease;
+  transition: 150ms ease;
+}
+#notifications,
+#hamburger {
+  @apply right-4 top-12;
+}
+#planet-menu {
+  @apply left-4 top-12;
 }
 #notifications::-webkit-scrollbar {
   @apply overflow-hidden;
@@ -57,7 +67,8 @@ button:active {
 }
 
 #notifications.shown,
-#hamburger.shown {
+#hamburger.shown,
+#planet-menu.shown {
   @apply visible;
   filter: opacity(100%);
   transition: filter 150ms ease;
@@ -80,20 +91,10 @@ button:active {
   @apply flex flex-nowrap items-center overflow-hidden text-ellipsis text-xs;
   gap: 0.5ch;
   -webkit-line-clamp: 1;
-  padding-block: 0.25ch;
+  padding-block: 0.75ch;
   padding-inline: 1.5ch;
   color: #CCC;
   background: #2F2F2F;
-}
-
-.notification button.archive {
-  @apply border-none transform-none;
-  padding: 0.25ch;
-  transition: transform 150ms ease;
-}
-
-.notification button.archive:hover {
-  transform: scale(1.3);
 }
 
 .notification > article {

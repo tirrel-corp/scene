@@ -34,9 +34,17 @@ const validate = (ccNum, exp, cvv, setError) => {
     }
 }
 
+const formatCardDetails = credit => {
+    const { number, exp, cvv } = credit;
+    const [_expMonth, _expYear] = exp.split('/');
+    const expMonth = parseInt(_expMonth, 10);
+    const expYear = parseInt(`20${_expYear}`, 10);
+    return ({number, expMonth, expYear, cvv});
+}
+
 export default function PayScreen() {
     const { planet, credit, setCredit } = useNewAcctContext();
-    const [ccNum, setCcNum] = useState("");
+    const [number, setNumber] = useState("");
     const [exp, setExp] = useState("");
     const [cvv, setCvv] = useState("");
     const [error, setError] = useState(false);
@@ -44,7 +52,6 @@ export default function PayScreen() {
     return <div className="grow flex justify-center items-center text-white">
         <div className="flex space-x-12">
             <div className="flex flex-col space-y-8 items-center">
-                <p>Reserved for 15 minutes</p>
                 <div className="rounded-xl overflow-hidden">
                     <Sigil patp={planet || "~zod"} color="#6184FF" />
                 </div>
@@ -57,7 +64,7 @@ export default function PayScreen() {
                         {"border-red-500": !!error?.ccNum}
                     )}
                     placeholder="0000 0000 0000 0000"
-                    onChange={setCcNum}
+                    onChange={setNumber}
                 />
                 <div className="flex space-x-4">
                     <div className="flex-col space-y-4">
@@ -86,13 +93,15 @@ export default function PayScreen() {
                         />
                     </div>
                 </div>
+                {error && <p className="text-red-600">Please ensure all fields are correct.</p>}
                 <Link to="/new/confirm" onClick={(e) => {
-                    validate(ccNum, exp, cvv, setError)
-                        ? setCredit({ ...credit, ccNum, exp, cvv })
+                    validate(number, exp, cvv, setError)
+                        ? setCredit(formatCardDetails({ number, exp, cvv }))
                         : e.preventDefault()
-                }}>
-                    <a className="mt-8 block rounded-full px-4 py-2 bg-[rgba(217,217,217,0.2)] text-white hover:brightness-110 text-xl text-center">Continue</a>
-                    {error && <p className="text-red-600">Please ensure all fields are correct.</p>}
+                }}
+                className="mt-8 block rounded-full px-4 py-2 bg-[rgba(217,217,217,0.2)] text-white hover:brightness-110 text-xl text-center"
+                >
+                    Continue
                 </Link>
             </div>
         </div>
