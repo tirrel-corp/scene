@@ -19,7 +19,7 @@ export default function Search({ allies, treaties, apps }) {
     return <div className="relative w-full max-w-md flex items-center justify-center"><input
         type="text"
         placeholder="Search for providers..."
-        className="rounded-xl my-4 p-1 bg-[rgba(0,0,0,0.1)] text-white"
+        className="rounded-xl my-4 py-1 px-2 bg-[rgba(0,0,0,0.1)] text-white"
         autoCorrect={"false"}
         onFocus={() => setPromptOpen(true)}
         onBlur={() => {

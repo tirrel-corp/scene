@@ -44,7 +44,6 @@ export default function HeaderBar({
       </p>
       </div>
       <div ref={windowMenuRef}>
-
         {windowMenu && (
           <div className="absolute top-10 left-1 w-full max-w-xs bg-white text-black rounded-xl p-4 flex flex-col space-y-2 shadow-sm shadow-[rgba(0,0,0,0.1)]">
             <a
