@@ -24,7 +24,7 @@ export default function HeaderBar({
 
   return (
     <div className="text-white w-full bg-[rgba(0,0,0,0.7)] backdrop-blur-sm flex justify-between items-center min-h-[2.25rem] px-4 cursor-default border-b border-[rgba(0,0,0,0.15)] z-[9999]">
-      <div>
+      <div className="flex" style={{gap: '1rem'}}>
         <button
           id="planet-menu-toggle"
           onClick={togglePlanetMenu}
@@ -36,13 +36,13 @@ export default function HeaderBar({
             colors: ['transparent', 'white'],
           })}
         </button>
-      </div>
       <p
         className="relative rounded-lg hover:bg-[rgba(255,255,255,0.1)]"
         onClick={() => setWindowMenu(!windowMenu)}
       >
         {selectedWindow.value?.[0]?.title || " "}
       </p>
+      </div>
       <div ref={windowMenuRef}>
 
         {windowMenu && (
