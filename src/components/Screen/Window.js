@@ -29,8 +29,8 @@ export const Window = ({
       default={{
         x: (index + 1) * 100,
         y: (index + 1) * 100,
-        width: 640,
-        height: 480,
+        width: 800,
+        height: 600,
       }}
     >
       <div className="w-full h-full flex flex-col bg-[#EEE] cursor-default">
