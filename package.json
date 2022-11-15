@@ -86,7 +86,7 @@
       "target": "nsis"
     },
     "linux": {
-      "target": "deb"
+      "target": "AppImage"
     },
     "dmg": {
       "icon": false
