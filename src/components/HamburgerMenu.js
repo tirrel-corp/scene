@@ -25,7 +25,7 @@ function isValidUrl(input) {
 }
 
 function isImage(input) {
-  return /\.(jpe?g|tiff?|png|webp|bmp)$/i.test(input);
+  return /\.(jpe?g|tiff?|png|webp|bmp|gif|svg)$/i.test(input);
 }
 
 const BackgroundInput = props => {
