@@ -17,7 +17,9 @@ export default function DebugMenu() {
     try {
 
       if (!url.startsWith('https://')) {
-        throw new Error(`Url must be on https`);
+        if ((url.indexOf('localhost') == -1) && (url.indexOf('127.0.0.1') == -1)){
+          throw new Error(`Url must be on https`);
+        }
       }
 
       const auth = await fetch(`${url}/~/login`, {
