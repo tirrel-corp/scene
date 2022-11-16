@@ -15,6 +15,13 @@ export default function DebugMenu() {
 
   const testCreds = async ({ship, code, url}) => {
     try {
+
+      if (!url.startsWith('https://')) {
+        if ((url.indexOf('localhost') == -1) && (url.indexOf('127.0.0.1') == -1)){
+          throw new Error(`Url must be on https`);
+        }
+      }
+
       const auth = await fetch(`${url}/~/login`, {
         method: 'POST',
         credentials: 'include',
