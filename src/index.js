@@ -8,6 +8,7 @@ import {
 import './css/index.css';
 import Onboarding from "./Onboarding";
 import Dashboard from './Dashboard';
+import ErrorView from "./ErrorView";
 import Login from "./components/Onboarding/login";
 import Welcome from "./components/Onboarding/welcome";
 import NewAccount from './components/Onboarding/new';
@@ -37,8 +38,9 @@ const authLoader = () => {
 const router = createHashRouter([
   {
     path: "/",
-    element: <Onboarding />,
     loader: authLoader,
+    element: <Onboarding />,
+    errorElement: <ErrorView />,
     children: [
       {
         path: "",
@@ -82,6 +84,7 @@ const router = createHashRouter([
   },
   {
     path: '/app',
+    loader: authLoader,
     element: (
       <React.Suspense fallback={
         <div className="min-w-[100vw] min-h-[100vh] flex justify-center items-center">
@@ -91,7 +94,7 @@ const router = createHashRouter([
         <App />
       </React.Suspense>
     ),
-    loader: authLoader
+    errorElement: <ErrorView />,
   },
 ])
 
