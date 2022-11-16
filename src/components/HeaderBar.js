@@ -31,7 +31,7 @@ export default function HeaderBar({
           onClick={togglePlanetMenu}
           className="border-none rounded-lg px-2 bg-[#FFF3] text-white flex-1 flex flex-column justify-center items-center">
           {sigil({
-            patp: ob.isValidPatp(`~${patp}`) ? `~${patp}` : '~zod',
+            patp: (ob.isValidPatp(`~${patp}`) && (patp.length <= 13)) ? `~${patp}` : '~zod',
             renderer: reactRenderer,
             size: 16,
             colors: ['transparent', 'white'],
