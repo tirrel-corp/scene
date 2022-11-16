@@ -16,15 +16,6 @@ export const setAuth = input => {
     if (input.code.startsWith('~')) {
         auth.code = input.code.replace(/^~/, '');
     }
-    if (!input.url.startsWith('https://')) {
-        if (/^(?:.*:\/\/)/.test(input.url)) {
-            // starts with some other protocol like http? replace it with https
-            auth.url = input.url.replace(/^(?:.*:\/\/)/, 'https://')
-        } else {
-            // doesn't start with a protocol but it should
-            auth.url = `https://${input.url}`
-        }
-    }
 
     window.localStorage.setItem('tirrel-desktop-auth', JSON.stringify(auth));
     window.scene.respawn();
