@@ -18,7 +18,7 @@ export default function DebugMenu() {
 
       if (!url.startsWith('https://')) {
         if ((url.indexOf('localhost') == -1) && (url.indexOf('127.0.0.1') == -1)){
-          throw new Error(`Url must be on https ${url} : ${url.indexOf('localhost')}`);
+          throw new Error(`Url must be on https`);
         }
       }
 
