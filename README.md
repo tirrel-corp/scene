@@ -1,4 +1,4 @@
-# @tirrel-corp/desktop
+# @tirrel-corp/scene
 
 ## Development
 
