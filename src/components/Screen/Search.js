@@ -64,6 +64,16 @@ const Prompt = ({ allies, apps, siggedAlly, treaties, setPromptOpen, currentApp,
             ? <p className=" text-xs p-4">Please enter a valid <code>@p</code> to search for applications.</p>
             : <div className='flex flex-col space-y-2 w-full min-h-0 h-full self-start'>
                 {currentApp.value?.desk && <AppInfo apps={apps} currentApp={currentApp} setPromptOpen={setPromptOpen} />}
+                {!currentApp.value?.desk
+                    && ob.isValidPatp(siggedAlly)
+                    && (!allies.value?.[siggedAlly] || !allies.value?.[siggedAlly]?.length)
+                    && (
+                        <p className="p-4 text-xs text-center">
+                            No apps are available from {siggedAlly}.
+                        </p>
+                        )
+                }
+
                 {!currentApp.value?.desk && ob.isValidPatp(siggedAlly) && Object.values(allies.value?.[siggedAlly] || {})?.map((charge) => {
                     if (treaties.value?.[charge]) {
                         const app = treaties?.value?.[charge];
