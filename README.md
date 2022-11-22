@@ -10,11 +10,12 @@
 ## Development
 
 ```bash
-cp .env.example .env ## set it to your ship and +code
 yarn install
 # Make sure that you aren't already running Scene.
 yarn dev ## spawns react + electron dev servers
 ```
+
+Log in to your local fake zod (use the correct port).
 
 ## Distribution
 
