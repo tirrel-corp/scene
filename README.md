@@ -1,5 +1,7 @@
 # @tirrel-corp/scene
 
+[Install Scene Here](https://tirrel.io/scene/)
+
 ## Development
 
 ```bash
