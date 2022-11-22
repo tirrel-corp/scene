@@ -1,4 +1,6 @@
-# @tirrel-corp/scene
+# Scene, the urbit desktop
+
+![](https://planet.one/static/media/scene-logotype-white.f7dff4982e3d8e0003be3f937904a442.svg)
 
 [Install Scene Here](https://planet.one/scene/)
 
