@@ -1,6 +1,6 @@
 # @tirrel-corp/scene
 
-[Install Scene Here](https://tirrel.io/scene/)
+[Install Scene Here](https://planet.one/scene/)
 
 ## Development
 
