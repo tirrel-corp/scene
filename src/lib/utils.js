@@ -18,3 +18,12 @@ export const normalizeUrbitColor = (color) => {
     const lengthAdjustedColor = colorString.padEnd(6, colorString.slice(0, -1));
     return `#${lengthAdjustedColor}`
 }
+
+export const fetchAsDataURL = (url) => fetch(url)
+    .then(res => res.blob())
+    .then(blob => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+    }));
