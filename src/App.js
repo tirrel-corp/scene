@@ -1,8 +1,12 @@
 import { useCallback, useState, useReducer, useEffect } from 'react';
 import { scryCharges, scryAllies } from '@urbit/api';
 import { api } from './state/api';
-import { useHarkStore } from './state/hark';
-import { chargeSubscription, allySubscription } from './state/subscriptions';
+import { useHarkStore, reduceHark } from './state/hark';
+import {
+  chargeSubscription,
+  allySubscription,
+  harkSubscription,
+} from './state/subscriptions';
 import HeaderBar from './components/HeaderBar';
 import Screen from './components/Screen';
 import Dock from './components/Dock';
@@ -41,6 +45,7 @@ function App() {
       setAllies(allies);
       chargeSubscription(setApps);
       allySubscription(setAllies);
+      harkSubscription(reduceHark);
 
       useHarkStore.getState().initialize(api);
 

@@ -17,3 +17,9 @@ export const treatySubscription = (callback) => api.subscribe({
     path: "/treaties",
     event: (data) => callback(data)
 })
+
+export const harkSubscription = (callback) => api.subscribe({
+    app: 'hark-store',
+    path: '/updates',
+    event: (data) => callback(data),
+});

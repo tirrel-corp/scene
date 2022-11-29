@@ -135,7 +135,7 @@ export const useHarkStore = createState(
   ]
 );
 
-function reduceHark(u) {
+export function reduceHark(u) {
   const { set } = useHarkStore.getState();
   if (!u) {
     return;
@@ -217,15 +217,6 @@ function reduceHark(u) {
   }
 }
 
-api.subscribe({
-  app: 'hark-store',
-  path: '/updates',
-  event: (u) => {
-    /* eslint-ignore-next-line camelcase */
-    reduceHark(u);
-  }
-});
-
 function harkContentsToPlainText(contents) {
   return contents
     .map((c) => {
@@ -236,31 +227,3 @@ function harkContentsToPlainText(contents) {
     })
     .join('');
 }
-
-api.subscribe({
-  app: 'hark-store',
-  path: '/notes',
-  event: (u) => {
-    if ('add-note' in u) {
-      console.debug('add-note');
-      // const { browserSettings, display } = useSettingsState.getState();
-      // const { browserId } = useLocalState.getState();
-      // const settings = parseBrowserSettings(browserSettings.settings);
-      // const browserNotifications = getBrowserSetting(settings, browserId)?.browserNotifications;
-
-      // if (!browserNotifications || display.doNotDisturb) {
-      //   return;
-      // }
-      // const { bin, body } = u['add-note'];
-      // const binId = harkBinToId(bin);
-      // const { title, content } = body;
-
-      // const note = new Notification(harkContentsToPlainText(title), {
-      //   body: harkContentsToPlainText(content),
-      //   tag: binId,
-      //   renotify: true
-      // });
-      // note.onclick = () => {};
-    }
-  }
-});
