@@ -21,6 +21,8 @@ function createWindow(dl_url) {
     mainWindow = new BrowserWindow({
         width: mainScreen.size.width,
         height: mainScreen.size.height,
+        minWidth: 1024,
+        minHeight: 768,
         backgroundColor: 'black',
         // Set the path of an additional "preload" script that can be used to
         // communicate between node-land and browser-land.
