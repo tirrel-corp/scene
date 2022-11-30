@@ -33,6 +33,8 @@ export const Window = ({
         y: (index + 1) * 100,
         width: 800,
         height: 600,
+        minWidth: 800,
+        minHeight: 600,
       }}
     >
       <div className="w-full h-full flex flex-col bg-[#EEE] cursor-default">
