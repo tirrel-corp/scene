@@ -8,7 +8,7 @@ export default function Screen({
   children,
 }) {
   return (
-    <div className="grow">
+    <div className="grow flex flex-col justify-end items-center">
       {children}
       {windows.value.map((win, index) => (
         <Window
