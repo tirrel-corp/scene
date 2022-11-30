@@ -4,6 +4,7 @@ import cn from "classnames";
 import CloseIcon from "../icons/close";
 import MinimizeIcon from "../icons/minimize";
 import RefreshIcon from "../icons/refresh";
+import { screenPadding } from '../../lib/constants';
 
 export const Window = ({
   win,
@@ -27,7 +28,8 @@ export const Window = ({
         visibility: hiddenWindow.value.includes(win) ? "hidden" : "visible",
       }}
       default={{
-        x: (index + 1) * 100,
+        // add 600 px to accommodate padding for offscreen scrolling
+        x: (index + 1) * 100 + screenPadding.inline,
         y: (index + 1) * 100,
         width: 800,
         height: 600,

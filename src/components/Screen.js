@@ -1,4 +1,5 @@
 import Window from "./Screen/Window";
+import { screenPadding } from '../lib/constants';
 
 export default function Screen({
   windows,
@@ -8,7 +9,16 @@ export default function Screen({
   children,
 }) {
   return (
-    <div className="grow flex flex-col justify-end items-center">
+    <div
+      className="grow flex flex-col justify-end items-center"
+      style={{
+        // enlarges this bit without changing position of content. 
+        marginInline: `-${screenPadding.inline}px`,
+        paddingInline: `${screenPadding.inline}px`,
+        marginBottom: `-${screenPadding.bottom}px`,
+        paddingBottom: `${screenPadding.bottom}px`,
+      }}
+    >
       {children}
       {windows.value.map((win, index) => (
         <Window
