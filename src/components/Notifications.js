@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useMemo } from 'react';
 import _ from 'lodash';
 import { harkBinToId } from '@urbit/api';
 import CloseIcon from './icons/close';
@@ -22,6 +22,24 @@ const Notifications = props => {
     lastVisible.current = visible.value;
   }, [visible]);
 
+  const sortedUnseen = useMemo(() =>
+    Object.values(unseen)
+      .sort((a, b) => b.time - a.time)
+      .filter(n => !!n?.body?.[0])
+      .filter(n => !!charges?.[n.bin.place.desk])
+      .map(n => ([n, charges[n.bin.place.desk]]))
+      .filter(([n, charge]) => charge?.title !== 'System'),
+  [charges, unseen]);
+  const sortedSeen = useMemo(() => 
+    Object.values(seen)
+    .sort((a, b) => b.time - a.time)
+    .filter(n => !!n?.body?.[0])
+    .filter(n => !!charges?.[n.bin.place.desk])
+    .map(n => ([n, charges[n.bin.place.desk]]))
+    .filter(([n, charge]) => charge?.title !== 'System'),
+  [charges, seen]);
+
+
   return (
     <div
       id="notifications"
@@ -33,49 +51,31 @@ const Notifications = props => {
             <p>No notifications</p>
           </div>
         )}
-        {Object.values(unseen)
-          .sort((a, b) => b.time - a.time)
-          .filter(n => !!n?.body?.[0])
-          .filter(n => !!charges?.[n.bin.place.desk])
-          .map(n => ([n, charges[n.bin.place.desk]]))
-          .filter(([n, charge]) => charge?.title !== 'System')
-          .map(([n, charge], idx) => (
-            <Notification {...{
-              key: `unseen-${idx}`,
-              className: 'unseen',
-              notification: n,
-              charge,
-              lid: { unseen: null },
-              onClick: () => {
-                focusByCharge(charge);
-                visible.set(false);
-              },
-            }}>
-              Unseen Notification {idx}
-            </Notification>
-          ))
-        }
-        {Object.values(seen)
-          .sort((a, b) => b.time - a.time)
-          .filter(n => !!n?.body?.[0])
-          .filter(n => !!charges?.[n.bin.place.desk])
-          .map(n => ([n, charges[n.bin.place.desk]]))
-          .filter(([n, charge]) => charge?.title !== 'System')
-          .map(([n, charge], idx) => (
-            <Notification {...{
-              key: `seen-${idx}`,
-              notification: n,
-              charge,
-              lid: { seen: null },
-              onClick: () => {
-                focusByCharge(charge)
-                visible.set(false);
-              },
-            }}>
-              Seen Notification {idx}
-            </Notification>
-          ))
-        }
+        {sortedUnseen.map(([n, charge], idx) => (
+          <Notification {...{
+            key: `unseen-${idx}`,
+            className: 'unseen',
+            notification: n,
+            charge,
+            lid: { unseen: null },
+            onClick: () => {
+              focusByCharge(charge);
+              visible.set(false);
+            },
+          }}/>
+        ))}
+        {sortedSeen.map(([n, charge], idx) => (
+          <Notification {...{
+            key: `seen-${idx}`,
+            notification: n,
+            charge,
+            lid: { seen: null },
+            onClick: () => {
+              focusByCharge(charge)
+              visible.set(false);
+            },
+          }}/>
+        ))}
       </section>
     </div>
   );
