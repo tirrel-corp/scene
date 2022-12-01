@@ -218,6 +218,9 @@ app.on("window-all-closed", function () {
     }
 });
 
+// Handle frontend app version query. No better way to do this, afaict.
+ipcMain.handle('query-version', () => app.getVersion());
+
 // See src/components/Onboarding/confirm.js.
 // We respawn the app once we set the cookies so that we relaunch into the desktop.
 ipcMain.on('respawn', () => {

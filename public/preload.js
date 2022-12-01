@@ -17,4 +17,5 @@ window.scene = {
   handleUpdateDownloaded: callback => {
     ipcRenderer.on('update-downloaded', callback);
   },
+  queryVersion: () => ipcRenderer.invoke('query-version'),
 }
