@@ -13,6 +13,8 @@ require("dotenv").config();
 const { default: installExtension, REACT_DEVELOPER_TOOLS } = require('electron-devtools-installer');
 const { autoUpdater } = require("electron-updater");
 
+const WIN_OR_MAC = process.platform === 'darwin' || process.platform === 'win32';
+
 let mainWindow;
 let dl_url;
 // Create the native browser window.
@@ -21,6 +23,8 @@ function createWindow(dl_url) {
     mainWindow = new BrowserWindow({
         width: mainScreen.size.width,
         height: mainScreen.size.height,
+        minWidth: WIN_OR_MAC ? 800 : undefined,
+        minHeight: WIN_OR_MAC ? 600 : undefined,
         backgroundColor: 'black',
         // Set the path of an additional "preload" script that can be used to
         // communicate between node-land and browser-land.

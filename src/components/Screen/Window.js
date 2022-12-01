@@ -4,6 +4,7 @@ import cn from "classnames";
 import CloseIcon from "../icons/close";
 import MinimizeIcon from "../icons/minimize";
 import RefreshIcon from "../icons/refresh";
+import { screenPadding } from "../../lib/constants";
 
 export const Window = ({
   win,
@@ -14,6 +15,7 @@ export const Window = ({
   hiddenWindow,
 }) => {
   const [key, setKey] = useState(0);
+  const [drag, setDrag] = useState(false);
   const href =
     "glob" in win.chad
       ? `${window.url}/apps/${win.href.glob.base}`
@@ -26,11 +28,16 @@ export const Window = ({
         zIndex: ([...selectedWindow.value].reverse().indexOf(win) + 1) * 10,
         visibility: hiddenWindow.value.includes(win) ? "hidden" : "visible",
       }}
+      onDragStart={() => setDrag(true)}
+      onDragStop={() => setDrag(false)}
       default={{
-        x: (index + 1) * 100,
+        // add 600 px to accommodate padding for offscreen scrolling
+        x: (index + 1) * 100 + screenPadding.inline,
         y: (index + 1) * 100,
         width: 800,
         height: 600,
+        minWidth: 800,
+        minHeight: 600,
       }}
     >
       <div className="w-full h-full flex flex-col bg-[#EEE] cursor-default">
@@ -87,6 +94,7 @@ export const Window = ({
           onClick={() => launchOpen.set(false)}
         >
           <Frame
+            dragged={drag}
             selectedWindow={selectedWindow}
             win={win}
             launchOpen={launchOpen}
@@ -100,13 +108,22 @@ export const Window = ({
   );
 };
 
-const Frame = ({ selectedWindow, launchOpen, win, href, title, keyName }) => {
+const Frame = ({
+  dragged,
+  selectedWindow,
+  launchOpen,
+  win,
+  href,
+  title,
+  keyName,
+}) => {
   return (
     <iframe
       className={cn("w-full h-full bg-white min-h-0 select-none", {
         "pointer-events-none":
           selectedWindow.value?.[0]?.title !== win.title ||
-          launchOpen.value === true,
+          launchOpen.value ||
+          dragged,
       })}
       src={href}
       title={title}

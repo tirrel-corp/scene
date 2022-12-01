@@ -100,7 +100,7 @@ function App() {
 
   return (
     <div
-      className="bg-[#e4e4e4] h-screen w-screen flex flex-col absolute"
+      className="bg-[#e4e4e4] h-screen w-screen flex flex-col absolute overflow-hidden"
       style={{
         backgroundImage: bgImage ? `url(${bgImage})` : "url('hallstatt.jpg')",
         backgroundSize: 'cover',
@@ -118,7 +118,7 @@ function App() {
         launchOpen={{ value: launchOpen, set: setLaunchOpen }}
         windows={{ value: windows, set: setWindows }}
       >
-        {launchOpen && <Launchpad
+        <Launchpad
           apps={apps}
           launchOpen={{ value: launchOpen, set: setLaunchOpen }}
           focusByCharge={focusByCharge}>
@@ -127,7 +127,13 @@ function App() {
             treaties={{ value: treaties, set: setTreaties }}
             apps={apps}
           />
-        </Launchpad>}
+        </Launchpad>
+        <Dock
+          apps={apps}
+          launchOpen={{ value: launchOpen, set: setLaunchOpen }}
+          windows={{ value: windows, set: setWindows }}
+          focusByCharge={focusByCharge}
+        />
       </Screen>
       <PlanetMenu
         visible={{ value: showPlanetMenu, set: setShowPlanetMenu }}
@@ -145,12 +151,6 @@ function App() {
       <Notifications
         visible={{ value: showNotifs, set: setShowNotifs }}
         charges={apps.charges}
-        focusByCharge={focusByCharge}
-      />
-      <Dock
-        apps={apps}
-        launchOpen={{ value: launchOpen, set: setLaunchOpen }}
-        windows={{ value: windows, set: setWindows }}
         focusByCharge={focusByCharge}
       />
     </div>

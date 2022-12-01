@@ -5,3 +5,8 @@ const testnet_publicKey = "LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCgptU
 export const publicKey = process.env.CIRCLE_PUBLIC_KEY || testnet_publicKey;
 
 export const shipHost = `third.earth`;
+
+export const screenPadding = {
+  bottom: 450,
+  inline: 600,
+}
