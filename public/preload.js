@@ -13,5 +13,8 @@ const ipcRenderer = require('electron').ipcRenderer;
 window.scene = {
   respawn: () => {
     ipcRenderer.send('respawn');
-  }
+  },
+  handleUpdateDownloaded: callback => {
+    ipcRenderer.on('update-downloaded', callback);
+  },
 }
