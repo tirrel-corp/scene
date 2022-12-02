@@ -118,6 +118,10 @@ button:active {
     filter: blur(0px);
 }
 
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;
