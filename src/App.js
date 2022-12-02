@@ -14,6 +14,7 @@ import Launchpad from './components/Screen/Launchpad';
 import Search from './components/Screen/Search';
 import HamburgerMenu from './components/HamburgerMenu';
 import PlanetMenu from './components/PlanetMenu';
+import BackgroundModal from './components/BackgroundModal';
 import { useClickOutside } from './lib/hooks';
 import { setAuth } from './lib/auth';
 
@@ -33,6 +34,7 @@ function App() {
   const [showPlanetMenu, setShowPlanetMenu] = useState(false);
   const [updateAvailable, setUpdateAvailable] = useState();
   const [appVersion, setAppVersion] = useState();
+  const [showBackgroundModal, setShowBackgroundModal] = useState(true);
 
   useEffect(() => {
     async function init() {
@@ -107,6 +109,7 @@ function App() {
 
   return (
     <div
+      id="app"
       className="bg-[#e4e4e4] h-screen w-screen flex flex-col absolute overflow-hidden"
       style={{
         backgroundImage: bgImage ? `url(${bgImage})` : "url('hallstatt.jpg')",
@@ -150,6 +153,10 @@ function App() {
       />
       <HamburgerMenu
         visible={{ value: showHamburger, set: setShowHamburger }}
+        backgroundModal={{
+          value: showBackgroundModal,
+          set: setShowBackgroundModal,
+        }}
         nativeNotifs={{
           value: showNativeNotifs,
           set: next => {
@@ -162,6 +169,10 @@ function App() {
         visible={{ value: showNotifs, set: setShowNotifs }}
         charges={apps.charges}
         focusByCharge={focusByCharge}
+      />
+      <BackgroundModal
+        isOpen={showBackgroundModal}
+        onRequestClose={() => setShowBackgroundModal(false)}
       />
     </div>
   );

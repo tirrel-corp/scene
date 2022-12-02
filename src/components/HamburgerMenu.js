@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const HamburgerMenu = props => {
-  const { nativeNotifs, visible } = props;
+  const { nativeNotifs, visible, backgroundModal } = props;
 
   return (
     <div
@@ -10,6 +10,12 @@ const HamburgerMenu = props => {
       <section className="flex flex-col gap-2">
         <NotificationsToggle value={nativeNotifs.value} set={nativeNotifs.set} />
         <BackgroundInput onSave={() => visible.set(false)} />
+        <button onClick={() => {
+          backgroundModal.set(true);
+          visible.set(false);
+        }}>
+          change bg
+        </button>
       </section>
     </div>
   );
