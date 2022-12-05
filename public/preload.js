@@ -13,5 +13,6 @@ const ipcRenderer = require('electron').ipcRenderer;
 window.scene = {
   respawn: () => {
     ipcRenderer.send('respawn');
-  }
+  },
+  queryVersion: () => ipcRenderer.invoke('query-version'),
 }
