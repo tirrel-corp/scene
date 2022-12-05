@@ -12,8 +12,18 @@ export default function PlanetMenu(props) {
       <section className="flex flex-col gap-2">
         <LogOut ship={ship} handleLogout={() => clearAuth()} />
         <div className="px-2 py-1 text-xs text-center">
-          {!!appVersion && <p>Scene v{appVersion}</p>}
-          <p>For bug reports and support, join ~tirrel/tirrel-support</p>
+          {!!appVersion && <p className="font-bold">Scene v{appVersion}</p>}
+          <p>
+            To file a bug report, or for other support concerns, email&nbsp;
+            <a
+              href="mailto:support@tirrel.io"
+              rel="noopener noreferrer"
+              target="_blank"
+              className="underline"
+            >
+              support@tirrel.io
+            </a>
+          </p>
         </div>
       </section>
     </div>
