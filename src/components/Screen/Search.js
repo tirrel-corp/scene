@@ -8,6 +8,7 @@ export default function Search({ allies, treaties, apps }) {
   const [query, setQuery] = useState("");
   const [promptOpen, setPromptOpen] = useState(false);
   const [currentApp, setCurrentApp] = useState({});
+  const [loading, setLoading] = useState(false);
   const siggedAlly = `~${deSig(query)}`;
 
   // useEffect(() => {
@@ -34,12 +35,15 @@ export default function Search({ allies, treaties, apps }) {
           if (e.key === "Enter") {
             e.preventDefault();
             if (ob.isValidPatp(siggedAlly)) {
+              setLoading(true);
               if (allies.value?.[siggedAlly]) {
-                searchFetch(treaties, getTreaties(siggedAlly));
+                searchFetch(treaties, getTreaties(siggedAlly))
+                  .then(() => setLoading(false));
               } else {
                 api.poke(allyShip(siggedAlly)).then(() => {
                   setTimeout(() => {
-                    searchFetch(treaties, getTreaties(siggedAlly));
+                    searchFetch(treaties, getTreaties(siggedAlly))
+                      .then(() => setLoading(false));
                   }, 5000);
                 });
               }
@@ -57,6 +61,7 @@ export default function Search({ allies, treaties, apps }) {
           setPromptOpen={setPromptOpen}
           currentApp={{ value: currentApp, set: setCurrentApp }}
           query={query}
+          loading={loading}
         />
       )}
     </div>
@@ -71,6 +76,7 @@ const Prompt = ({
   setPromptOpen,
   currentApp,
   query,
+  loading,
 }) => {
   return (
     <div className="bg-black text-white absolute top-14 self-center w-full rounded-xl shadow-md shadow-[rgba(0,0,0,0.1)] p-4 flex justify-center items-center min-h-[200px] max-h-[500px] overflow-y-auto">
@@ -98,6 +104,12 @@ const Prompt = ({
               !allies.value?.[siggedAlly]?.length) && (
               <p className="p-4 text-xs text-center">
                 No apps are available from {siggedAlly}.
+                <br />
+                {loading ? (
+                  <span>Loading...</span>
+                ) : (
+                  <span>Press Enter to search again.</span>
+                )}
               </p>
             )}
 
