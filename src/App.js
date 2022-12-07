@@ -32,6 +32,7 @@ function App() {
   const [showHamburger, setShowHamburger] = useState(false);
   const [showPlanetMenu, setShowPlanetMenu] = useState(false);
   const [updateAvailable, setUpdateAvailable] = useState();
+  const [appVersion, setAppVersion] = useState();
 
   useEffect(() => {
     async function init() {
@@ -54,6 +55,9 @@ function App() {
       }
 
       window.scene.handleUpdateDownloaded(() => setUpdateAvailable(true));
+
+      const version = await window.scene.queryVersion();
+      setAppVersion(version);
     }
 
     init();
@@ -142,6 +146,7 @@ function App() {
       <PlanetMenu
         visible={{ value: showPlanetMenu, set: setShowPlanetMenu }}
         updateAvailable={updateAvailable}
+        appVersion={appVersion}
       />
       <HamburgerMenu
         visible={{ value: showHamburger, set: setShowHamburger }}
