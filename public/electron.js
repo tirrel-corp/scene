@@ -10,8 +10,12 @@ const {
 const path = require("path");
 const url = require("url");
 require("dotenv").config();
+const log = require("electron-log");
 const { default: installExtension, REACT_DEVELOPER_TOOLS } = require('electron-devtools-installer');
 const { autoUpdater } = require("electron-updater");
+
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = 'info';
 
 const WIN_OR_MAC = process.platform === 'darwin' || process.platform === 'win32';
 
