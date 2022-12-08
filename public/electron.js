@@ -10,8 +10,12 @@ const {
 const path = require("path");
 const url = require("url");
 require("dotenv").config();
+const log = require("electron-log");
 const { default: installExtension, REACT_DEVELOPER_TOOLS } = require('electron-devtools-installer');
 const { autoUpdater } = require("electron-updater");
+
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = 'info';
 
 const WIN_OR_MAC = process.platform === 'darwin' || process.platform === 'win32';
 
@@ -185,6 +189,8 @@ if (!gotTheLock) {
         installExtension(REACT_DEVELOPER_TOOLS)
         setupLocalFilesNormalizerProxy();
         // check once on startup and then again every half hour
+        autoUpdater.addEventListener('update-downloaded',
+            () => ipcMain.send('update-downloaded'));
         autoUpdater.checkForUpdatesAndNotify();
         setInterval(() => autoUpdater.checkForUpdatesAndNotify(), 1800000);
     });

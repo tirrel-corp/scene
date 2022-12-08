@@ -31,6 +31,7 @@ function App() {
   const [showNativeNotifs, setShowNativeNotifs] = useState(false);
   const [showHamburger, setShowHamburger] = useState(false);
   const [showPlanetMenu, setShowPlanetMenu] = useState(false);
+  const [updateAvailable, setUpdateAvailable] = useState();
   const [appVersion, setAppVersion] = useState();
 
   useEffect(() => {
@@ -52,6 +53,8 @@ function App() {
         window.localStorage.setItem('nativeNotifs', JSON.stringify(true));
         setShowNativeNotifs(true);
       }
+
+      window.scene.handleUpdateDownloaded(() => setUpdateAvailable(true));
 
       const version = await window.scene.queryVersion();
       setAppVersion(version);
@@ -115,6 +118,7 @@ function App() {
         toggleNotifs={() => setShowNotifs(a => !a)}
         toggleHamburger={() => setShowHamburger(a => !a)}
         togglePlanetMenu={() => setShowPlanetMenu(a => !a)}
+        updateAvailable={updateAvailable}
       />
       <Screen
         hiddenWindow={{ value: hiddenWindow, set: setHiddenWindow }}
@@ -141,6 +145,7 @@ function App() {
       </Screen>
       <PlanetMenu
         visible={{ value: showPlanetMenu, set: setShowPlanetMenu }}
+        updateAvailable={updateAvailable}
         appVersion={appVersion}
       />
       <HamburgerMenu

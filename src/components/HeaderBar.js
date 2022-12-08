@@ -15,6 +15,7 @@ export default function HeaderBar({
   toggleHamburger,
   toggleNotifs,
   togglePlanetMenu,
+  updateAvailable,
 }) {
   const { unseen } = useHarkStore();
   const hasUnseen = Boolean(Object.keys(unseen).length);
@@ -29,7 +30,7 @@ export default function HeaderBar({
         <button
           id="planet-menu-toggle"
           onClick={togglePlanetMenu}
-          className="border-none rounded-lg px-2 bg-[#FFF3] text-white flex-1 flex flex-column justify-center items-center">
+          className={`border-none rounded-lg px-2 bg-[#FFF3] text-white flex-1 flex flex-column justify-center items-center ${updateAvailable ? 'bg-rose-400' : ''}`}>
           {sigil({
             patp: (ob.isValidPatp(`~${patp}`) && (patp.length <= 13)) ? `~${patp}` : '~zod',
             renderer: reactRenderer,

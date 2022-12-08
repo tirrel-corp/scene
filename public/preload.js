@@ -14,5 +14,8 @@ window.scene = {
   respawn: () => {
     ipcRenderer.send('respawn');
   },
+  handleUpdateDownloaded: callback => {
+    ipcRenderer.on('update-downloaded', callback);
+  },
   queryVersion: () => ipcRenderer.invoke('query-version'),
 }
