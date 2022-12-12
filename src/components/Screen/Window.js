@@ -20,10 +20,15 @@ export const Window = ({
     "glob" in win.chad
       ? `${window.url}/apps/${win.href.glob.base}`
       : `${window.url}${win.href.site}`;
+  const isSelected = selectedWindow.value?.[0] === win;
   return (
     <Rnd
       bounds="parent"
-      className="rounded-xl overflow-hidden shadow-xl shadow-[rgba(0,0,0,0.2)]"
+      className={cn("rounded-xl overflow-hidden shadow-xl",
+        "border-[#CCC] border-x border-b", {
+        "shadow-[rgba(0,0,0,0.8)]": isSelected,
+        "shadow-[rgba(0,0,0,0.4)]": !isSelected,
+      })}
       style={{
         zIndex: ([...selectedWindow.value].reverse().indexOf(win) + 1) * 10,
         visibility: hiddenWindow.value.includes(win) ? "hidden" : "visible",

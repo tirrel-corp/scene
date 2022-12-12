@@ -82,6 +82,10 @@ function App() {
   }, []);
 
   useClickOutside(
+    ['launchpad', 'dock'],
+    () => setLaunchOpen(false)
+  );
+  useClickOutside(
     ['notifications', 'notifications-toggle'],
     () => setShowNotifs(false)
   );
