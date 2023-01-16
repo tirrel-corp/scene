@@ -5,6 +5,10 @@ export const allyReducer = (state, action) => {
         case "new":
             const { ship, alliance } = action.new;
             return { ...state, [ship]: alliance }
+        case "add":
+            return { ...state, [action.add]: [] }
+        default:
+            return state;
     }
 }
 
