@@ -31,13 +31,3 @@ The result will be in `./dist`, for example:
 open ./dist/Scene-0.0.12-arm64.dmg
 ```
 
-## Debug builds
-
-Debug builds let you pass any ship in, instead of just hosted ships. To create one, set `REACT_APP_DEBUG` to true in your .env file.
-
-## Requested Additions
-- Ability to pin and unpin apps from the dock
-- In-App Web browser
-- Common keyboard shortcuts (Cmd+f for find, etc)
-- Theme engine
-
