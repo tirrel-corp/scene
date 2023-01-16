@@ -1,6 +1,4 @@
 export const allyReducer = (state, action) => {
-    console.log(state);
-    console.log(action);
     switch (Object.keys(action)[0]) {
         case "ini":
             return action.ini;
