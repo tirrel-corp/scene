@@ -20,7 +20,6 @@ export default function Launchpad({
           .sort((a, b) =>
             a[1].title.toLowerCase().localeCompare(b[1].title.toLowerCase())
           )
-          .filter((e) => e[0] !== "garden")
           .map(([desk, charge]) => (
             <div
               key={desk}
