@@ -1,4 +1,5 @@
 import cn from "classnames";
+import LaunchpadTile from './LaunchpadTile';
 
 export default function Launchpad({
   apps,
@@ -22,32 +23,13 @@ export default function Launchpad({
           )
           .filter((e) => e[0] !== "garden")
           .map(([desk, charge]) => (
-            <div
+            <LaunchpadTile
+              desk={desk}
+              charge={charge}
+              focusByCharge={focusByCharge}
+              launchOpen={launchOpen}
               key={desk}
-              className="flex flex-col items-center justify-center text-white space-y-4"
-            >
-              <div
-                className={cn(
-                  "h-[125px] w-[125px] rounded-xl overflow-hidden mx-2 cursor-pointer",
-                  {
-                    "hover:brightness-110": !("install" in charge?.chad),
-                    "opacity-25": Boolean("install" in charge?.chad),
-                  }
-                )}
-                style={{ backgroundColor: charge.color }}
-                onClick={() => {
-                  if (!("install" in charge?.chad)) {
-                    focusByCharge(charge);
-                    launchOpen.set(prev => !prev);
-                  }
-                }}
-              >
-                {charge?.image?.startsWith("http") && (
-                  <img className="h-[125px] w-[125px]" src={charge.image} />
-                )}
-              </div>
-              <p>{charge.title}</p>
-            </div>
+            />
           ))}
       </div>
     </div>
