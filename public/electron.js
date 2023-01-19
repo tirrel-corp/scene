@@ -110,43 +110,43 @@ async function getAuth(dl_url) {
 
     let newAuth;
     if (deepLink) {
-      const params = new URL(deepLink).searchParams;
-      if (params.has('patp') && params.has('code') && params.has('url')) {
-        newAuth = {
-          ship: params.get('patp'),
-          code: params.get('code'),
-          url: params.get('url'),
-        }
-        if (newAuth.ship.startsWith('~')) {
-            newAuth.ship = newAuth.ship.replace(/^~/, '');
-        }
-        if (!newAuth.url.startsWith('https://')) {
-            if (/^(?:.*:\/\/)/.test(newAuth.url)) {
-                // starts with some other protocol like http? replace it with https
-                newAuth.url = newAuth.url.replace(/^(?:.*:\/\/)/, 'https://')
-            } else {
-                // doesn't start with a protocol but it should
-                newAuth.url = `https://${newAuth.url}`
+        const params = new URL(deepLink).searchParams;
+        if (params.has('patp') && params.has('code') && params.has('url')) {
+            newAuth = {
+                ship: params.get('patp'),
+                code: params.get('code'),
+                url: params.get('url'),
             }
+            if (newAuth.ship.startsWith('~')) {
+                newAuth.ship = newAuth.ship.replace(/^~/, '');
+            }
+            if (!newAuth.url.startsWith('https://')) {
+                if (/^(?:.*:\/\/)/.test(newAuth.url)) {
+                    // starts with some other protocol like http? replace it with https
+                    newAuth.url = newAuth.url.replace(/^(?:.*:\/\/)/, 'https://')
+                } else {
+                    // doesn't start with a protocol but it should
+                    newAuth.url = `https://${newAuth.url}`
+                }
+            }
+        } else {
+            throw new Error(`bad deep link ${deepLink}`)
         }
-      } else {
-        throw new Error(`bad deep link ${deepLink}`)
-      }
     } else {
     }
     if (newAuth) {
-      const oldStorage = await mainWindow.webContents.executeJavaScript(`window.localStorage.getItem("tirrel-desktop-auth")`);
-      if (oldStorage === JSON.stringify(newAuth)) {
-        return newAuth;
-      }
+        const oldStorage = await mainWindow.webContents.executeJavaScript(`window.localStorage.getItem("tirrel-desktop-auth")`);
+        if (oldStorage === JSON.stringify(newAuth)) {
+            return newAuth;
+        }
 
-      await mainWindow.webContents.executeJavaScript(`window.localStorage.setItem("tirrel-desktop-auth", '${JSON.stringify(newAuth)}')`);  // note security vulnerability
-      const newArgs = process.argv.filter((arg) => !arg.startsWith('scene://'));
-      app.relaunch({ args: newArgs });
-      app.quit(0);
+        await mainWindow.webContents.executeJavaScript(`window.localStorage.setItem("tirrel-desktop-auth", '${JSON.stringify(newAuth)}')`);  // note security vulnerability
+        const newArgs = process.argv.filter((arg) => !arg.startsWith('scene://'));
+        app.relaunch({ args: newArgs });
+        app.quit(0);
     } else {
-      const storage = await mainWindow.webContents.executeJavaScript(`window.localStorage.getItem("tirrel-desktop-auth")`);
-      return storage ? JSON.parse(storage) : {};
+        const storage = await mainWindow.webContents.executeJavaScript(`window.localStorage.getItem("tirrel-desktop-auth")`);
+        return storage ? JSON.parse(storage) : {};
     }
 }
 
@@ -228,6 +228,14 @@ ipcMain.handle('query-version', () => app.getVersion());
 // See src/components/Onboarding/confirm.js.
 // We respawn the app once we set the cookies so that we relaunch into the desktop.
 ipcMain.on('respawn', () => {
-    app.relaunch();
+    const options = {
+        args: process.argv,
+        execPath: process.execPath
+    };
+    if (process.env.APPIMAGE) {
+        options.execPath = process.env.APPIMAGE;
+        options.args.unshift('--appimage-extract-and-run');
+    }
+    app.relaunch(options);
     app.quit(0);
 })
