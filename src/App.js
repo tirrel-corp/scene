@@ -80,21 +80,19 @@ function App() {
     ipcRenderer.on('deepLink', deepLinkListener);
     return () => ipcRenderer.removeListener('deepLink', deepLinkListener);
   }, []);
-
+  useClickOutside([
+    { current: document.getElementById('notifications') },
+    { current: document.getElementById('notifications-toggle') },
+  ], () => setShowNotifs(false));
+  useClickOutside([
+    { current: document.getElementById('hamburger') },
+    { current: document.getElementById('hamburger-toggle') },
+  ], () => setShowHamburger(false));
   useClickOutside(
-    ['launchpad', 'dock'],
-    () => setLaunchOpen(false)
-  );
-  useClickOutside(
-    ['notifications', 'notifications-toggle'],
-    () => setShowNotifs(false)
-  );
-  useClickOutside(
-    ['hamburger', 'hamburger-toggle'],
-    () => setShowHamburger(false)
-  );
-  useClickOutside(
-    ['planet-menu', 'planet-menu-toggle'],
+    [
+      { current: document.getElementById('planet-menu') },
+      { current: document.getElementById('planet-menu-toggle') },
+    ],
     () => setShowPlanetMenu(false)
   );
 
