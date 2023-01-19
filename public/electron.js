@@ -229,7 +229,7 @@ ipcMain.handle('query-version', () => app.getVersion());
 // We respawn the app once we set the cookies so that we relaunch into the desktop.
 ipcMain.on('respawn', () => {
     const options = {
-        args: process.argv.slice(1).concat(['--relaunch']),
+        args: process.argv,
         execPath: process.execPath
     };
     if (process.env.APPIMAGE) {
