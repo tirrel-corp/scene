@@ -32,11 +32,15 @@ const BackgroundInput = props => {
   const { onSave } = props;
   const previousBg = window.localStorage.getItem('tirrel-desktop-background') || '';
   const [value, setValue] = useState(previousBg);
-  const validity = isValidUrl(value) && isImage(value);
+  const validity = value === '' ? true : isValidUrl(value) && isImage(value);
 
 
   const handleSave = () => {
-    window.localStorage.setItem('tirrel-desktop-background', value);
+    if (value === '') {
+      window.localStorage.removeItem('tirrel-desktop-background');
+    } else {
+      window.localStorage.setItem('tirrel-desktop-background', value);
+    }
     onSave();
   };
 
@@ -79,7 +83,7 @@ const NotificationsToggle = props => {
             <p>
               Native notifications are&nbsp;
               <span className="underline">
-               {value ? 'enabled' : 'disabled'}
+                {value ? 'enabled' : 'disabled'}
               </span>
             </p>
           </div>
