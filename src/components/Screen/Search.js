@@ -103,15 +103,15 @@ const Prompt = ({
             ob.isValidPatp(siggedAlly) &&
             (!allies.value?.[siggedAlly] ||
               !allies.value?.[siggedAlly]?.length) && (
-              <p className="p-4 text-xs text-center">
+              <div className="p-4 text-xs text-center">
                 {loading ? (
-                  <Sigil patp={siggedAlly} size="48" className="animate-spin" />
+                  <Sigil patp={siggedAlly} size="48" color="black" className="animate-spin inline-block" />
                 ) : (<>
                   No apps are available from {siggedAlly}.<br />
                   <span>Press Enter to search again.</span>
                 </>
                 )}
-              </p>
+              </div>
             )}
 
           {!currentApp.value?.desk &&
