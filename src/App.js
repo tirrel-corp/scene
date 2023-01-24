@@ -17,7 +17,7 @@ import HamburgerMenu from './components/HamburgerMenu';
 import PlanetMenu from './components/PlanetMenu';
 import { useClickOutside } from './lib/hooks';
 import { setAuth } from './lib/auth';
-
+import { setBackgroundImage } from './lib/background';
 const { ipcRenderer } = require("electron");
 
 function App() {
@@ -64,6 +64,7 @@ function App() {
     }
 
     init();
+    migrateLocalStorageBg(setBgImage);
   }, []);
 
   useEffect(() => {
@@ -170,6 +171,15 @@ function App() {
       />
     </div>
   );
+}
+
+// migrate to new bg state, remove after 0.1.13
+function migrateLocalStorageBg(callback) {
+  const storedbg = window.localStorage.getItem('tirrel-desktop-background');
+  if (storedbg) {
+    window.localStorage.removeItem('tirrel-desktop-background');
+    return setBackgroundImage(storedbg, callback);
+  }
 }
 
 export default App;
