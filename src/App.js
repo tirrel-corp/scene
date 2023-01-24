@@ -1,4 +1,5 @@
 import { useCallback, useState, useReducer, useEffect, useRef } from 'react';
+import { useLoaderData } from 'react-router-dom';
 import { scryCharges, scryAllies } from '@urbit/api';
 import { api } from './state/api';
 import { useHarkStore } from './state/hark';
@@ -14,13 +15,13 @@ import Launchpad from './components/Screen/Launchpad';
 import Search from './components/Screen/Search';
 import HamburgerMenu from './components/HamburgerMenu';
 import PlanetMenu from './components/PlanetMenu';
-import { getBackgroundImage } from './lib/background';
 import { useClickOutside } from './lib/hooks';
 import { setAuth } from './lib/auth';
 
 const { ipcRenderer } = require("electron");
 
 function App() {
+  const { bg } = useLoaderData();
   const [apps, setApps] = useReducer(chargeReducer, {});
   const [allies, setAllies] = useReducer(allyReducer, {});
   const [treaties, setTreaties] = useReducer(treatyReducer, {});
@@ -34,11 +35,10 @@ function App() {
   const [showPlanetMenu, setShowPlanetMenu] = useState(false);
   const [updateAvailable, setUpdateAvailable] = useState();
   const [appVersion, setAppVersion] = useState();
-  const bgImage = useRef('hallstatt.jpg');
+  const [bgImage, setBgImage] = useState(bg);
 
   useEffect(() => {
     async function init() {
-      bgImage.current = await getBackgroundImage() || 'hallstatt.jpg';
       await api.connect();
       const charges = (await api.scry(scryCharges));
       const allies = (await api.scry(scryAllies));
@@ -113,7 +113,7 @@ function App() {
     <div
       className="bg-[#e4e4e4] h-screen w-screen flex flex-col absolute overflow-hidden"
       style={{
-        backgroundImage: `url(${bgImage.current.startsWith('hallstatt') ? '' : 'file://'}${encodeURI(bgImage.current)})`,
+        backgroundImage: `url(${bgImage.startsWith('hallstatt') ? '' : 'file://'}${encodeURI(bgImage)})`,
         backgroundSize: 'cover',
       }}>
       <HeaderBar
@@ -154,6 +154,7 @@ function App() {
       />
       <HamburgerMenu
         visible={{ value: showHamburger, set: setShowHamburger }}
+        setBgImage={setBgImage}
         nativeNotifs={{
           value: showNativeNotifs,
           set: next => {

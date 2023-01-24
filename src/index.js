@@ -18,6 +18,7 @@ import PayScreen from "./components/Onboarding/pay";
 import ConfirmScreen from "./components/Onboarding/confirm";
 import Debug from "./components/Onboarding/debug";
 import PulsingLogo from "./components/PulsingLogo";
+import { get } from "./lib/background";
 import { getAuth } from "./lib/auth";
 import 'tippy.js/dist/tippy.css';
 
@@ -34,6 +35,11 @@ const authLoader = () => {
     url: process.env.REACT_APP_URL || undefined
   };
 };
+
+const appLoader = async () => {
+  const bg = await get();
+  return { ...authLoader(), ...{ bg: bg + `?${new Date().getTime()}` } }
+}
 
 const router = createHashRouter([
   {
@@ -84,13 +90,13 @@ const router = createHashRouter([
   },
   {
     path: '/app',
-    loader: authLoader,
+    loader: appLoader,
     element: (
       <React.Suspense fallback={
         <div className="min-w-[100vw] min-h-[100vh] flex justify-center items-center">
           <PulsingLogo />
         </div>
-        }>
+      }>
         <App />
       </React.Suspense>
     ),
