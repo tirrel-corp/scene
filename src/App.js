@@ -1,4 +1,4 @@
-import { useCallback, useState, useReducer, useEffect } from 'react';
+import { useCallback, useState, useReducer, useEffect, useRef } from 'react';
 import { scryCharges, scryAllies } from '@urbit/api';
 import { api } from './state/api';
 import { useHarkStore } from './state/hark';
@@ -14,6 +14,7 @@ import Launchpad from './components/Screen/Launchpad';
 import Search from './components/Screen/Search';
 import HamburgerMenu from './components/HamburgerMenu';
 import PlanetMenu from './components/PlanetMenu';
+import { getBackgroundImage } from './lib/background';
 import { useClickOutside } from './lib/hooks';
 import { setAuth } from './lib/auth';
 
@@ -33,9 +34,11 @@ function App() {
   const [showPlanetMenu, setShowPlanetMenu] = useState(false);
   const [updateAvailable, setUpdateAvailable] = useState();
   const [appVersion, setAppVersion] = useState();
+  const bgImage = useRef('hallstatt.jpg');
 
   useEffect(() => {
     async function init() {
+      bgImage.current = await getBackgroundImage() || 'hallstatt.jpg';
       await api.connect();
       const charges = (await api.scry(scryCharges));
       const allies = (await api.scry(scryAllies));
@@ -80,6 +83,7 @@ function App() {
     ipcRenderer.on('deepLink', deepLinkListener);
     return () => ipcRenderer.removeListener('deepLink', deepLinkListener);
   }, []);
+
   useClickOutside([
     { current: document.getElementById('notifications') },
     { current: document.getElementById('notifications-toggle') },
@@ -105,13 +109,11 @@ function App() {
     setHiddenWindow(prev => prev.filter(i => i !== charge));
   }, []);
 
-  const bgImage = window.localStorage.getItem('tirrel-desktop-background');
-
   return (
     <div
       className="bg-[#e4e4e4] h-screen w-screen flex flex-col absolute overflow-hidden"
       style={{
-        backgroundImage: bgImage ? `url(${bgImage})` : "url('hallstatt.jpg')",
+        backgroundImage: `url(${bgImage.current.startsWith('hallstatt') ? '' : 'file://'}${encodeURI(bgImage.current)})`,
         backgroundSize: 'cover',
       }}>
       <HeaderBar

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { set } from '../lib/background';
 
 const HamburgerMenu = props => {
   const { nativeNotifs, visible } = props;
@@ -30,19 +31,8 @@ function isImage(input) {
 
 const BackgroundInput = props => {
   const { onSave } = props;
-  const previousBg = window.localStorage.getItem('tirrel-desktop-background') || '';
-  const [value, setValue] = useState(previousBg);
+  const [value, setValue] = useState('');
   const validity = value === '' ? true : isValidUrl(value) && isImage(value);
-
-
-  const handleSave = () => {
-    if (value === '') {
-      window.localStorage.removeItem('tirrel-desktop-background');
-    } else {
-      window.localStorage.setItem('tirrel-desktop-background', value);
-    }
-    onSave();
-  };
 
   return (
     <div className="rounded bg-neutral-500 text-white overflow-hidden">
@@ -60,7 +50,10 @@ const BackgroundInput = props => {
             onChange={ev => setValue(ev.target.value)}
             value={value}
           />
-          <button disabled={!validity} onClick={handleSave}>
+          <button disabled={!validity} onClick={() => {
+            set(value);
+            onSave();
+          }}>
             Save
           </button>
         </div>
