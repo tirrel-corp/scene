@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import ob from "urbit-ob";
 import { api } from "../../state/api";
 import { getTreaties } from "../../state/treaties";
+import Sigil from '../../components/sigil';
 
 export default function Search({ allies, treaties, apps }) {
   const [query, setQuery] = useState("");
@@ -103,12 +104,12 @@ const Prompt = ({
             (!allies.value?.[siggedAlly] ||
               !allies.value?.[siggedAlly]?.length) && (
               <p className="p-4 text-xs text-center">
-                No apps are available from {siggedAlly}.
-                <br />
                 {loading ? (
-                  <span>Loading...</span>
-                ) : (
+                  <Sigil patp={siggedAlly} size="48" className="animate-spin" />
+                ) : (<>
+                  No apps are available from {siggedAlly}.<br />
                   <span>Press Enter to search again.</span>
+                </>
                 )}
               </p>
             )}
