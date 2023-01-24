@@ -105,7 +105,9 @@ const Prompt = ({
               !allies.value?.[siggedAlly]?.length) && (
               <div className="p-4 text-xs text-center">
                 {loading ? (
-                  <Sigil patp={siggedAlly} size="48" color="black" className="animate-spin inline-block" />
+                  siggedAlly.length <= 14
+                    ? <Sigil patp={siggedAlly} size="48" color="black" className="animate-spin inline-block" />
+                    : <p>Checking {siggedAlly}... </p>
                 ) : (<>
                   No apps are available from {siggedAlly}.<br />
                   <span>Press Enter to search again.</span>
