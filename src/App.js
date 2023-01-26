@@ -1,4 +1,5 @@
-import { useCallback, useState, useReducer, useEffect } from 'react';
+import { useCallback, useState, useReducer, useEffect, useRef } from 'react';
+import { useLoaderData } from 'react-router-dom';
 import { scryCharges, scryAllies } from '@urbit/api';
 import { api } from './state/api';
 import { useHarkStore } from './state/hark';
@@ -16,10 +17,11 @@ import HamburgerMenu from './components/HamburgerMenu';
 import PlanetMenu from './components/PlanetMenu';
 import { useClickOutside } from './lib/hooks';
 import { setAuth } from './lib/auth';
-
+import { setBackgroundImage } from './lib/background';
 const { ipcRenderer } = require("electron");
 
 function App() {
+  const { bg } = useLoaderData();
   const [apps, setApps] = useReducer(chargeReducer, {});
   const [allies, setAllies] = useReducer(allyReducer, {});
   const [treaties, setTreaties] = useReducer(treatyReducer, {});
@@ -33,6 +35,7 @@ function App() {
   const [showPlanetMenu, setShowPlanetMenu] = useState(false);
   const [updateAvailable, setUpdateAvailable] = useState();
   const [appVersion, setAppVersion] = useState();
+  const [bgImage, setBgImage] = useState(bg);
 
   useEffect(() => {
     async function init() {
@@ -61,6 +64,7 @@ function App() {
     }
 
     init();
+    migrateLocalStorageBg(setBgImage);
   }, []);
 
   useEffect(() => {
@@ -80,6 +84,7 @@ function App() {
     ipcRenderer.on('deepLink', deepLinkListener);
     return () => ipcRenderer.removeListener('deepLink', deepLinkListener);
   }, []);
+
   useClickOutside([
     { current: document.getElementById('notifications') },
     { current: document.getElementById('notifications-toggle') },
@@ -105,13 +110,11 @@ function App() {
     setHiddenWindow(prev => prev.filter(i => i !== charge));
   }, []);
 
-  const bgImage = window.localStorage.getItem('tirrel-desktop-background');
-
   return (
     <div
       className="bg-[#e4e4e4] h-screen w-screen flex flex-col absolute overflow-hidden"
       style={{
-        backgroundImage: bgImage ? `url(${bgImage})` : "url('hallstatt.jpg')",
+        backgroundImage: `url(${bgImage.startsWith('hallstatt') ? '' : 'file://'}${encodeURI(bgImage)})`,
         backgroundSize: 'cover',
       }}>
       <HeaderBar
@@ -152,6 +155,7 @@ function App() {
       />
       <HamburgerMenu
         visible={{ value: showHamburger, set: setShowHamburger }}
+        setBgImage={setBgImage}
         nativeNotifs={{
           value: showNativeNotifs,
           set: next => {
@@ -167,6 +171,15 @@ function App() {
       />
     </div>
   );
+}
+
+// migrate to new bg state, remove after 0.1.13
+function migrateLocalStorageBg(callback) {
+  const storedbg = window.localStorage.getItem('tirrel-desktop-background');
+  if (storedbg) {
+    window.localStorage.removeItem('tirrel-desktop-background');
+    return setBackgroundImage(storedbg, callback);
+  }
 }
 
 export default App;

@@ -1,7 +1,8 @@
 import { useState } from 'react';
+import { set } from '../lib/background';
 
 const HamburgerMenu = props => {
-  const { nativeNotifs, visible } = props;
+  const { nativeNotifs, setBgImage, visible } = props;
 
   return (
     <div
@@ -9,7 +10,7 @@ const HamburgerMenu = props => {
       className={`${visible.value ? 'shown' : ''}`}>
       <section className="flex flex-col gap-2">
         <NotificationsToggle value={nativeNotifs.value} set={nativeNotifs.set} />
-        <BackgroundInput onSave={() => visible.set(false)} />
+        <BackgroundInput setBgImage={setBgImage} onSave={() => visible.set(false)} />
       </section>
     </div>
   );
@@ -29,16 +30,9 @@ function isImage(input) {
 }
 
 const BackgroundInput = props => {
-  const { onSave } = props;
-  const previousBg = window.localStorage.getItem('tirrel-desktop-background') || '';
-  const [value, setValue] = useState(previousBg);
-  const validity = isValidUrl(value) && isImage(value);
-
-
-  const handleSave = () => {
-    window.localStorage.setItem('tirrel-desktop-background', value);
-    onSave();
-  };
+  const { onSave, setBgImage } = props;
+  const [value, setValue] = useState('');
+  const validity = value === '' ? true : isValidUrl(value) && isImage(value);
 
   return (
     <div className="rounded bg-neutral-500 text-white overflow-hidden">
@@ -56,7 +50,10 @@ const BackgroundInput = props => {
             onChange={ev => setValue(ev.target.value)}
             value={value}
           />
-          <button disabled={!validity} onClick={handleSave}>
+          <button disabled={!validity} onClick={() => {
+            set(value, setBgImage)
+            onSave()
+          }}>
             Save
           </button>
         </div>
@@ -79,7 +76,7 @@ const NotificationsToggle = props => {
             <p>
               Native notifications are&nbsp;
               <span className="underline">
-               {value ? 'enabled' : 'disabled'}
+                {value ? 'enabled' : 'disabled'}
               </span>
             </p>
           </div>

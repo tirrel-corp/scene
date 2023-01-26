@@ -239,3 +239,5 @@ ipcMain.on('respawn', () => {
     app.relaunch(options);
     app.quit(0);
 })
+
+ipcMain.handle('get-user-data-folder', () => app.getPath('userData'));
