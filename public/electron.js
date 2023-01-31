@@ -15,6 +15,7 @@ const { default: installExtension, REACT_DEVELOPER_TOOLS } = require('electron-d
 const { autoUpdater } = require("electron-updater");
 
 autoUpdater.logger = log;
+autoUpdater.channel = "alpha";
 autoUpdater.logger.transports.file.level = 'info';
 
 const WIN_OR_MAC = process.platform === 'darwin' || process.platform === 'win32';
