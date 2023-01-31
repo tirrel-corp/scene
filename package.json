@@ -1,6 +1,6 @@
 {
   "name": "Scene",
-  "version": "0.1.2",
+  "version": "0.1.3-alpha",
   "author": {
     "name": "Tirrel Corporation",
     "email": "support@tirrel.io",
@@ -59,6 +59,7 @@
     "electron:package:all": "cross-env node_env=production yarn run build && electron-builder -m -w -l -c.extraMetadata.main=build/electron.js"
   },
   "build": {
+    "generateUpdatesFilesForAllChannels": true,
     "appId": "com.tirrel.scene",
     "productName": "Scene",
     "files": [
