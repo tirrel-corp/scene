@@ -20,6 +20,8 @@ autoUpdater.logger.transports.file.level = 'info';
 
 const WIN_OR_MAC = process.platform === 'darwin' || process.platform === 'win32';
 
+console.log('we good');
+
 let mainWindow;
 let dl_url;
 // Create the native browser window.
