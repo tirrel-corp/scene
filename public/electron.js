@@ -189,9 +189,9 @@ if (!gotTheLock) {
         installExtension(REACT_DEVELOPER_TOOLS)
         setupLocalFilesNormalizerProxy();
         // check once on startup and then again every half hour
-        autoUpdater.addEventListener('update-downloaded',
-            () => ipcMain.send('update-downloaded'));
         autoUpdater.checkForUpdatesAndNotify();
+        app.addEventListener('update-downloaded',
+            () => ipcMain.send('update-downloaded'));
         setInterval(() => autoUpdater.checkForUpdatesAndNotify(), 1800000);
     });
     app.on('ready', async () => {
