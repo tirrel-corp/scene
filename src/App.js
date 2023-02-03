@@ -18,6 +18,7 @@ import PlanetMenu from './components/PlanetMenu';
 import { useClickOutside } from './lib/hooks';
 import { setAuth } from './lib/auth';
 import { setBackgroundImage } from './lib/background';
+import { incomingLinkToWindow } from "./lib/window";
 const { ipcRenderer } = require("electron");
 
 function App() {
@@ -84,6 +85,23 @@ function App() {
     ipcRenderer.on('deepLink', deepLinkListener);
     return () => ipcRenderer.removeListener('deepLink', deepLinkListener);
   }, []);
+
+  useEffect(() => {
+    window.scene.linkToWindow = (link) => incomingLinkToWindow(link, {
+      apps: {
+        value: apps
+      },
+      windows: {
+        set: setWindows,
+        value: windows
+      },
+      selectedWindow: {
+        set: setSelectedWindow,
+        value: selectedWindow
+      }
+    })
+
+  }, [apps, windows, setWindows, selectedWindow, setSelectedWindow])
 
   useClickOutside([
     { current: document.getElementById('notifications') },
