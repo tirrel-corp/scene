@@ -8,7 +8,7 @@ export function incomingLinkToWindow(link, { apps, windows, selectedWindow }) {
             windows.set([charge, ...windows.value.filter((e) => e.desk !== desk)]);
             selectedWindow.set([charge, ...selectedWindow.value.filter((e) => e.desk !== desk)])
         } else {
-            windows.set([...windows.value, charge])
+            windows.set([charge, ...windows.value])
             selectedWindow.set([charge, ...selectedWindow.value])
         }
     }
