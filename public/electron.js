@@ -44,7 +44,16 @@ function createWindow(dl_url) {
     // Open external links in other browsers (i.e. target="_blank").
     const ses = mainWindow.webContents.session;
     mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-        return shell.openExternal(url)
+        if (url.includes(("/apps/talk")) || url.includes(("/apps/groups"))) {
+            mainWindow.webContents.executeJavaScript(`window.scene.linkToWindow("${url}")`);
+            return {
+                action: "deny"
+            }
+        }
+        shell.openExternal(url)
+        return {
+            action: "deny"
+        }
     })
 
     getAuth(dl_url).then((res) => {
