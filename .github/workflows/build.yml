@@ -16,9 +16,11 @@ jobs:
 
       - name: Install Node, NPM, Yarn
         uses: actions/setup-node@v3
+        with:
+          node-version: 16
       
       - name: Build/release Scene
-        uses: samuelmeuli/action-electron-builder@v1
+        uses: Yan-Jobs/action-electron-builder@v1.7.0
         with:
           github_token: ${{ secrets.github_token }}
 
