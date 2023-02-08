@@ -53,7 +53,7 @@
     "eject": "react-scripts eject",
     "electron:start": "concurrently -k \"cross-env BROWSER=none yarn run start start\" \"wait-on http://localhost:3000 && electronmon . \"",
     "electron:package:mac:nocs": "cross-env NODE_ENV=production yarn run build && electron-builder -m -c.extraMetadata.main=build/electron.js -c.mac.identity=null",
-    "electron:package:mac": "cross-env NODE_ENV=production yarn run build && electron-builder -m --universal -c.extraMetadata.main=build/electron.js",
+    "electron:package:mac": "cross-env NODE_ENV=production yarn run build && electron-builder -m -c.extraMetadata.main=build/electron.js",
     "electron:package:win": "cross-env NODE_ENV=production yarn run build && electron-builder -w -c.extraMetadata.main=build/electron.js",
     "electron:package:linux": "cross-env NODE_ENV=production yarn run build && electron-builder -l -c.extraMetadata.main=build/electron.js",
     "electron:package:all": "cross-env node_env=production yarn run build && electron-builder -m -w -l -c.extraMetadata.main=build/electron.js"
