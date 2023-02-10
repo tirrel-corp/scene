@@ -1,13 +1,13 @@
-import { useCallback, useState, useReducer, useEffect, useRef } from 'react';
+import { useCallback, useState, useReducer, useEffect } from 'react';
 import { useLoaderData } from 'react-router-dom';
 import { scryCharges, scryAllies } from '@urbit/api';
 import { api } from './state/api';
-import { useHarkStore } from './state/hark';
 import { chargeSubscription, allySubscription } from './state/subscriptions';
 import HeaderBar from './components/HeaderBar';
 import Screen from './components/Screen';
 import Dock from './components/Dock';
-import Notifications from './components/Notifications';
+import Notifications from "./components/Notifications"
+import useHarkState from "./state/hark";
 import chargeReducer from './state/charges';
 import allyReducer from "./state/allies";
 import { treatyReducer } from './state/treaties';
@@ -48,8 +48,7 @@ function App() {
       chargeSubscription(setApps);
       allySubscription(setAllies);
 
-      useHarkStore.getState().initialize(api);
-
+      useHarkState.getState().start();
       const nativeNotifsSetting = window.localStorage.getItem('nativeNotifs');
       if (!!nativeNotifsSetting) {
         setShowNativeNotifs(JSON.parse(nativeNotifsSetting))
@@ -119,12 +118,27 @@ function App() {
     () => setShowPlanetMenu(false)
   );
 
-  const focusByCharge = useCallback(charge => {
-    setWindows(prev => (!prev.includes(charge)
-      ? [...prev, charge]
-      : prev
+  const focusByCharge = useCallback((charge, channel) => {
+    const href = 'glob' in charge.chad
+      ? {
+        href: {
+          glob: {
+            base: channel
+          }
+        }
+      }
+      : {
+        href: {
+          site: channel
+        }
+      }
+    const newCharge = channel ? { ...charge, ...href } : charge
+    console.log(newCharge)
+    setWindows(prev => (!prev.some((win) => win.desk === charge.desk)
+      ? [newCharge, ...prev]
+      : [newCharge, ...prev.filter((e) => e.desk !== charge.desk)]
     ));
-    setSelectedWindow(prev => ([charge, ...prev.filter(i => i !== charge)]));
+    setSelectedWindow(prev => ([newCharge, ...prev.filter(i => i.desk !== charge.desk)]));
     setHiddenWindow(prev => prev.filter(i => i !== charge));
   }, []);
 
@@ -138,7 +152,10 @@ function App() {
       <HeaderBar
         selectedWindow={{ value: selectedWindow, set: setSelectedWindow }}
         windows={{ value: windows, set: setWindows }}
-        toggleNotifs={() => setShowNotifs(a => !a)}
+        toggleNotifs={() => {
+          useHarkState.getState().sawSeam({ all: null });
+          setShowNotifs(a => !a)
+        }}
         toggleHamburger={() => setShowHamburger(a => !a)}
         togglePlanetMenu={() => setShowPlanetMenu(a => !a)}
         updateAvailable={updateAvailable}
@@ -147,7 +164,7 @@ function App() {
           visible={{ value: showPlanetMenu, set: setShowPlanetMenu }}
           updateAvailable={updateAvailable}
           appVersion={appVersion}
-      />
+        />
         <HamburgerMenu
           visible={{ value: showHamburger, set: setShowHamburger }}
           setBgImage={setBgImage}
