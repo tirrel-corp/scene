@@ -7,7 +7,8 @@ const HamburgerMenu = props => {
   return (
     <div
       id="hamburger"
-      className={`${visible.value ? 'shown' : ''}`}>
+      className={`w-full max-w-[350px] z-20 absolute top-12 right-2 ${visible.value ? 'visible fade-in' : 'hidden'}`}
+    >
       <section className="flex flex-col gap-2">
         <NotificationsToggle value={nativeNotifs.value} set={nativeNotifs.set} />
         <BackgroundInput setBgImage={setBgImage} onSave={() => visible.set(false)} />

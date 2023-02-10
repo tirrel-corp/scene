@@ -142,7 +142,29 @@ function App() {
         toggleHamburger={() => setShowHamburger(a => !a)}
         togglePlanetMenu={() => setShowPlanetMenu(a => !a)}
         updateAvailable={updateAvailable}
+      >
+        <PlanetMenu
+          visible={{ value: showPlanetMenu, set: setShowPlanetMenu }}
+          updateAvailable={updateAvailable}
+          appVersion={appVersion}
       />
+        <HamburgerMenu
+          visible={{ value: showHamburger, set: setShowHamburger }}
+          setBgImage={setBgImage}
+          nativeNotifs={{
+            value: showNativeNotifs,
+            set: next => {
+              setShowNativeNotifs(next);
+              window.localStorage.setItem('nativeNotifs', JSON.stringify(next))
+            }
+          }}
+        />
+        <Notifications
+          visible={{ value: showNotifs, set: setShowNotifs }}
+          charges={apps.charges}
+          focusByCharge={focusByCharge}
+        />
+      </HeaderBar>
       <Screen
         hiddenWindow={{ value: hiddenWindow, set: setHiddenWindow }}
         selectedWindow={{ value: selectedWindow, set: setSelectedWindow }}
@@ -166,27 +188,6 @@ function App() {
           focusByCharge={focusByCharge}
         />
       </Screen>
-      <PlanetMenu
-        visible={{ value: showPlanetMenu, set: setShowPlanetMenu }}
-        updateAvailable={updateAvailable}
-        appVersion={appVersion}
-      />
-      <HamburgerMenu
-        visible={{ value: showHamburger, set: setShowHamburger }}
-        setBgImage={setBgImage}
-        nativeNotifs={{
-          value: showNativeNotifs,
-          set: next => {
-            setShowNativeNotifs(next);
-            window.localStorage.setItem('nativeNotifs', JSON.stringify(next));
-          },
-        }}
-      />
-      <Notifications
-        visible={{ value: showNotifs, set: setShowNotifs }}
-        charges={apps.charges}
-        focusByCharge={focusByCharge}
-      />
     </div>
   );
 }

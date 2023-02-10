@@ -7,7 +7,7 @@ export default function PlanetMenu(props) {
   return (
     <div
       id="planet-menu"
-      className={cn("text-white", { shown: !!visible.value })}
+      className={cn("text-white w-full max-w-[350px] z-20 absolute top-12 left-2", { "shown fade-in": !!visible.value, "hidden": !Boolean(visible.value) })}
     >
       <section className="flex flex-col gap-2">
         {updateAvailable && <UpdatePrompt />}
@@ -62,7 +62,7 @@ const UpdatePrompt = () => (
             An update for Scene has been downloaded and is ready to install.
           </p>
         </div>
-        <button onClick={() => window.scene.respawn()} style={{flexBasis: '12ch'}}>
+        <button onClick={() => window.scene.respawn()} style={{ flexBasis: '12ch' }}>
           Quit &amp; Install
         </button>
       </div>
