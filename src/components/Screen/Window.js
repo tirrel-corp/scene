@@ -51,7 +51,7 @@ export const Window = ({
           onMouseDown={() =>
             selectedWindow.set([
               win,
-              ...selectedWindow.value.filter((e) => e !== win),
+              ...selectedWindow.value.filter((e) => e.desk !== win.desk),
             ])
           }
         >
@@ -66,9 +66,9 @@ export const Window = ({
             <button
               className="weird text-black bg-white rounded-full cursor-pointer hover:brightness-75"
               onClick={() => {
-                windows.set(windows.value.filter((e) => e !== win));
+                windows.set(windows.value.filter((e) => e.desk !== win.desk));
                 selectedWindow.set(
-                  selectedWindow.value.filter((e) => e !== win)
+                  selectedWindow.value.filter((e) => e.desk !== win.desk)
                 );
               }}
             >
@@ -93,7 +93,7 @@ export const Window = ({
           onClickCapture={() => {
             selectedWindow.set([
               win,
-              ...selectedWindow.value.filter((e) => e !== win),
+              ...selectedWindow.value.filter((e) => e.desk !== win.desk),
             ]);
           }}
           onClick={() => launchOpen.set(false)}
