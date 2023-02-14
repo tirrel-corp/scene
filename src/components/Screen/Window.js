@@ -1,10 +1,11 @@
 import { Rnd } from "react-rnd";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import cn from "classnames";
 import CloseIcon from "../icons/close";
 import MinimizeIcon from "../icons/minimize";
 import RefreshIcon from "../icons/refresh";
 import { screenPadding } from "../../lib/constants";
+import { ThemeContext } from "../../App";
 
 export const Window = ({
   win,
@@ -21,15 +22,17 @@ export const Window = ({
       ? `${window.url}/apps/${win.href.glob.base}`
       : `${window.url}${win.href.site}`;
   const isSelected = selectedWindow.value?.[0] === win;
+  const palette = useContext(ThemeContext);
   return (
     <Rnd
       bounds="parent"
       className={cn("rounded-xl overflow-hidden shadow-xl",
-        "border-[#CCC] border-x border-b", {
+        "border-x border-b", {
         "shadow-[rgba(0,0,0,0.8)]": isSelected,
         "shadow-[rgba(0,0,0,0.4)]": !isSelected,
       })}
       style={{
+        borderColor: `rgb(${palette?.["DarkMuted"]?.join(",") || "0,0,0"})`,
         zIndex: ([...selectedWindow.value].reverse().indexOf(win) + 1) * 10,
         visibility: hiddenWindow.value.includes(win) ? "hidden" : "visible",
       }}
@@ -45,9 +48,12 @@ export const Window = ({
         minHeight: 600,
       }}
     >
-      <div className="w-full h-full flex flex-col bg-[#EEE] cursor-default">
+      <div className="w-full h-full flex flex-col cursor-default"
+        style={{
+          backgroundColor: `rgb(${palette?.["Muted"]?.join(",") || "0,0,0"})`
+        }}>
         <div
-          className="min-h-[2.25rem] bg-gradient-to-b from-[#0000] to-[#0003] text-white w-full flex justify-between items-center px-1"
+          className="min-h-[2.25rem] text-white w-full flex justify-between items-center px-1"
           onMouseDown={() =>
             selectedWindow.set([
               win,
