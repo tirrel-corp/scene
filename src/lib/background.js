@@ -8,7 +8,9 @@ async function getBackgroundImage() {
 async function setBackgroundImage(next, callback) {
   if (next === '') {
     const filetype = await window.scene.checkBackground();
-    return window.scene.deleteBackground(filetype);
+    return window.scene.deleteBackground(filetype).then(() => {
+      callback('hallstatt.jpg')
+    });
   }
   const filetype = await window.scene.checkBackground();
   if (filetype) {
