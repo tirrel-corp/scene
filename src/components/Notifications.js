@@ -1,5 +1,8 @@
 import cn from 'classnames';
 import { useNotifications } from "../lib/useNotifications";
+import { useContext } from 'react';
+import { ThemeContext } from '../App';
+import { whiteOrBlack } from '../lib/background';
 
 export default function Notifications({ visible, charges, focusByCharge }) {
     const { notifications, count } = useNotifications();
@@ -27,6 +30,9 @@ export default function Notifications({ visible, charges, focusByCharge }) {
 }
 
 function Notification({ bin, charges, focusByCharge, visible }) {
+    const palette = useContext(ThemeContext);
+    const header = `rgb(${palette?.["Muted"]?.join(",") || "0,0,0"})`;
+    const content = `rgb(${palette?.["DarkMuted"]?.join(",") || "0,0,0"})`;
     const desk = bin?.topYarn?.rope?.desk;
     const charge = charges?.[desk] ? charges[desk] : {
         chad: {},
@@ -36,12 +42,20 @@ function Notification({ bin, charges, focusByCharge, visible }) {
     };
     const wer = 'glob' in charge.chad ? bin.topYarn.wer.substring(1) : bin?.topYarn?.wer;
     const channel = wer.includes(desk) ? wer : `${desk}${bin?.topYarn?.rope?.thread}`;
-    return <div className="rounded-xl bg-white flex flex-col max-w-[250px] cursor-default"
+    return <div className="rounded-xl flex flex-col max-w-[250px] cursor-default"
         onClick={() => {
             focusByCharge(charge, channel)
             visible.set(!visible.value)
+        }}
+        style={{
+            backgroundColor: content,
+            color: whiteOrBlack(content)
         }}>
-        <div className="p-2 space-x-2 flex w-full bg-neutral-100 text-black text-xs text-semibold rounded-t-xl">
+        <div className="p-2 space-x-2 flex w-full text-xs text-semibold rounded-t-xl"
+            style={{
+                backgroundColor: header
+            }}
+        >
             <DocketImage color={charge?.color} image={charge?.image} />
             <p>{charge.title}</p>
         </div>

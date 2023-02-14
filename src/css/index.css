@@ -9,6 +9,10 @@ body {
   font-family: "IBM Plex Sans", sans-serif;
 }
 
+body *::-webkit-scrollbar {
+  display: none;
+}
+
 svg:not:has([width]) {
   @apply w-4;
 }
