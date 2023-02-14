@@ -1,3 +1,5 @@
+import * as Vibrant from 'node-vibrant';
+
 async function getBackgroundImage() {
   // scry against :switchboard
   const filetype = await window.scene.checkBackground();
@@ -33,4 +35,8 @@ export {
   setBackgroundImage,
   getBackgroundImage as get,
   setBackgroundImage as set,
+}
+
+export function getColors(img) {
+  return Vibrant.from(img).getPalette().then((pal) => Object.assign(...Object.entries(pal).map(([swatch, val]) => ({ [swatch]: val.getRgb() }))))
 }
