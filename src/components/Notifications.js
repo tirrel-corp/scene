@@ -67,7 +67,11 @@ function Notification({ bin, charges, focusByCharge, visible }) {
         image: null
     };
     const wer = 'glob' in charge.chad ? bin.topYarn.wer.substring(1) : bin?.topYarn?.wer;
-    const channel = wer.includes(desk) ? wer : `${desk}${bin?.topYarn?.rope?.thread}`;
+    const channel = wer.includes("groups/") ?
+        `groups/?grid-note=${encodeURI("/" + wer)}`
+        : wer.includes(desk)
+            ? wer
+            : `${desk}${bin?.topYarn?.rope?.thread}`;
     return <div className="rounded-xl flex flex-col max-w-[250px] cursor-default"
         onClick={() => {
             focusByCharge(charge, channel)
