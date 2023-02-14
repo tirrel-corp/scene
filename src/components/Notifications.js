@@ -1,20 +1,45 @@
 import cn from 'classnames';
 import { useNotifications } from "../lib/useNotifications";
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { ThemeContext } from '../App';
 import { whiteOrBlack } from '../lib/background';
 
 export default function Notifications({ visible, charges, focusByCharge }) {
     const { notifications, count } = useNotifications();
+    const [latestYarn, setLatestYarn] = useState(window.localStorage.getItem('tirrel-desktop-latest-yarn'));
 
-    return <div id="notifications" className={cn("p-2 rounded-xl flex flex-col absolute z-[9999] top-12 right-2 space-y-4 bg-[rgba(0,0,0,0.3)]", {
+    const palette = useContext(ThemeContext);
+    const header = `rgb(${palette?.["Muted"]?.join(",") || "0,0,0"})`;
+    const text = whiteOrBlack(header);
+
+    const latestYarnFilter = (e) => {
+        if (latestYarn) {
+            return e[0]?.latest > latestYarn
+        }
+        else return true
+    };
+
+    return <div id="notifications" className={cn("p-2 rounded-xl flex flex-col justify-center items-center absolute z-[9999] top-12 right-2 space-y-4 bg-[rgba(0,0,0,0.3)]", {
         "visible": visible.value,
         "hidden": !visible.value
     })}>
+        <div className='self-end'>
+            {(notifications?.length > 0 && latestYarn < notifications[0]?.latest) &&
+                <button
+                    style={{
+                        borderColor: 'transparent',
+                        color: text,
+                        backgroundColor: header
+                    }}
+                    onClick={() => setLatestYarn(notifications[0]?.latest || null)}
+                >
+                    Clear
+                </button>}
+        </div>
         <div
-            className="max-h-[25vh] overflow-y-auto space-y-2">
-            {notifications.map((grouping) => (
-                <div key={grouping.date}>
+            className="max-h-[25vh] overflow-y-auto space-y-6">
+            {notifications.filter(latestYarnFilter).map((grouping) => (
+                <div className='space-y-2' key={grouping.date}>
                     <h2 className="text-white text-xl font-medium text-right">{grouping.date}</h2>
                     <ul className='space-y-2'>
                         {grouping.bins.map((b) => (
@@ -25,6 +50,7 @@ export default function Notifications({ visible, charges, focusByCharge }) {
                     </ul>
                 </div>
             ))}
+            {notifications?.filter(latestYarnFilter)?.length === 0 && <p className='text-xs pb-4 px-4' style={{ color: text }}>No notifications</p>}
         </div>
     </div>
 }
