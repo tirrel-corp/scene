@@ -1,153 +1,118 @@
-import { useEffect, useRef, useMemo } from 'react';
-import _ from 'lodash';
-import { harkBinToId } from '@urbit/api';
-import CloseIcon from './icons/close';
-import { useHarkStore } from '../state/hark';
+import cn from 'classnames';
+import { useNotifications } from "../lib/useNotifications";
+import { useContext, useState } from 'react';
+import { ThemeContext } from '../App';
+import { whiteOrBlack } from '../lib/background';
 
-const MAX_CONTENTS = 3;
+export default function Notifications({ visible, charges, focusByCharge }) {
+    const { notifications, count } = useNotifications();
+    const [latestYarn, setLatestYarn] = useState(window.localStorage.getItem('tirrel-desktop-latest-yarn'));
 
-const Notifications = props => {
-  const { charges, focusByCharge, visible } = props;
-  const harkStore = useHarkStore();
-  const { seen, unseen } = harkStore;
-  const empty = Object.values(unseen).length === 0
-    && Object.values(seen).length === 0;
+    const palette = useContext(ThemeContext);
+    const header = `rgb(${palette?.["Muted"]?.join(",") || "0,0,0"})`;
+    const text = whiteOrBlack(header);
 
-  const lastVisible = useRef(visible.value);
-  useEffect(() => {
-    const previous = lastVisible.current;
-    if (!previous && visible.value) {
-      useHarkStore.getState().opened();
-    }
-    lastVisible.current = visible.value;
-  }, [visible]);
+    const latestYarnFilter = (e) => {
+        if (latestYarn) {
+            return e[0]?.latest > latestYarn
+        }
+        else return true
+    };
 
-  const sortedUnseen = useMemo(() =>
-    Object.values(unseen)
-      .sort((a, b) => b.time - a.time)
-      .filter(n => !!n?.body?.[0])
-      .filter(n => !!charges?.[n.bin.place.desk])
-      .map(n => ([n, charges[n.bin.place.desk]]))
-      .filter(([n, charge]) => charge?.title !== 'System'),
-  [charges, unseen]);
-  const sortedSeen = useMemo(() => 
-    Object.values(seen)
-    .sort((a, b) => b.time - a.time)
-    .filter(n => !!n?.body?.[0])
-    .filter(n => !!charges?.[n.bin.place.desk])
-    .map(n => ([n, charges[n.bin.place.desk]]))
-    .filter(([n, charge]) => charge?.title !== 'System'),
-  [charges, seen]);
-
-
-  return (
-    <div
-      id="notifications"
-      className={`text-zinc-200 ${visible.value ? 'shown' : ''}`}
-    >
-      <section>
-        {empty && (
-          <div className="p-3 text-center">
-            <p>No notifications</p>
-          </div>
-        )}
-        {sortedUnseen.map(([n, charge], idx) => (
-          <Notification {...{
-            key: `unseen-${idx}`,
-            className: 'unseen',
-            notification: n,
-            charge,
-            lid: { unseen: null },
-            onClick: () => {
-              focusByCharge(charge);
-              visible.set(false);
-            },
-          }}/>
-        ))}
-        {sortedSeen.map(([n, charge], idx) => (
-          <Notification {...{
-            key: `seen-${idx}`,
-            notification: n,
-            charge,
-            lid: { seen: null },
-            onClick: () => {
-              focusByCharge(charge)
-              visible.set(false);
-            },
-          }}/>
-        ))}
-      </section>
-    </div>
-  );
-}
-
-const Notification = props => {
-  const { charge, className = '', notification, lid, ...rest } = props;
-  const binId = harkBinToId(notification.bin);
-  const id = `notif-${notification.time}-${binId}`;
-
-  const contents = _.map(notification.body, 'content').filter(c => c.length);
-  const large = contents.length === 0;
-  const archive = () => {
-    useHarkStore.getState().archiveNote(notification.bin, lid);
-  };
-
-  const archiveNoFollow = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    archive();
-  };
-
-  return (
-    <div
-      className={`notification bg-neutral-700 text-white ${className}`}
-      {...rest}>
-      <header>
-        <DocketImage {...charge} />
-        <h2>{charge?.title || notification.bin.place.desk}</h2>
-        <button
-          className="weird ml-auto hover:brightness-50"
-          style={{
-            transition: 'none',
-            "--close-icon-bg": "gainsboro",
-            "--close-icon-fg": "black",
-          }}
-          onClick={archiveNoFollow}>
-          <CloseIcon />
-        </button>
-      </header>
-      <article>
-        <h2>{notification.body[0].title.map(i => i.ship
-            ? (<span key={i.ship} className="ship">{i.ship}</span>)
-            : (<span key={i.text}>{i.text}</span>)
-        )}</h2>
-        {_.take(contents, MAX_CONTENTS).map((cs, idx) => (
-          <p key={idx}>
-            {cs.map((c, idx) => (
-              <span className={c?.ship ? 'ship' : ''} key={idx}>
-                {c?.ship || c.text}
-              </span>
+    return <div id="notifications" className={cn("p-2 rounded-xl flex flex-col justify-center items-center absolute z-[9999] top-12 right-2 space-y-4 bg-[rgba(0,0,0,0.3)]", {
+        "visible": visible.value,
+        "hidden": !visible.value
+    })}>
+        <div className='self-end'>
+            {(notifications?.length > 0 && latestYarn < notifications[0]?.latest) &&
+                <button
+                    style={{
+                        borderColor: 'transparent',
+                        color: text,
+                        backgroundColor: header
+                    }}
+                    onClick={() => setLatestYarn(notifications[0]?.latest || null)}
+                >
+                    Clear
+                </button>}
+        </div>
+        <div
+            className="max-h-[25vh] overflow-y-auto space-y-6">
+            {notifications.filter(latestYarnFilter).map((grouping) => (
+                <div className='space-y-2' key={grouping.date}>
+                    <h2 className="text-white text-xl font-medium text-right">{grouping.date}</h2>
+                    <ul className='space-y-2'>
+                        {grouping.bins.map((b) => (
+                            <li key={b.time}>
+                                <Notification bin={b} charges={charges} focusByCharge={focusByCharge} visible={visible} />
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             ))}
-          </p>
-        ))}
-        {contents.length > MAX_CONTENTS && (
-          <p>...and {contents.length - MAX_CONTENTS} more</p>
-        )}
-      </article>
+            {notifications?.filter(latestYarnFilter)?.length === 0 && <p className='text-xs pb-4 px-4' style={{ color: text }}>No notifications</p>}
+        </div>
     </div>
-  )
-};
-
-const DocketImage = props => {
-  const { className = '', color, image } = props;
-
-  const bgColor = color;
-
-  return (
-    <div className={`docket-image ${className}`} style={{ background: bgColor }}>
-      <img src={image} alt="" />
-    </div>
-  )
 }
 
-export default Notifications;
+function Notification({ bin, charges, focusByCharge, visible }) {
+    const palette = useContext(ThemeContext);
+    const header = `rgb(${palette?.["Muted"]?.join(",") || "0,0,0"})`;
+    const content = `rgb(${palette?.["DarkMuted"]?.join(",") || "0,0,0"})`;
+    const desk = bin?.topYarn?.rope?.desk;
+    const charge = charges?.[desk] ? charges[desk] : {
+        chad: {},
+        color: "#ee5432",
+        desk: "garden",
+        image: null
+    };
+    const wer = 'glob' in charge.chad ? bin.topYarn.wer.substring(1) : bin?.topYarn?.wer;
+    const channel = wer.includes("groups/") ?
+        `groups/?grid-note=${encodeURI("/" + wer)}`
+        : wer.includes(desk)
+            ? wer
+            : `${desk}${bin?.topYarn?.rope?.thread}`;
+    return <div className="rounded-xl flex flex-col max-w-[350px] cursor-default"
+        onClick={() => {
+            focusByCharge(charge, channel)
+            visible.set(!visible.value)
+        }}
+        style={{
+            backgroundColor: content,
+            color: whiteOrBlack(content)
+        }}>
+        <div className="p-2 space-x-2 flex w-full text-xs text-semibold rounded-t-xl"
+            style={{
+                backgroundColor: header
+            }}
+        >
+            <DocketImage color={charge?.color} image={charge?.image} />
+            <p>{charge.title}</p>
+        </div>
+        <div>
+            <p className="p-2 text-xs overflow-hidden truncate max-w-30ch">
+                {bin?.topYarn?.con.map((content) => {
+                    if (typeof content === 'string') {
+                        return <span className='' key={content}>{content}</span>
+                    }
+                    if ('ship' in content) {
+                        return <span className='font-bold' key={content.ship}>
+                            {content.ship}
+                        </span>
+                    }
+                    return <span className="font-bold" key={content.emph}>{content.emph}</span>
+                })}
+            </p>
+        </div>
+    </div>
+}
+
+const DocketImage = ({ className = "", color = "#ee5432", image }) => {
+    const bgColor = color;
+
+    return (
+        <div className={cn(className, "h-4 w-4")} style={{ background: bgColor }}>
+            {image && <img src={image} alt="" />}
+        </div>
+    )
+}

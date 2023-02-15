@@ -2,10 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Inter:wght@300;400;600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Inter:wght@300;400;600&display=swap");
 
-html, body {
-    font-family: "IBM Plex Sans", sans-serif;
+html,
+body {
+  font-family: "IBM Plex Sans", sans-serif;
+}
+
+body *::-webkit-scrollbar {
+  display: none;
 }
 
 svg:not:has([width]) {
@@ -32,75 +37,6 @@ button:active {
   @apply brightness-110;
 }
 
-#notifications,
-#hamburger,
-#planet-menu {
-  @apply z-[100] absolute max-h-[80vh] max-w-[35ch] overflow-y-auto p-2 invisible;
-  background-color: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(4px);
-  min-width: calc(min(35ch, 100%));
-  border-radius: 0.75ch;
-}
-#notifications,
-#hamburger {
-  @apply right-4 top-12;
-}
-#planet-menu {
-  @apply left-4 top-12;
-}
-#notifications::-webkit-scrollbar {
-  @apply overflow-hidden;
-  border-top-right-radius: 0.75ch;
-  border-bottom-right-radius: 0.75ch;
-  max-width: 0.75ch;
-  background-color: #555;
-  /* padding: 0.25ch; */
-}
-
-#notifications::-webkit-scrollbar-thumb {
-  @apply border-black border;
-  background-color: #eee;
-  border-top-right-radius: 0.75ch;
-  border-bottom-right-radius: 0.75ch;
-  border-style: inset;
-}
-
-#notifications.shown,
-#hamburger.shown,
-#planet-menu.shown {
-  @apply visible;
-}
-#notifications > :only-child {
-  @apply flex flex-col gap-2;
-}
-
-.notification {
-  @apply min-h-min overflow-hidden cursor-pointer filter-none;
-  border-radius: 0.5ch;
-  transition: filter 150ms ease;
-}
-
-.notification:hover {
-  /* filter: drop-shadow(0 0.5ch 0.5ch #2F2F2F); */
-  filter: brightness(130%) drop-shadow(0 0.25ch 0.25ch #2F2F2F80);
-}
-.notification > header {
-  @apply flex flex-nowrap items-center overflow-hidden text-ellipsis text-xs;
-  gap: 0.5ch;
-  -webkit-line-clamp: 1;
-  padding-block: 0.75ch;
-  padding-inline: 1.5ch;
-  color: #CCC;
-  background: #2F2F2F;
-}
-
-.notification > article {
-  font-size: small;
-  color: #E8E8E8;
-  padding-inline: 1.5ch;
-  padding-block: 0.75ch;
-}
-
 .docket-image {
   @apply w-4 h-4 aspect-square overflow-hidden relative;
   border-radius: 0.25ch;
@@ -111,19 +47,19 @@ button:active {
 }
 
 .fade-in {
-    animation: 0.2s fadeIn ease-in-out forwards;
-    filter: blur(0px);
+  animation: 0.2s fadeIn ease-in-out forwards;
+  filter: blur(0px);
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        filter: blur(1px)
-    }
-    to {
-        opacity: 1;
-        filter: blur(0px);
-    }
+  from {
+    opacity: 0;
+    filter: blur(1px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0px);
+  }
 }
 
 .spinner {
@@ -131,6 +67,10 @@ button:active {
 }
 
 @keyframes spin {
-  0% { transform: perspective(500px) rotateY(0turn); }
-  100% { transform: perspective(500px) rotateY(1turn); }
+  0% {
+    transform: perspective(500px) rotateY(0turn);
+  }
+  100% {
+    transform: perspective(500px) rotateY(1turn);
+  }
 }

@@ -6,7 +6,7 @@ export function incomingLinkToWindow(link, { apps, windows, selectedWindow }) {
         const charge = { ...apps.value.charges[desk], ...{ href: { glob: { base: remainderUrl } } } };
         if (windows.value.some((e) => e.desk === desk)) {
             windows.set([charge, ...windows.value.filter((e) => e.desk !== desk)]);
-            selectedWindow.set([charge, ...selectedWindow.value.filter((e) => e.desk !== desk)])
+            selectedWindow.set([apps.value.charges[desk], ...selectedWindow.value.filter((e) => e.desk !== desk)])
         } else {
             windows.set([charge, ...windows.value])
             selectedWindow.set([charge, ...selectedWindow.value])

@@ -18,7 +18,7 @@ import PayScreen from "./components/Onboarding/pay";
 import ConfirmScreen from "./components/Onboarding/confirm";
 import Debug from "./components/Onboarding/debug";
 import PulsingLogo from "./components/PulsingLogo";
-import { get } from "./lib/background";
+import { get, getColors } from "./lib/background";
 import { getAuth } from "./lib/auth";
 import 'tippy.js/dist/tippy.css';
 
@@ -38,7 +38,8 @@ const authLoader = () => {
 
 const appLoader = async () => {
   const bg = await get();
-  return { ...authLoader(), ...{ bg: bg + `?${new Date().getTime()}` } }
+  const colors = await getColors(`${bg.startsWith('hallstatt') ? '' : 'file://'}${encodeURI(bg)}`);
+  return { ...authLoader(), ...{ bg: bg + `?${new Date().getTime()}`, pal: colors } }
 }
 
 const router = createHashRouter([

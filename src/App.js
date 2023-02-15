@@ -1,13 +1,13 @@
-import { useCallback, useState, useReducer, useEffect, useRef } from 'react';
+import { useCallback, useState, useReducer, useEffect, createContext } from 'react';
 import { useLoaderData } from 'react-router-dom';
 import { scryCharges, scryAllies } from '@urbit/api';
 import { api } from './state/api';
-import { useHarkStore } from './state/hark';
 import { chargeSubscription, allySubscription } from './state/subscriptions';
 import HeaderBar from './components/HeaderBar';
 import Screen from './components/Screen';
 import Dock from './components/Dock';
-import Notifications from './components/Notifications';
+import Notifications from "./components/Notifications"
+import useHarkState from "./state/hark";
 import chargeReducer from './state/charges';
 import allyReducer from "./state/allies";
 import { treatyReducer } from './state/treaties';
@@ -17,12 +17,14 @@ import HamburgerMenu from './components/HamburgerMenu';
 import PlanetMenu from './components/PlanetMenu';
 import { useClickOutside } from './lib/hooks';
 import { setAuth } from './lib/auth';
-import { setBackgroundImage } from './lib/background';
+import { setBackgroundImage, getColors } from './lib/background';
 import { incomingLinkToWindow } from "./lib/window";
 const { ipcRenderer } = require("electron");
 
+export const ThemeContext = createContext();
+
 function App() {
-  const { bg } = useLoaderData();
+  const { bg, pal } = useLoaderData();
   const [apps, setApps] = useReducer(chargeReducer, {});
   const [allies, setAllies] = useReducer(allyReducer, {});
   const [treaties, setTreaties] = useReducer(treatyReducer, {});
@@ -37,7 +39,9 @@ function App() {
   const [updateAvailable, setUpdateAvailable] = useState();
   const [appVersion, setAppVersion] = useState();
   const [bgImage, setBgImage] = useState(bg);
+  const [palette, setPalette] = useState(pal);
 
+  // Initialize all subscriptions and scries
   useEffect(() => {
     async function init() {
       await api.connect();
@@ -48,8 +52,7 @@ function App() {
       chargeSubscription(setApps);
       allySubscription(setAllies);
 
-      useHarkStore.getState().initialize(api);
-
+      useHarkState.getState().start();
       const nativeNotifsSetting = window.localStorage.getItem('nativeNotifs');
       if (!!nativeNotifsSetting) {
         setShowNativeNotifs(JSON.parse(nativeNotifsSetting))
@@ -67,6 +70,15 @@ function App() {
     init();
     migrateLocalStorageBg(setBgImage);
   }, []);
+
+  // Derive theme engine palette again when background changes.
+  useEffect(() => {
+    async function refetchPalette() {
+      const pal = await getColors(`${bgImage.startsWith('hallstatt') ? '' : 'file://'}${encodeURI(bgImage)}`);
+      return setPalette(pal)
+    }
+    refetchPalette()
+  }, [bgImage])
 
   useEffect(() => {
     const deepLinkListener = (event, url) => {
@@ -86,6 +98,10 @@ function App() {
     return () => ipcRenderer.removeListener('deepLink', deepLinkListener);
   }, []);
 
+  // If a link inside one of our windows has target=_blank to another app, 
+  // Electron's window handler will send it back here. We have a handler in this app
+  // to then set our window state to change or spawn the window necessary.
+
   useEffect(() => {
     window.scene.linkToWindow = (link) => incomingLinkToWindow(link, {
       apps: {
@@ -103,6 +119,8 @@ function App() {
 
   }, [apps, windows, setWindows, selectedWindow, setSelectedWindow])
 
+  // Listeners for prompts and menus to dismiss them clicking on something else.
+
   useClickOutside([
     { current: document.getElementById('notifications') },
     { current: document.getElementById('notifications-toggle') },
@@ -119,75 +137,97 @@ function App() {
     () => setShowPlanetMenu(false)
   );
 
-  const focusByCharge = useCallback(charge => {
-    setWindows(prev => (!prev.includes(charge)
-      ? [...prev, charge]
-      : prev
+  // Focus or spawn a window, shuffling our state
+  // based on whether a notification or a tile is clicked related to the app.
+  const focusByCharge = useCallback((charge, channel) => {
+    const href = 'glob' in charge.chad
+      ? {
+        href: {
+          glob: {
+            base: channel
+          }
+        }
+      }
+      : {
+        href: {
+          site: channel
+        }
+      }
+    const newCharge = channel ? { ...charge, ...href } : charge
+    setWindows(prev => (!prev.some((win) => win.desk === charge.desk)
+      ? [newCharge, ...prev]
+      : [newCharge, ...prev.filter((e) => e.desk !== charge.desk)]
     ));
-    setSelectedWindow(prev => ([charge, ...prev.filter(i => i !== charge)]));
+    setSelectedWindow(prev => ([newCharge, ...prev.filter(i => i.desk !== charge.desk)]));
     setHiddenWindow(prev => prev.filter(i => i !== charge));
   }, []);
 
   return (
-    <div
-      className="bg-[#e4e4e4] h-screen w-screen flex flex-col absolute overflow-hidden"
-      style={{
-        backgroundImage: `url(${bgImage.startsWith('hallstatt') ? '' : 'file://'}${encodeURI(bgImage)})`,
-        backgroundSize: 'cover',
-      }}>
-      <HeaderBar
-        selectedWindow={{ value: selectedWindow, set: setSelectedWindow }}
-        windows={{ value: windows, set: setWindows }}
-        toggleNotifs={() => setShowNotifs(a => !a)}
-        toggleHamburger={() => setShowHamburger(a => !a)}
-        togglePlanetMenu={() => setShowPlanetMenu(a => !a)}
-        updateAvailable={updateAvailable}
-      />
-      <Screen
-        hiddenWindow={{ value: hiddenWindow, set: setHiddenWindow }}
-        selectedWindow={{ value: selectedWindow, set: setSelectedWindow }}
-        launchOpen={{ value: launchOpen, set: setLaunchOpen }}
-        windows={{ value: windows, set: setWindows }}
-      >
-        <Launchpad
-          apps={apps}
-          launchOpen={{ value: launchOpen, set: setLaunchOpen }}
-          focusByCharge={focusByCharge}>
-          <Search
-            allies={{ value: allies, set: setAllies }}
-            treaties={{ value: treaties, set: setTreaties }}
-            apps={apps}
+    <ThemeContext.Provider value={palette}>
+      <div
+        className="bg-[#e4e4e4] h-screen w-screen flex flex-col absolute overflow-hidden"
+        style={{
+          backgroundImage: `url(${bgImage.startsWith('hallstatt') ? '' : 'file://'}${encodeURI(bgImage)})`,
+          backgroundSize: 'cover',
+        }}>
+        <HeaderBar
+          selectedWindow={{ value: selectedWindow, set: setSelectedWindow }}
+          windows={{ value: windows, set: setWindows }}
+          toggleNotifs={() => {
+            useHarkState.getState().sawSeam({ all: null });
+            setShowNotifs(a => !a)
+          }}
+          toggleHamburger={() => setShowHamburger(a => !a)}
+          togglePlanetMenu={() => setShowPlanetMenu(a => !a)}
+          updateAvailable={updateAvailable}
+        >
+          <PlanetMenu
+            visible={{ value: showPlanetMenu, set: setShowPlanetMenu }}
+            updateAvailable={updateAvailable}
+            appVersion={appVersion}
           />
-        </Launchpad>
-        <Dock
-          apps={apps}
+          <HamburgerMenu
+            visible={{ value: showHamburger, set: setShowHamburger }}
+            setBgImage={setBgImage}
+            nativeNotifs={{
+              value: showNativeNotifs,
+              set: next => {
+                setShowNativeNotifs(next);
+                window.localStorage.setItem('nativeNotifs', JSON.stringify(next))
+              }
+            }}
+          />
+          <Notifications
+            visible={{ value: showNotifs, set: setShowNotifs }}
+            charges={apps.charges}
+            focusByCharge={focusByCharge}
+          />
+        </HeaderBar>
+        <Screen
+          hiddenWindow={{ value: hiddenWindow, set: setHiddenWindow }}
+          selectedWindow={{ value: selectedWindow, set: setSelectedWindow }}
           launchOpen={{ value: launchOpen, set: setLaunchOpen }}
           windows={{ value: windows, set: setWindows }}
-          focusByCharge={focusByCharge}
-        />
-      </Screen>
-      <PlanetMenu
-        visible={{ value: showPlanetMenu, set: setShowPlanetMenu }}
-        updateAvailable={updateAvailable}
-        appVersion={appVersion}
-      />
-      <HamburgerMenu
-        visible={{ value: showHamburger, set: setShowHamburger }}
-        setBgImage={setBgImage}
-        nativeNotifs={{
-          value: showNativeNotifs,
-          set: next => {
-            setShowNativeNotifs(next);
-            window.localStorage.setItem('nativeNotifs', JSON.stringify(next));
-          },
-        }}
-      />
-      <Notifications
-        visible={{ value: showNotifs, set: setShowNotifs }}
-        charges={apps.charges}
-        focusByCharge={focusByCharge}
-      />
-    </div>
+        >
+          <Launchpad
+            apps={apps}
+            launchOpen={{ value: launchOpen, set: setLaunchOpen }}
+            focusByCharge={focusByCharge}>
+            <Search
+              allies={{ value: allies, set: setAllies }}
+              treaties={{ value: treaties, set: setTreaties }}
+              apps={apps}
+            />
+          </Launchpad>
+          <Dock
+            apps={apps}
+            launchOpen={{ value: launchOpen, set: setLaunchOpen }}
+            windows={{ value: windows, set: setWindows }}
+            focusByCharge={focusByCharge}
+          />
+        </Screen>
+      </div>
+    </ThemeContext.Provider>
   );
 }
 
