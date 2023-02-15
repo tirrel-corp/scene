@@ -72,7 +72,7 @@ function Notification({ bin, charges, focusByCharge, visible }) {
         : wer.includes(desk)
             ? wer
             : `${desk}${bin?.topYarn?.rope?.thread}`;
-    return <div className="rounded-xl flex flex-col max-w-[250px] cursor-default"
+    return <div className="rounded-xl flex flex-col max-w-[350px] cursor-default"
         onClick={() => {
             focusByCharge(charge, channel)
             visible.set(!visible.value)
