@@ -38,7 +38,17 @@ export {
 }
 
 export function getColors(img) {
-  return Vibrant.from(img).getPalette().then((pal) => Object.assign(...Object.entries(pal).map(([swatch, val]) => ({ [swatch]: val.getRgb() }))))
+  return Vibrant
+    .from(img)
+    .getPalette()
+    .then((pal) => Object.assign(
+      ...Object.entries(pal)
+        .map(([swatch, val]) => (
+          { [swatch]: val.getRgb().map((r) => Math.round(r)) }
+        )
+        )
+    )
+    ).catch((err) => console.log(err))
 }
 
 export function whiteOrBlack(color) {
