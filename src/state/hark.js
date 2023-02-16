@@ -46,7 +46,6 @@ const useHarkState = create((set, get) => ({
             app: 'hark',
             path: '/ui',
             event: (event) => {
-                console.log(event, get().carpet);
                 const { retrieve } = get();
                 retrieve();
             },
