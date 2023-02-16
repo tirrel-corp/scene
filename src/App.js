@@ -223,6 +223,7 @@ function App() {
             apps={apps}
             launchOpen={{ value: launchOpen, set: setLaunchOpen }}
             windows={{ value: windows, set: setWindows }}
+            hiddenWindow={{ value: hiddenWindow, set: setHiddenWindow }}
             selectedWindow={{ value: selectedWindow, set: setSelectedWindow }}
           />
         </Screen>
