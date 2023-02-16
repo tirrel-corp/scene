@@ -22,7 +22,7 @@ export default function Screen({
       {children}
       {windows.value.map((win, index) => (
         <Window
-          key={win.title}
+          key={win.desk}
           win={win}
           launchOpen={launchOpen}
           index={index}
