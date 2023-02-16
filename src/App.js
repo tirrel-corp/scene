@@ -223,7 +223,8 @@ function App() {
             apps={apps}
             launchOpen={{ value: launchOpen, set: setLaunchOpen }}
             windows={{ value: windows, set: setWindows }}
-            focusByCharge={focusByCharge}
+            hiddenWindow={{ value: hiddenWindow, set: setHiddenWindow }}
+            selectedWindow={{ value: selectedWindow, set: setSelectedWindow }}
           />
         </Screen>
       </div>

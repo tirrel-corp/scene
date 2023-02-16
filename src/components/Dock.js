@@ -1,7 +1,7 @@
 import Tippy from "@tippyjs/react";
 import LaunchpadIcon from "./icons/launchpad";
 
-export default function Dock({ windows, focusByCharge, launchOpen }) {
+export default function Dock({ windows, selectedWindow, hiddenWindow, launchOpen }) {
   return (
     <div
       id="dock"
@@ -16,7 +16,11 @@ export default function Dock({ windows, focusByCharge, launchOpen }) {
               key={charge.title}
               onClick={() => {
                 launchOpen.set(false);
-                focusByCharge(charge);
+                selectedWindow.set([
+                  charge,
+                  ...selectedWindow.value.filter((e) => e.desk !== charge.desk),
+                ])
+                hiddenWindow.set(hiddenWindow.value.filter(i => i !== charge));
               }}
             >
               {charge?.image && (
