@@ -14,7 +14,7 @@ export default function Notifications({ visible, charges, focusByCharge }) {
 
     const latestYarnFilter = (e) => {
         if (latestYarn) {
-            return e[0]?.latest > latestYarn
+            return e?.latest > latestYarn
         }
         else return true
     };
@@ -31,7 +31,10 @@ export default function Notifications({ visible, charges, focusByCharge }) {
                         color: text,
                         backgroundColor: header
                     }}
-                    onClick={() => setLatestYarn(notifications[0]?.latest || null)}
+                    onClick={() => {
+                        window.localStorage.setItem('tirrel-desktop-latest-yarn', notifications[0]?.latest || null)
+                        setLatestYarn(notifications[0]?.latest || null)
+                    }}
                 >
                     Clear
                 </button>}
