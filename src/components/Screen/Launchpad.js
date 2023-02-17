@@ -1,14 +1,16 @@
 import cn from "classnames";
 import LaunchpadTile from './LaunchpadTile';
-import { useRef } from "react";
+import { useContext, useRef } from "react";
 import { useOutsideAlerter } from "../../lib/hooks";
+import { WindowContext } from "../../App";
 
 export default function Launchpad({
   apps,
   children,
   focusByCharge,
-  launchOpen,
 }) {
+
+  const { launchOpen } = useContext(WindowContext);
 
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef, () => launchOpen.set(false));

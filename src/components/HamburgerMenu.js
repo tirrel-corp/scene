@@ -1,9 +1,11 @@
 import { useState, useContext } from 'react';
 import { set, whiteOrBlack } from '../lib/background';
 import { ThemeContext } from "../App"
+import { WidgetContext } from './HeaderBar';
 
 const HamburgerMenu = props => {
-  const { nativeNotifs, setBgImage, visible } = props;
+  const { nativeNotifs, setBgImage } = props;
+  const { showHamburger: visible } = useContext(WidgetContext);
 
   return (
     <div
