@@ -1,7 +1,7 @@
 import { useCallback, useState, useReducer, useEffect, createContext } from 'react';
 import { useLoaderData } from 'react-router-dom';
 import { scryCharges, scryAllies } from '@urbit/api';
-import { api } from './state/api';
+import { api, getName } from './state/api';
 import { chargeSubscription, allySubscription } from './state/subscriptions';
 import HeaderBar from './components/HeaderBar';
 import Screen from './components/Screen';
@@ -67,6 +67,12 @@ function App() {
       setAppVersion(version);
     }
 
+    async function setName() {
+      api.ship = await getName();
+      window.ship = api.ship
+    }
+
+    setName();
     init();
     migrateLocalStorageBg(setBgImage);
   }, []);

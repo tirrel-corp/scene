@@ -13,9 +13,12 @@ api.onError = e => {
   console.error(e);
 }
 
-api.ship = auth?.ship || process.env.REACT_APP_SHIP;
+export async function getName() {
+  const name = await fetch(`${auth?.url || process.env.REACT_APP_URL}/~/name.json`);
+  const nameText = await name.text();
+  return nameText.slice(1)
+}
 
-window.ship = auth?.ship || process.env.REACT_APP_SHIP;
 window.url = auth?.url || process.env.REACT_APP_URL;
 
 window.api = api;
