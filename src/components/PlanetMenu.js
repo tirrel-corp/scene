@@ -6,7 +6,7 @@ import { ThemeContext } from "../App"
 
 export default function PlanetMenu(props) {
   const { visible, updateAvailable, appVersion } = props;
-  const { ship } = getAuth();
+  const ship = window.ship;
   return (
     <div
       id="planet-menu"

@@ -30,7 +30,6 @@ const authLoader = () => {
     return stored;
   }
   return {
-    ship: process.env.REACT_APP_SHIP || undefined,
     code: process.env.REACT_APP_CODE || undefined,
     url: process.env.REACT_APP_URL || undefined
   };

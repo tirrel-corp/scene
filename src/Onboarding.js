@@ -19,20 +19,18 @@ export default function Onboarding() {
 
     const auth = useLoaderData();
     useEffect(() => {
-        if (auth.ship) {
+        if (auth.url) {
             navigate("/app")
         }
-    }, [auth.ship])
+    }, [auth.url])
 
     const [query, setQuery] = useSearchParams();
     const token = query.get("token");
     useEffect(() => {
-        const dl_ship = query.get("patp");
         const dl_code = query.get("code");
         const dl_url = query.get("url");
-        if (!auth?.ship && !!dl_ship && !!dl_code && !!dl_url) {
+        if (!!dl_code && !!dl_url) {
             setAuth({
-                ship: dl_ship,
                 code: dl_code,
                 url: dl_url,
             });
@@ -48,7 +46,7 @@ export default function Onboarding() {
 
     const updateAccountState = useCallback(() =>
         getAccountState().then(res => setAccountState(res)),
-    [setAccountState])
+        [setAccountState])
 
     // We receive a "deepLink" event from electron.js when the OS sends us a scene:// link.
     // The scene:// link looks like `scene://?token=34232rfwefwefw` or etc.
@@ -86,14 +84,14 @@ export default function Onboarding() {
             credentials: 'include',
             body: atob(token),
         }).then(res => res.json())
-        .then(res => setSession(p => ({...p, stage: res.grate})))
-        // make another request to /third/session/ with the auth cookie, this
-        // will yield our sesision id
-        .then(() => fetch(`${tirrelServer}/third/session/`, {
-            method: 'GET',
-            credentials: 'include',
-        })).then(res => res.json())
-        .then(res => setSession(p => ({...p, id: res.session })))
+            .then(res => setSession(p => ({ ...p, stage: res.grate })))
+            // make another request to /third/session/ with the auth cookie, this
+            // will yield our sesision id
+            .then(() => fetch(`${tirrelServer}/third/session/`, {
+                method: 'GET',
+                credentials: 'include',
+            })).then(res => res.json())
+            .then(res => setSession(p => ({ ...p, id: res.session })))
 
     }, [session.id, session.stage, token]);
 
@@ -114,22 +112,22 @@ export default function Onboarding() {
     }, [session?.id, accountState?.ships]);
 
     return (
-    <div className="h-screen w-screen bg-cover flex justify-start items-center font-inter antialiased"
-        style={{
-            backgroundColor: 'black',
-            backgroundImage: "linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('tirrel-mark.svg'), url('scene-large-stroke.svg')",
-            backgroundSize: 'cover, auto, calc(max(25vw, 340px))',
-            backgroundPosition: 'center, bottom 2vh center, center',
-            backgroundRepeat: 'no-repeat',
-        }}
-    >
-        <Outlet context={{
-            session,
-            setSession,
-            accountState,
-            updateAccountState,
-        }} />
-    </div>
+        <div className="h-screen w-screen bg-cover flex justify-start items-center font-inter antialiased"
+            style={{
+                backgroundColor: 'black',
+                backgroundImage: "linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('tirrel-mark.svg'), url('scene-large-stroke.svg')",
+                backgroundSize: 'cover, auto, calc(max(25vw, 340px))',
+                backgroundPosition: 'center, bottom 2vh center, center',
+                backgroundRepeat: 'no-repeat',
+            }}
+        >
+            <Outlet context={{
+                session,
+                setSession,
+                accountState,
+                updateAccountState,
+            }} />
+        </div>
     );
 }
 

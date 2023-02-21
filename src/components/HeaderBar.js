@@ -18,7 +18,7 @@ export default function HeaderBar({
   updateAvailable,
   children
 }) {
-  const { ship: patp } = getAuth();
+  const patp = window.ship;
   const [windowMenu, setWindowMenu] = useState(false);
   const windowMenuRef = useRef(null);
   useOutsideAlerter(windowMenuRef, () => setWindowMenu(false));

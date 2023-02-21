@@ -72,8 +72,7 @@ function App() {
       window.ship = api.ship
     }
 
-    setName();
-    init();
+    setName().then(() => init());
     migrateLocalStorageBg(setBgImage);
   }, []);
 
@@ -94,7 +93,6 @@ function App() {
         return;
       }
       const newAuth = {
-        ship: params.get('patp'),
         code: params.get('code'),
         url: params.get('url'),
       }
