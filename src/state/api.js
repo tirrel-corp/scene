@@ -13,12 +13,6 @@ api.onError = e => {
   console.error(e);
 }
 
-export async function getName() {
-  const name = await fetch(`${auth?.url || process.env.REACT_APP_URL}/~/name.json`);
-  const nameText = await name.text();
-  return nameText.slice(1)
-}
-
 window.url = auth?.url || process.env.REACT_APP_URL;
 
 window.api = api;

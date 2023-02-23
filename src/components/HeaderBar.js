@@ -7,7 +7,6 @@ import { useOutsideAlerter } from '../lib/hooks';
 import HamburgerIcon from './icons/hamburger';
 import BellIcon from './icons/bell';
 import { docketUninstall } from '@urbit/api';
-import { getAuth } from '../lib/auth';
 
 export default function HeaderBar({
   selectedWindow,

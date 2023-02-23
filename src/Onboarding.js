@@ -17,12 +17,12 @@ const getAccountState = () =>
 export default function Onboarding() {
     const navigate = useNavigate();
 
-    const auth = useLoaderData();
+    const { auth } = useLoaderData();
     useEffect(() => {
-        if (auth.url) {
+        if (auth?.url) {
             navigate("/app")
         }
-    }, [auth.url])
+    }, [auth?.url])
 
     const [query, setQuery] = useSearchParams();
     const token = query.get("token");

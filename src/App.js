@@ -1,7 +1,6 @@
 import { useCallback, useState, useReducer, useEffect, createContext } from 'react';
 import { useLoaderData } from 'react-router-dom';
 import { scryCharges, scryAllies } from '@urbit/api';
-import { api, getName } from './state/api';
 import { chargeSubscription, allySubscription } from './state/subscriptions';
 import HeaderBar from './components/HeaderBar';
 import Screen from './components/Screen';
@@ -24,7 +23,7 @@ const { ipcRenderer } = require("electron");
 export const ThemeContext = createContext();
 
 function App() {
-  const { bg, pal } = useLoaderData();
+  const { bg, pal, api } = useLoaderData();
   const [apps, setApps] = useReducer(chargeReducer, {});
   const [allies, setAllies] = useReducer(allyReducer, {});
   const [treaties, setTreaties] = useReducer(treatyReducer, {});
@@ -66,13 +65,7 @@ function App() {
       const version = await window.scene.queryVersion();
       setAppVersion(version);
     }
-
-    async function setName() {
-      api.ship = await getName();
-      window.ship = api.ship
-    }
-
-    setName().then(() => init());
+    init();
     migrateLocalStorageBg(setBgImage);
   }, []);
 

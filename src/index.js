@@ -21,24 +21,34 @@ import PulsingLogo from "./components/PulsingLogo";
 import { get, getColors } from "./lib/background";
 import { getAuth } from "./lib/auth";
 import 'tippy.js/dist/tippy.css';
+import { api } from './state/api';
 
 const App = React.lazy(() => import('./App'));
 
-const authLoader = () => {
+const authLoader = async () => {
   const stored = getAuth();
   if (!!stored) {
-    return stored;
+    if (!stored.ship) {
+      const name = await fetch(`${stored.url}/~/name.json`);
+      const nameText = await name.text();
+      const auth = { ...stored, ship: nameText.slice(1) };
+      window.localStorage.setItem('tirrel-desktop-auth', JSON.stringify(auth));
+      api.ship = nameText.slice(1);
+      window.ship = nameText.slice(1);
+      return { auth, api }
+    }
+    api.ship = stored.ship;
+    window.ship = stored.ship;
+    return { auth: stored, api };
   }
-  return {
-    code: process.env.REACT_APP_CODE || undefined,
-    url: process.env.REACT_APP_URL || undefined
-  };
+  return { auth: stored, api };
 };
 
 const appLoader = async () => {
   const bg = await get();
   const colors = await getColors(`${bg.startsWith('hallstatt') ? '' : 'file://'}${encodeURI(bg)}`);
-  return { ...authLoader(), ...{ bg: bg + `?${new Date().getTime()}`, pal: colors } }
+  const auth = await authLoader();
+  return { ...auth, ...{ bg: bg + `?${new Date().getTime()}`, pal: colors } }
 }
 
 const router = createHashRouter([
