@@ -1,7 +1,11 @@
 import Tippy from "@tippyjs/react";
+import { useContext } from "react";
+import { WindowContext } from "../App";
 import LaunchpadIcon from "./icons/launchpad";
 
-export default function Dock({ windows, selectedWindow, hiddenWindow, launchOpen }) {
+export default function Dock() {
+  const { windows, selectedWindow, hiddenWindow, launchOpen } = useContext(WindowContext);
+
   return (
     <div
       id="dock"

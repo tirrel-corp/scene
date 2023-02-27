@@ -1,13 +1,13 @@
 import Window from "./Screen/Window";
 import { screenPadding } from '../lib/constants';
+import { useContext } from "react";
+import { WindowContext } from "../App";
 
 export default function Screen({
-  windows,
-  selectedWindow,
-  hiddenWindow,
-  launchOpen,
   children,
 }) {
+  const { windows, selectedWindow, hiddenWindow, launchOpen } = useContext(WindowContext);
+
   return (
     <div
       className="grow flex flex-col justify-end items-center"
