@@ -3,8 +3,10 @@ import { useNotifications } from "../lib/useNotifications";
 import { useContext, useState } from 'react';
 import { ThemeContext } from '../App';
 import { whiteOrBlack } from '../lib/background';
+import { WidgetContext } from './HeaderBar';
 
-export default function Notifications({ visible, charges, focusByCharge }) {
+export default function Notifications({ charges, focusByCharge }) {
+    const { showNotifications: visible } = useContext(WidgetContext);
     const { notifications, count } = useNotifications();
     const [latestYarn, setLatestYarn] = useState(window.localStorage.getItem('tirrel-desktop-latest-yarn'));
 

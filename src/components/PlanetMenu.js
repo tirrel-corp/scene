@@ -1,11 +1,25 @@
 import cn from "classnames";
-import { getAuth, clearAuth } from "../lib/auth";
-import { useContext } from 'react';
+import { clearAuth } from "../lib/auth";
+import { useContext, useEffect, useState } from 'react';
 import { whiteOrBlack } from '../lib/background';
 import { ThemeContext } from "../App"
+import { WidgetContext } from "./HeaderBar";
 
 export default function PlanetMenu(props) {
-  const { visible, updateAvailable, appVersion } = props;
+  const { updateAvailable } = props;
+  const { showPlanetMenu: visible } = useContext(WidgetContext);
+  const [appVersion, setAppVersion] = useState("");
+
+  useEffect(() => {
+    const getVersion = async () => {
+      const version = await window.scene.queryVersion();
+      setAppVersion(version);
+    }
+    if (appVersion === "") {
+      getVersion();
+    }
+  }, [appVersion])
+
   const ship = window.ship;
   return (
     <div
