@@ -1,5 +1,5 @@
 import cn from "classnames";
-import { getAuth, clearAuth } from "../lib/auth";
+import { clearAuth } from "../lib/auth";
 import { useContext, useEffect, useState } from 'react';
 import { whiteOrBlack } from '../lib/background';
 import { ThemeContext } from "../App"
@@ -20,7 +20,7 @@ export default function PlanetMenu(props) {
     }
   }, [appVersion])
 
-  const { ship } = getAuth();
+  const ship = window.ship;
   return (
     <div
       id="planet-menu"

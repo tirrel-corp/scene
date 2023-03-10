@@ -13,9 +13,6 @@ api.onError = e => {
   console.error(e);
 }
 
-api.ship = auth?.ship || process.env.REACT_APP_SHIP;
-
-window.ship = auth?.ship || process.env.REACT_APP_SHIP;
 window.url = auth?.url || process.env.REACT_APP_URL;
 
 window.api = api;

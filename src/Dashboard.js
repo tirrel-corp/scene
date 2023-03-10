@@ -21,7 +21,6 @@ const Dashboard = props => {
 
   const respawn = (details) => {
     setAuth({
-      ship: details.patp,
       url: details.url,
       code: details.code,
     });

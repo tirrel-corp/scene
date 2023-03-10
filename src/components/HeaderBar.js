@@ -7,7 +7,6 @@ import { useOutsideAlerter, useClickOutside } from '../lib/hooks';
 import HamburgerIcon from './icons/hamburger';
 import BellIcon from './icons/bell';
 import { docketUninstall } from '@urbit/api';
-import { getAuth } from '../lib/auth';
 import { WindowContext } from '../App';
 import useHarkState from "../state/hark";
 
@@ -17,7 +16,7 @@ export default function HeaderBar({
   updateAvailable,
   children
 }) {
-  const { ship: patp } = getAuth();
+  const patp = window.ship;
   const [windowMenu, setWindowMenu] = useState(false);
   const windowMenuRef = useRef(null);
   useOutsideAlerter(windowMenuRef, () => setWindowMenu(false));

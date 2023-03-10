@@ -13,11 +13,11 @@ export default function DebugMenu() {
 
   console.debug(errors);
 
-  const testCreds = async ({ship, code, url}) => {
+  const testCreds = async ({ ship, code, url }) => {
     try {
 
       if (!url.startsWith('https://')) {
-        if ((url.indexOf('localhost') == -1) && (url.indexOf('127.0.0.1') == -1)){
+        if ((url.indexOf('localhost') == -1) && (url.indexOf('127.0.0.1') == -1)) {
           throw new Error(`Url must be on https`);
         }
       }
@@ -30,12 +30,12 @@ export default function DebugMenu() {
         })
       });
       if (!auth.ok) {
-        throw new Error(`Could not log in as ~${ship} with code ${code}`);
+        throw new Error(`Could not log in with code ${code}`);
       }
 
-      setAuth({ship, code, url})
+      setAuth({ code, url })
     } catch (err) {
-      setError('url', {type: 'custom', message: err?.message || err});
+      setError('url', { type: 'custom', message: err?.message || err });
     }
   }
 
@@ -50,16 +50,6 @@ export default function DebugMenu() {
       <form
         onSubmit={handleSubmit(testCreds)}
         className="flex flex-col space-y-4">
-        <p>Ship name</p>
-        <input
-          type="text"
-          className={`bg-transparent border-b p-2 ${errors?.code ? 'border-red-600' : ''}`}
-          placeholder="sidfus-tirlyx"
-          {...register('ship', {
-            required: true,
-            validate: v => ob.isValidPatp(v) || ob.isValidPatp(`~${v}`),
-          })}
-        />
         <p>URL</p>
         <input
           type="url"
@@ -91,13 +81,13 @@ export default function DebugMenu() {
         <button>Connect</button>
       </form>
       {Object.entries(errors)
-          .filter(([, err]) => err.type === 'custom')
-          .map(([key, err]) => (
-            <p className="border rounded-lg p-2 border-red-600" key={key}>
-              Error: {err?.message}
-            </p>
-          )
-      )}
+        .filter(([, err]) => err.type === 'custom')
+        .map(([key, err]) => (
+          <p className="border rounded-lg p-2 border-red-600" key={key}>
+            Error: {err?.message}
+          </p>
+        )
+        )}
     </div>
   )
 }

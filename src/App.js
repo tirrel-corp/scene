@@ -1,7 +1,6 @@
 import { useCallback, useState, useReducer, useEffect, createContext } from 'react';
 import { useLoaderData } from 'react-router-dom';
 import { scryCharges, scryAllies } from '@urbit/api';
-import { api } from './state/api';
 import { chargeSubscription, allySubscription } from './state/subscriptions';
 import HeaderBar from './components/HeaderBar';
 import Screen from './components/Screen';
@@ -25,7 +24,7 @@ export const WindowContext = createContext();
 
 
 function App() {
-  const { bg, pal } = useLoaderData();
+  const { bg, pal, api } = useLoaderData();
   const [apps, setApps] = useReducer(chargeReducer, {});
   const [allies, setAllies] = useReducer(allyReducer, {});
   const [treaties, setTreaties] = useReducer(treatyReducer, {});
@@ -61,7 +60,6 @@ function App() {
       window.scene.handleUpdateDownloaded(() => setUpdateAvailable(true));
 
     }
-
     init();
     migrateLocalStorageBg(setBgImage);
   }, []);
@@ -83,7 +81,6 @@ function App() {
         return;
       }
       const newAuth = {
-        ship: params.get('patp'),
         code: params.get('code'),
         url: params.get('url'),
       }

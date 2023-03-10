@@ -125,12 +125,8 @@ async function getAuth(dl_url) {
         const params = new URL(deepLink).searchParams;
         if (params.has('patp') && params.has('code') && params.has('url')) {
             newAuth = {
-                ship: params.get('patp'),
                 code: params.get('code'),
                 url: params.get('url'),
-            }
-            if (newAuth.ship.startsWith('~')) {
-                newAuth.ship = newAuth.ship.replace(/^~/, '');
             }
             if (!newAuth.url.startsWith('https://')) {
                 if (/^(?:.*:\/\/)/.test(newAuth.url)) {
