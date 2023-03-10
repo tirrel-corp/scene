@@ -41,6 +41,9 @@ function createWindow(dl_url) {
         },
     });
 
+    //Disable the menu at the top of the window if not on macos
+    process.platform !== 'darwin' && mainWindow.setMenu(null);
+
     // Open external links in other browsers (i.e. target="_blank").
     const ses = mainWindow.webContents.session;
     mainWindow.webContents.setWindowOpenHandler(({ url }) => {
